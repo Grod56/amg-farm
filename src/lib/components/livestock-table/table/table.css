@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+td,
+th {
+	@apply border-1 p-1.5;
+}
