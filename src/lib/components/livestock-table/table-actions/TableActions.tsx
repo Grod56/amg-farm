@@ -1,9 +1,12 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { TableActionsModel } from "./table-actions-model";
+import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 
 const TableActions = function ({ model }) {
 	const { interact, modelView } = model;
-	const { locations, selectedLocation } = modelView!;
+	const { locations, selectedLocation, selectedCow } = modelView!;
 
 	return (
 		<div className="flex gap-7 justify-between w-full">
@@ -25,9 +28,21 @@ const TableActions = function ({ model }) {
 				))}
 			</select>
 			<div className="flex gap-4">
-				<button className="add">+</button>
-				<button className="remove">x</button>
-				<button className="edit">Edit</button>
+				<button className="add">
+					<FontAwesomeIcon icon={faAdd} />
+				</button>
+				<button
+					className="remove disabled:opacity-60 disabled:cursor-default cursor-pointer"
+					disabled={Boolean(!selectedCow)}
+				>
+					<FontAwesomeIcon icon={faTrashCan} />
+				</button>
+				<button
+					className="edit disabled:opacity-60 disabled:cursor-default cursor-pointer"
+					disabled={Boolean(!selectedCow)}
+				>
+					<FontAwesomeIcon icon={faEdit} />
+				</button>
 			</div>
 		</div>
 	);
