@@ -9,6 +9,9 @@ import TableActions from "./table-actions/TableActions";
 import Table from "./table/Table";
 import { useStatefulRepository } from "@/lib/utilities/repositories/use-repository";
 import { cattleRepositoryViewInteractionInterface } from "@/lib/implementations/repositories/cattle-repository";
+import { addCowDialogVIInterface } from "@/lib/implementations/models/add-cow-dialog";
+import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
+import AddCowDialog from "./table-actions/add-cow/AddCowDialog";
 
 const LivestockTable = function ({ model }) {
 	const cattleRepositoryModel = useStatefulRepository({
@@ -16,12 +19,22 @@ const LivestockTable = function ({ model }) {
 		viewInteractionInterface: cattleRepositoryViewInteractionInterface,
 	});
 	const { modelView, interact } = model;
-	const { selectedCow, selectedLocation } = modelView!;
+	const { selectedCow, selectedLocationName } = modelView!;
 	const { modelView: repositoryModelView } = cattleRepositoryModel;
-	const computedSelectedLocation = selectedLocation
-		? selectedLocation
+	const computedSelectedLocationName = selectedLocationName
+		? selectedLocationName
 		: repositoryModelView?.locations[0];
 
+	const addCowDialogModel = useInitializedStatefulInteractiveModel(
+		addCowDialogVIInterface(),
+		{
+			cattleRepositoryModel,
+			shown: false,
+			locationNames: repositoryModelView
+				? repositoryModelView.locations
+				: [],
+		},
+	);
 	return (
 		<div className="livestock-table flex flex-col gap-3">
 			<ConditionalComponent
@@ -33,17 +46,30 @@ const LivestockTable = function ({ model }) {
 							<TableActions
 								model={{
 									modelView: {
-										locations:
+										locationNames:
 											repositoryModelView!.locations,
 										selectedCow,
-										selectedLocation:
-											computedSelectedLocation!,
+										selectedLocationName:
+											computedSelectedLocationName!,
 									},
 									interact: (
 										interaction: TableActionsModelInteraction,
 									) => {
 										switch (interaction.type) {
 											case "Add":
+												addCowDialogModel!.interact({
+													type: "Toggle_Dialog",
+													input: {
+														currentDialogModelView:
+															{
+																cattleRepositoryModel,
+																shown: false,
+																locationNames:
+																	repositoryModelView!
+																		.locations,
+															},
+													},
+												});
 												break;
 											case "Remove":
 												break;
@@ -70,13 +96,25 @@ const LivestockTable = function ({ model }) {
 										repositoryModelView!.cattleModels.filter(
 											cattleModel =>
 												cattleModel.modelView
-													.location ==
-												computedSelectedLocation,
+													.locationName ==
+												computedSelectedLocationName,
 										),
 									selectedCow,
 								})}
 							/>
 						</>
+					),
+				})}
+			/>
+			<ConditionalComponent
+				model={newReadonlyModel({
+					condition: repositoryModelView,
+					components: new Map([
+						[null, () => <></>],
+						[undefined, () => <></>],
+					]),
+					FallBackComponent: () => (
+						<AddCowDialog model={addCowDialogModel} />
 					),
 				})}
 			/>

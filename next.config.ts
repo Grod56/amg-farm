@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
 	sassOptions: {
 		implementation: "sass-embedded",
 	},
+	serverExternalPackages: ["pdfkit"],
 };
 
 export default nextConfig;

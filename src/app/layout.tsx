@@ -1,19 +1,9 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { newReadonlyModel } from "@mvc-react/mvc";
-import Header from "@/lib/components/header/Header";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "@/lib/components/footer/Footer";
-
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
-});
+import Header from "@/lib/components/header/Header";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
 	title: "AMG Farm",
@@ -26,10 +16,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-				suppressHydrationWarning
-			>
+			<body suppressHydrationWarning>
 				<Header model={newReadonlyModel({ headerTitle: "AMG Farm" })} />
 				{children}
 				<Footer

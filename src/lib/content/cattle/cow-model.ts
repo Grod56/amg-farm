@@ -1,12 +1,12 @@
 import { ReadonlyModel } from "@mvc-react/mvc";
 
-export interface CattleModelView {
+export interface CowModelView {
 	id: string;
 	name: string;
 	type: string;
 	tag: string;
 	dob: Date;
-	location: string;
+	locationName: string;
 }
 
-export type CattleModel = ReadonlyModel<CattleModelView>;
+export type CowModel = ReadonlyModel<CowModelView>;

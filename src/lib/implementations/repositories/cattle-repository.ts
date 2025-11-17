@@ -1,4 +1,4 @@
-import { CattleModelView } from "@/lib/content/cattle/cattle-model";
+import { CowModelView } from "@/lib/content/cattle/cow-model";
 import {
 	CattleRepositoryModelInteraction,
 	CattleRepositoryModelView,
@@ -6,7 +6,7 @@ import {
 import { RepositoryInteractionType } from "@/lib/utilities/repositories/repository-model";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
-import { retrieveRecords } from "./server-actions";
+import { addCow, retrieveRecords } from "./server-actions";
 
 export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 	CattleRepositoryModelView,
@@ -16,22 +16,27 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 		switch (interaction.type) {
 			case RepositoryInteractionType.RETRIEVE: {
 				const records = await retrieveRecords();
-				const locationsSet = new Set<string>(
-					records.map(record => record.location),
-				);
 				return {
 					cattleModels: records.map(record =>
-						newReadonlyModel<CattleModelView>({
+						newReadonlyModel<CowModelView>({
 							id: record.id,
 							name: record.name,
 							type: record.type,
 							tag: record.tag,
 							dob: new Date(record.dob),
-							location: record.location,
+							locationName: record.location,
 						}),
 					),
-					locations: locationsSet.keys().toArray(),
+					locations: [
+						...new Set(records.map(record => record.location)),
+					],
 				};
+			}
+			case "Add_Cow": {
+				await addCow(interaction.input.form);
+				return await this.produceModelView({
+					type: RepositoryInteractionType.RETRIEVE,
+				});
 			}
 		}
 	},

@@ -10,7 +10,10 @@ export default function Home() {
 				>
 					Livestock
 				</button>
-				<button className="p-8 bg-gray-950 cursor-pointer rounded-2xl text-white">
+				<button
+					className="p-8 bg-gray-950 cursor-pointer rounded-2xl text-white"
+					onClick={() => window.open("api/register", "_self")}
+				>
 					Register
 				</button>
 			</div>

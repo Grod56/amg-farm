@@ -10,5 +10,5 @@ export type RepositoryModelInteraction =
 
 export type RepositoryModel<
 	V extends ModelView,
-	I extends RepositoryModelInteraction,
+	I extends RepositoryModelInteraction | ModelInteraction<unknown>,
 > = InteractiveModel<V, I>;

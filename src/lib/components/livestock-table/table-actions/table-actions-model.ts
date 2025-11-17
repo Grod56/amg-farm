@@ -1,4 +1,4 @@
-import { CattleModel } from "@/lib/content/cattle/cattle-model";
+import { CowModel } from "@/lib/content/cattle/cow-model";
 import {
 	InputModelInteraction,
 	InteractiveModel,
@@ -9,12 +9,12 @@ export type TableActionsModelInteraction =
 	| ModelInteraction<"Add">
 	| ModelInteraction<"Remove">
 	| ModelInteraction<"Edit">
-	| InputModelInteraction<"Change_Location", { location: string }>;
+	| InputModelInteraction<"Change_Location", { locationName: string }>;
 
 export interface TableActionsModelView {
-	locations: string[];
-	selectedLocation: string;
-	selectedCow: CattleModel | undefined;
+	locationNames: string[];
+	selectedLocationName: string;
+	selectedCow: CowModel | undefined;
 }
 
 export type TableActionsModel = InteractiveModel<

@@ -1,9 +1,9 @@
-import { CattleModel } from "@/lib/content/cattle/cattle-model";
+import { CowModel } from "@/lib/content/cattle/cow-model";
 import { ReadonlyModel } from "@mvc-react/mvc";
 
 export interface TableModelView {
-	cattleModels: CattleModel[];
-	selectedCow: CattleModel | undefined;
+	cattleModels: CowModel[];
+	selectedCow: CowModel | undefined;
 }
 
 export type TableModel = ReadonlyModel<TableModelView>;

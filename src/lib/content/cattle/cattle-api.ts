@@ -1,4 +1,4 @@
-export interface CattleRecord {
+export interface CowRecord {
 	id: string;
 	name: string;
 	type: string;

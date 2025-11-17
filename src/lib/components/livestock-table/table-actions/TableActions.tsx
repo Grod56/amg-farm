@@ -1,27 +1,27 @@
+import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { TableActionsModel } from "./table-actions-model";
-import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd } from "@fortawesome/free-solid-svg-icons";
 
 const TableActions = function ({ model }) {
 	const { interact, modelView } = model;
-	const { locations, selectedLocation, selectedCow } = modelView!;
+	const { locationNames, selectedLocationName, selectedCow } = modelView!;
 
 	return (
 		<div className="flex gap-7 justify-between w-full">
 			<select
 				name="locations"
 				id="location-selector"
-				defaultValue={selectedLocation}
+				defaultValue={selectedLocationName}
 				onChange={event =>
 					interact({
 						type: "Change_Location",
-						input: { location: event.target.value },
+						input: { locationName: event.target.value },
 					})
 				}
 			>
-				{locations.map(location => (
+				{locationNames.map(location => (
 					<option key={location} value={location}>
 						{location}
 					</option>
@@ -29,7 +29,10 @@ const TableActions = function ({ model }) {
 			</select>
 			<div className="flex gap-4">
 				<button className="add">
-					<FontAwesomeIcon icon={faAdd} />
+					<FontAwesomeIcon
+						icon={faAdd}
+						onClick={() => interact({ type: "Add" })}
+					/>
 				</button>
 				<button
 					className="remove disabled:opacity-60 disabled:cursor-default cursor-pointer"
