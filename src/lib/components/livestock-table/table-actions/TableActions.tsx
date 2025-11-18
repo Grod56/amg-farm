@@ -6,24 +6,32 @@ import { TableActionsModel } from "./table-actions-model";
 
 const TableActions = function ({ model }) {
 	const { interact, modelView } = model;
-	const { locationNames, selectedLocationName, selectedCow } = modelView!;
+	const { locations, selectedLocation, selectedCow } = modelView!;
+	const locationsMap = new Map<string, string>(
+		locations.map(location => [location.name, location.id]),
+	);
 
 	return (
 		<div className="flex gap-7 justify-between w-full">
 			<select
 				name="locations"
 				id="location-selector"
-				defaultValue={selectedLocationName}
+				defaultValue={selectedLocation.name}
 				onChange={event =>
 					interact({
 						type: "Change_Location",
-						input: { locationName: event.target.value },
+						input: {
+							location: {
+								name: event.target.value,
+								id: locationsMap.get(event.target.value)!,
+							},
+						},
 					})
 				}
 			>
-				{locationNames.map(location => (
-					<option key={location} value={location}>
-						{location}
+				{locationsMap.entries().map(([location_name, location_id]) => (
+					<option key={location_id} value={location_name}>
+						{location_name}
 					</option>
 				))}
 			</select>

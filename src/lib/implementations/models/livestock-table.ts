@@ -13,11 +13,11 @@ export function useLivestockTableModel(): LivestockTableModel {
 			): Promise<LivestockTableModelView> {
 				switch (interaction.type) {
 					case "Change_Location": {
-						const { currentModelView, locationName: location } =
+						const { currentModelView, location: location } =
 							interaction.input;
 						return {
 							...currentModelView,
-							selectedLocationName: location,
+							selectedLocation: location,
 						};
 					}
 				}

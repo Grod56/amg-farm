@@ -1,4 +1,4 @@
-import { generateRegister } from "@/lib/utilities/server-actions";
+import { generateRegister } from "@/lib/utilities/server-actions/register-pdf";
 import BlobStream from "blob-stream";
 import { NextRequest } from "next/server";
 

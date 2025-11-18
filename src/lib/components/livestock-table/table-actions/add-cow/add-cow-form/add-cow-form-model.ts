@@ -1,3 +1,4 @@
+import { Location } from "@/lib/types/miscellaneous";
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 
 export interface AddCowFormModelView {
@@ -5,7 +6,7 @@ export interface AddCowFormModelView {
 	dob: Date;
 	type: string;
 	tag: string;
-	locationName: string;
+	location: Location;
 }
 
 export type AddCowFormModelInteraction =

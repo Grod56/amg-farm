@@ -5,10 +5,11 @@ import {
 } from "../../utilities/repositories/repository-model";
 import { CowModel } from "./cow-model";
 import { AddCowFormModelView } from "@/lib/components/livestock-table/table-actions/add-cow/add-cow-form/add-cow-form-model";
+import { Location } from "@/lib/types/miscellaneous";
 
 export interface CattleRepositoryModelView {
 	cattleModels: CowModel[];
-	locations: string[];
+	locations: Location[];
 }
 
 export type CattleRepositoryModelInteraction =

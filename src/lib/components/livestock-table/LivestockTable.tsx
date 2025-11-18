@@ -19,10 +19,10 @@ const LivestockTable = function ({ model }) {
 		viewInteractionInterface: cattleRepositoryViewInteractionInterface,
 	});
 	const { modelView, interact } = model;
-	const { selectedCow, selectedLocationName } = modelView!;
+	const { selectedCow, selectedLocation } = modelView!;
 	const { modelView: repositoryModelView } = cattleRepositoryModel;
-	const computedSelectedLocationName = selectedLocationName
-		? selectedLocationName
+	const computedSelectedLocation = selectedLocation
+		? selectedLocation
 		: repositoryModelView?.locations[0];
 
 	const addCowDialogModel = useInitializedStatefulInteractiveModel(
@@ -30,9 +30,10 @@ const LivestockTable = function ({ model }) {
 		{
 			cattleRepositoryModel,
 			shown: false,
-			locationNames: repositoryModelView
-				? repositoryModelView.locations
-				: [],
+			location: {
+				id: "",
+				name: "",
+			},
 		},
 	);
 	return (
@@ -46,11 +47,11 @@ const LivestockTable = function ({ model }) {
 							<TableActions
 								model={{
 									modelView: {
-										locationNames:
+										locations:
 											repositoryModelView!.locations,
 										selectedCow,
-										selectedLocationName:
-											computedSelectedLocationName!,
+										selectedLocation:
+											computedSelectedLocation!,
 									},
 									interact: (
 										interaction: TableActionsModelInteraction,
@@ -64,9 +65,8 @@ const LivestockTable = function ({ model }) {
 															{
 																cattleRepositoryModel,
 																shown: false,
-																locationNames:
-																	repositoryModelView!
-																		.locations,
+																location:
+																	computedSelectedLocation!,
 															},
 													},
 												});
@@ -95,9 +95,9 @@ const LivestockTable = function ({ model }) {
 									cattleModels:
 										repositoryModelView!.cattleModels.filter(
 											cattleModel =>
-												cattleModel.modelView
-													.locationName ==
-												computedSelectedLocationName,
+												cattleModel.modelView.location
+													.id ==
+												computedSelectedLocation!.id,
 										),
 									selectedCow,
 								})}

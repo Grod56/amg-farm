@@ -4,5 +4,6 @@ export interface CowRecord {
 	type: string;
 	tag: string;
 	dob: string;
-	location: string;
+	location_name: string;
+	location_id: string;
 }

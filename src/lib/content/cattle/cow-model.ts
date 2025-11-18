@@ -1,3 +1,4 @@
+import { Location } from "@/lib/types/miscellaneous";
 import { ReadonlyModel } from "@mvc-react/mvc";
 
 export interface CowModelView {
@@ -6,7 +7,7 @@ export interface CowModelView {
 	type: string;
 	tag: string;
 	dob: Date;
-	locationName: string;
+	location: Location;
 }
 
 export type CowModel = ReadonlyModel<CowModelView>;

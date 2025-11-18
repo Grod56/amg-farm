@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 
 const AddCowForm = function ({ model }) {
 	const { interact, modelView } = model;
-	const { name, dob, tag, type } = modelView!;
+	const { name, dob, tag, type, location } = modelView!;
 
 	return (
 		<Form>
@@ -74,6 +74,13 @@ const AddCowForm = function ({ model }) {
 						},
 					})
 				}
+			/>
+			<br />
+			<Form.Control
+				type="text"
+				placeholder="Location"
+				value={location.name}
+				disabled
 			/>
 		</Form>
 	);

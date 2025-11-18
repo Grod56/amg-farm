@@ -8,7 +8,7 @@ import AddCowForm from "./add-cow-form/AddCowForm";
 
 const AddCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
-	const { shown, cattleRepositoryModel } = modelView!;
+	const { shown, cattleRepositoryModel, location } = modelView!;
 	const addCowFormModel = useInitializedStatefulInteractiveModel(
 		addCowFormVIInterface(cattleRepositoryModel),
 		{
@@ -16,7 +16,7 @@ const AddCowDialog = function ({ model }) {
 			type: "",
 			tag: "",
 			dob: new Date(),
-			locationName: "",
+			location,
 		},
 	);
 

@@ -9,6 +9,14 @@ export async function retrieveRecords() {
 	return records as CowRecord[];
 }
 
-export async function addCow({ name, type, tag, dob }: AddCowFormModelView) {
-	return await neon()`INSERT INTO "Cattle"(name, type, tag, dob) VALUES (${name}, ${type}, ${tag}, ${dob})`;
+export async function addCow({
+	name,
+	type,
+	tag,
+	dob,
+	location,
+}: AddCowFormModelView) {
+	return await neon()`
+		INSERT INTO "CattleTable"(name, type, tag, dob, location_id) 
+		VALUES (${name}, ${type}, ${tag}, ${dob}, ${location.id})`;
 }

@@ -1,14 +1,15 @@
 import { CowModel } from "@/lib/content/cattle/cow-model";
+import { Location } from "@/lib/types/miscellaneous";
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 
 export interface LivestockTableModelView {
 	selectedCow?: CowModel;
-	selectedLocationName?: string;
+	selectedLocation?: Location;
 }
 
 export type LivestockTableModelInteraction = InputModelInteraction<
 	"Change_Location",
-	{ currentModelView: LivestockTableModelView; locationName: string }
+	{ currentModelView: LivestockTableModelView; location: Location }
 >;
 
 export type LivestockTableModel = InteractiveModel<

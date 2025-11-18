@@ -15,11 +15,11 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 					const {
 						cattleRepositoryModel,
 						shown,
-						locationNames: locations,
+						location: locations,
 					} = interaction.input.currentDialogModelView;
 					return {
 						cattleRepositoryModel,
-						locationNames: locations,
+						location: locations,
 						shown: !shown,
 					};
 				}

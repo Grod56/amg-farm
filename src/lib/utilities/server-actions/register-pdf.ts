@@ -1,8 +1,8 @@
 "use server";
 
 import PDFDocument from "pdfkit";
-import { CowRecord } from "../content/cattle/cattle-api";
-import { retrieveRecords } from "../implementations/repositories/server-actions";
+import { CowRecord } from "../../content/cattle/cattle-api";
+import { retrieveRecords } from "../../implementations/repositories/server-actions";
 import { IBlobStream } from "blob-stream";
 
 export async function generateRegister(destinationStream: IBlobStream) {
@@ -71,18 +71,18 @@ function writeTables(doc: PDFKit.PDFDocument, cowRecords: CowRecord[]) {
 	let number: number = 1;
 	const groupedCattle: Map<string, CowRecord[]> = new Map();
 	const groups = new Set<string>(
-		cowRecords.map(cowRecord => cowRecord.location),
+		cowRecords.map(cowRecord => cowRecord.location_name),
 	);
 	groups.forEach(group => {
 		const cattle: CowRecord[] = cowRecords.filter(
-			cowRecord => cowRecord.location == group,
+			cowRecord => cowRecord.location_name == group,
 		);
 		groupedCattle.set(group, cattle);
 	});
 
 	groupedCattle.entries().forEach(([, cowRecords], index) => {
 		doc.fontSize(12);
-		doc.font("Helvetica-Bold").text(`From ${cowRecords[0].location}`, {
+		doc.font("Helvetica-Bold").text(`From ${cowRecords[0].location_name}`, {
 			underline: true,
 		});
 		doc.fontSize(9.5);

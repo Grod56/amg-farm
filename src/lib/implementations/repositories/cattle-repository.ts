@@ -24,11 +24,19 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 							type: record.type,
 							tag: record.tag,
 							dob: new Date(record.dob),
-							locationName: record.location,
+							location: {
+								id: record.location_id,
+								name: record.location_name,
+							},
 						}),
 					),
 					locations: [
-						...new Set(records.map(record => record.location)),
+						...new Set(
+							records.map(record => ({
+								id: record.location_id,
+								name: record.location_name,
+							})),
+						),
 					],
 				};
 			}
