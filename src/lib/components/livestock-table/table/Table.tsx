@@ -3,17 +3,18 @@ import { TableModel } from "./table-model";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import TableRow from "../table-row/TableRow";
 import "./table.css";
+import { TableRowModelView } from "../table-row/table-row-model";
 
 const Table = function ({ model }) {
 	const { cattleModels } = model.modelView;
+
 	return (
 		<div>
 			<table className="border-collapse border-1 w-full">
 				<thead>
 					<tr>
-						<th className="border-1" scope="col">
-							Name
-						</th>
+						<th scope="col">No.</th>
+						<th scope="col">Name</th>
 						<th scope="col">Type</th>
 						<th scope="col">Tag</th>
 						<th scope="col">D.o.B</th>
@@ -23,8 +24,12 @@ const Table = function ({ model }) {
 					<ComponentList
 						model={newReadonlyModel({
 							Component: TableRow,
-							componentModels: cattleModels.map(cattleModel =>
-								newReadonlyModel({ cattleModel }),
+							componentModels: cattleModels.map(
+								(cattleModel, index) =>
+									newReadonlyModel<TableRowModelView>({
+										cattleModel,
+										rowNumber: index + 1,
+									}),
 							),
 						})}
 					/>
