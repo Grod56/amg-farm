@@ -1,17 +1,21 @@
+import { addCowDialogVIInterface } from "@/lib/implementations/models/add-cow-dialog";
+import { editCowDialogVIInterface } from "@/lib/implementations/models/edit-cow-dialog";
+import { removeCowDialogVIInterface } from "@/lib/implementations/models/remove-cow-dialog";
+import { cattleRepositoryViewInteractionInterface } from "@/lib/implementations/repositories/cattle-repository";
+import { useStatefulRepository } from "@/lib/utilities/repositories/use-repository";
 import {
 	ConditionalComponent,
 	ModeledVoidComponent,
 } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
 import { LivestockTableModel } from "./livestock-table-model";
+import AddCowDialog from "./table-actions/add-cow/AddCowDialog";
+import EditCowDialog from "./table-actions/edit-cow/EditCowDialog";
+import RemoveCowDialog from "./table-actions/remove-cow/RemoveCowDialog";
 import { TableActionsModelInteraction } from "./table-actions/table-actions-model";
 import TableActions from "./table-actions/TableActions";
 import Table from "./table/Table";
-import { useStatefulRepository } from "@/lib/utilities/repositories/use-repository";
-import { cattleRepositoryViewInteractionInterface } from "@/lib/implementations/repositories/cattle-repository";
-import { addCowDialogVIInterface } from "@/lib/implementations/models/add-cow-dialog";
-import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
-import AddCowDialog from "./table-actions/add-cow/AddCowDialog";
 
 const LivestockTable = function ({ model }) {
 	const cattleRepositoryModel = useStatefulRepository({
@@ -25,17 +29,16 @@ const LivestockTable = function ({ model }) {
 		? selectedLocation
 		: repositoryModelView?.locations[0];
 
-	const addCowDialogModel = useInitializedStatefulInteractiveModel(
+	const addCowDialogModel = useNewStatefulInteractiveModel(
 		addCowDialogVIInterface(),
-		{
-			cattleRepositoryModel,
-			shown: false,
-			location: {
-				id: "",
-				name: "",
-			},
-		},
 	);
+	const editCowDialogModel = useNewStatefulInteractiveModel(
+		editCowDialogVIInterface(),
+	);
+	const removeCowDialogModel = useNewStatefulInteractiveModel(
+		removeCowDialogVIInterface(),
+	);
+
 	return (
 		<div className="livestock-table flex flex-col gap-3">
 			<ConditionalComponent
@@ -58,7 +61,7 @@ const LivestockTable = function ({ model }) {
 									) => {
 										switch (interaction.type) {
 											case "Add":
-												addCowDialogModel!.interact({
+												addCowDialogModel.interact({
 													type: "Toggle_Dialog",
 													input: {
 														currentDialogModelView:
@@ -72,8 +75,41 @@ const LivestockTable = function ({ model }) {
 												});
 												break;
 											case "Remove":
+												if (selectedCow)
+													removeCowDialogModel.interact(
+														{
+															type: "TOGGLE_DIALOG",
+															input: {
+																currentDialogModelView:
+																	{
+																		cattleRepositoryModel,
+																		shown: false,
+																		cowModel:
+																			selectedCow,
+																	},
+															},
+														},
+													);
 												break;
 											case "Edit":
+												if (selectedCow)
+													editCowDialogModel.interact(
+														{
+															type: "Toggle_Dialog",
+															input: {
+																currentDialogModelView:
+																	{
+																		cattleRepositoryModel,
+																		shown: false,
+																		cowModel:
+																			selectedCow,
+																		locations:
+																			repositoryModelView!
+																				.locations,
+																	},
+															},
+														},
+													);
 												break;
 											case "Change_Location": {
 												interact({
@@ -91,16 +127,35 @@ const LivestockTable = function ({ model }) {
 								}}
 							/>
 							<Table
-								model={newReadonlyModel({
-									cattleModels:
-										repositoryModelView!.cattleModels.filter(
-											cattleModel =>
-												cattleModel.modelView.location
-													.id ==
-												computedSelectedLocation!.id,
-										),
-									selectedCow,
-								})}
+								model={{
+									modelView: {
+										cowModels:
+											repositoryModelView!.cowModels.filter(
+												cattleModel =>
+													cattleModel.modelView
+														.location.id ==
+													computedSelectedLocation!
+														.id,
+											),
+										selectedCow,
+									},
+									interact(interaction) {
+										switch (interaction.type) {
+											case "SELECT_COW": {
+												const { cowModel } =
+													interaction.input;
+												interact({
+													type: "SELECT_COW",
+													input: {
+														cowModel,
+														currentModelView:
+															modelView!,
+													},
+												});
+											}
+										}
+									},
+								}}
 							/>
 						</>
 					),
@@ -114,7 +169,67 @@ const LivestockTable = function ({ model }) {
 						[undefined, () => <></>],
 					]),
 					FallBackComponent: () => (
-						<AddCowDialog model={addCowDialogModel} />
+						<AddCowDialog
+							model={{
+								...addCowDialogModel,
+								modelView: addCowDialogModel.modelView
+									? addCowDialogModel.modelView
+									: {
+											shown: false,
+											cattleRepositoryModel,
+											location: computedSelectedLocation!,
+										},
+							}}
+						/>
+					),
+				})}
+			/>
+			<ConditionalComponent
+				model={newReadonlyModel({
+					condition: selectedCow,
+					components: new Map([
+						[null, () => <></>],
+						[undefined, () => <></>],
+					]),
+					FallBackComponent: () => (
+						<EditCowDialog
+							model={{
+								...editCowDialogModel,
+								modelView: editCowDialogModel.modelView
+									? editCowDialogModel.modelView
+									: {
+											cowModel: selectedCow!,
+											shown: false,
+											cattleRepositoryModel,
+											locations:
+												cattleRepositoryModel.modelView!
+													.locations,
+										},
+							}}
+						/>
+					),
+				})}
+			/>
+			<ConditionalComponent
+				model={newReadonlyModel({
+					condition: selectedCow,
+					components: new Map([
+						[null, () => <></>],
+						[undefined, () => <></>],
+					]),
+					FallBackComponent: () => (
+						<RemoveCowDialog
+							model={{
+								...removeCowDialogModel,
+								modelView: removeCowDialogModel.modelView
+									? removeCowDialogModel.modelView
+									: {
+											cowModel: selectedCow!,
+											shown: false,
+											cattleRepositoryModel,
+										},
+							}}
+						/>
 					),
 				})}
 			/>

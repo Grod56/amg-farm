@@ -1,12 +1,16 @@
 import { ComponentList, ModeledVoidComponent } from "@mvc-react/components";
-import { TableModel } from "./table-model";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import {
+	TableRowModel,
+	TableRowModelInteraction,
+} from "../table-row/table-row-model";
 import TableRow from "../table-row/TableRow";
+import { TableModel } from "./table-model";
 import "./table.css";
-import { TableRowModelView } from "../table-row/table-row-model";
 
 const Table = function ({ model }) {
-	const { cattleModels } = model.modelView;
+	const { modelView, interact } = model;
+	const { cowModels, selectedCow } = modelView!;
 
 	return (
 		<div>
@@ -24,12 +28,29 @@ const Table = function ({ model }) {
 					<ComponentList
 						model={newReadonlyModel({
 							Component: TableRow,
-							componentModels: cattleModels.map(
-								(cattleModel, index) =>
-									newReadonlyModel<TableRowModelView>({
-										cattleModel,
-										rowNumber: index + 1,
-									}),
+							componentModels: cowModels.map(
+								(cowModel, index) =>
+									({
+										modelView: {
+											cowModel,
+											isSelected: selectedCow == cowModel,
+											rowNumber: index + 1,
+										},
+										interact: function (
+											interaction: TableRowModelInteraction,
+										) {
+											switch (interaction.type) {
+												case "SELECT_COW": {
+													const { cowModel } =
+														interaction.input;
+													interact({
+														type: "SELECT_COW",
+														input: { cowModel },
+													});
+												}
+											}
+										},
+									}) as TableRowModel,
 							),
 						})}
 					/>

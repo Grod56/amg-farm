@@ -5,22 +5,23 @@ import {
 	ModelInteraction,
 } from "@mvc-react/mvc";
 
-export interface AddCowFormModelView {
+export interface EditCowFormModelView {
 	name: string;
 	dob: Date;
 	type: string;
 	tag: string;
-	location: Location;
+	selectedLocation: Location;
+	locations: Location[];
 }
 
-export type AddCowFormModelInteraction =
+export type EditCowFormModelInteraction =
 	| InputModelInteraction<
 			"Update_Form",
-			{ updatedFormModelView: AddCowFormModelView }
+			{ updatedFormModelView: EditCowFormModelView }
 	  >
 	| ModelInteraction<"Clear_Form">;
 
-export type AddCowFormModel = InteractiveModel<
-	AddCowFormModelView,
-	AddCowFormModelInteraction
+export type EditCowFormModel = InteractiveModel<
+	EditCowFormModelView,
+	EditCowFormModelInteraction
 >;

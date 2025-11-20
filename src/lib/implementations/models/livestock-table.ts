@@ -18,6 +18,15 @@ export function useLivestockTableModel(): LivestockTableModel {
 						return {
 							...currentModelView,
 							selectedLocation: location,
+							selectedCow: undefined,
+						};
+					}
+					case "SELECT_COW": {
+						const { cowModel, currentModelView } =
+							interaction.input;
+						return {
+							...currentModelView,
+							selectedCow: cowModel,
 						};
 					}
 				}

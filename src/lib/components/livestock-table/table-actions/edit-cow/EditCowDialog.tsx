@@ -1,22 +1,24 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { AddCowDialogModel } from "./add-cow-dialog-model";
+import { AddCowDialogModel } from "./edit-cow-dialog-model";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
-import { addCowFormVIInterface } from "@/lib/implementations/models/add-cow-form";
-import AddCowForm from "./add-cow-form/AddCowForm";
+import EditCowForm from "./edit-cow-form/EditCowForm";
+import { editCowFormVIInterface } from "@/lib/implementations/models/edit-cow-form";
 
-const AddCowDialog = function ({ model }) {
+const EditCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
-	const { shown, location } = modelView!;
-	const addCowFormModel = useInitializedStatefulInteractiveModel(
-		addCowFormVIInterface(),
+	const { shown, locations, cowModel } = modelView!;
+	const { name, tag, type, location, dob } = cowModel!.modelView;
+	const editCowFormModel = useInitializedStatefulInteractiveModel(
+		editCowFormVIInterface(),
 		{
-			name: "",
-			type: "",
-			tag: "",
-			dob: new Date(),
-			location,
+			name,
+			type,
+			tag,
+			dob,
+			locations,
+			selectedLocation: location,
 		},
 	);
 
@@ -31,10 +33,17 @@ const AddCowDialog = function ({ model }) {
 			}
 		>
 			<Modal.Header closeButton>
-				<Modal.Title>Add Cow</Modal.Title>
+				<Modal.Title>Edit Cow</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<AddCowForm model={addCowFormModel} />
+				<EditCowForm
+					model={{
+						...editCowFormModel,
+						modelView: {
+							...editCowFormModel.modelView!,
+						},
+					}}
+				/>
 			</Modal.Body>
 			<Modal.Footer>
 				<Button
@@ -56,16 +65,16 @@ const AddCowDialog = function ({ model }) {
 							input: {
 								currentDialogModelView: modelView!,
 								currentFormModelView:
-									addCowFormModel.modelView!,
+									editCowFormModel.modelView!,
 							},
 						})
 					}
 				>
-					Add Cow
+					Update Cow
 				</Button>
 			</Modal.Footer>
 		</Modal>
 	);
 } as ModeledVoidComponent<AddCowDialogModel>;
 
-export default AddCowDialog;
+export default EditCowDialog;

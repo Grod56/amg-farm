@@ -12,15 +12,25 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 		produceModelView: async interaction => {
 			switch (interaction.type) {
 				case "Toggle_Dialog": {
-					const {
-						cattleRepositoryModel,
-						shown,
-						location: locations,
-					} = interaction.input.currentDialogModelView;
+					const { cattleRepositoryModel, shown, location } =
+						interaction.input.currentDialogModelView;
 					return {
 						cattleRepositoryModel,
-						location: locations,
+						location,
 						shown: !shown,
+					};
+				}
+				case "Submit": {
+					const { cattleRepositoryModel, location } =
+						interaction.input.currentDialogModelView;
+					cattleRepositoryModel.interact({
+						type: "Add_Cow",
+						input: { form: interaction.input.currentFormModelView },
+					});
+					return {
+						cattleRepositoryModel,
+						location,
+						shown: false,
 					};
 				}
 			}

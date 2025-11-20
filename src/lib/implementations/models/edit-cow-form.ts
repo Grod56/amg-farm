@@ -1,12 +1,12 @@
 import {
-	AddCowFormModelInteraction,
-	AddCowFormModelView,
-} from "@/lib/components/livestock-table/table-actions/add-cow/add-cow-form/add-cow-form-model";
+	EditCowFormModelView,
+	EditCowFormModelInteraction,
+} from "@/lib/components/livestock-table/table-actions/edit-cow/edit-cow-form/edit-cow-form-model";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
-export function addCowFormVIInterface(): ViewInteractionInterface<
-	AddCowFormModelView,
-	AddCowFormModelInteraction
+export function editCowFormVIInterface(): ViewInteractionInterface<
+	EditCowFormModelView,
+	EditCowFormModelInteraction
 > {
 	return {
 		produceModelView: async interaction => {
@@ -18,8 +18,12 @@ export function addCowFormVIInterface(): ViewInteractionInterface<
 						name: "",
 						type: "",
 						tag: "",
-						location: { id: "", name: "" },
+						selectedLocation: {
+							id: "",
+							name: "",
+						},
 						dob: new Date(),
+						locations: [],
 					};
 			}
 		},

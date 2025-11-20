@@ -6,7 +6,7 @@ import {
 import { RepositoryInteractionType } from "@/lib/utilities/repositories/repository-model";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
-import { addCow, retrieveRecords } from "./server-actions";
+import { addCow, editCow, removeCow, retrieveRecords } from "./server-actions";
 
 export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 	CattleRepositoryModelView,
@@ -17,7 +17,7 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 			case RepositoryInteractionType.RETRIEVE: {
 				const records = await retrieveRecords();
 				return {
-					cattleModels: records.map(record =>
+					cowModels: records.map(record =>
 						newReadonlyModel<CowModelView>({
 							id: record.id,
 							name: record.name,
@@ -42,6 +42,18 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 			}
 			case "Add_Cow": {
 				await addCow(interaction.input.form);
+				return await this.produceModelView({
+					type: RepositoryInteractionType.RETRIEVE,
+				});
+			}
+			case "Remove_Cow": {
+				await removeCow(interaction.input.cowModel.modelView);
+				return await this.produceModelView({
+					type: RepositoryInteractionType.RETRIEVE,
+				});
+			}
+			case "Edit_Cow": {
+				await editCow(interaction.input.cowModel.modelView);
 				return await this.produceModelView({
 					type: RepositoryInteractionType.RETRIEVE,
 				});

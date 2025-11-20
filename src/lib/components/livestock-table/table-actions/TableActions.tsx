@@ -29,11 +29,15 @@ const TableActions = function ({ model }) {
 					})
 				}
 			>
-				{locationsMap.entries().map(([location_name, location_id]) => (
-					<option key={location_id} value={location_name}>
-						{location_name}
-					</option>
-				))}
+				{[
+					...locationsMap
+						.entries()
+						.map(([location_name, location_id]) => (
+							<option key={location_id} value={location_name}>
+								{location_name}
+							</option>
+						)),
+				]}
 			</select>
 			<div className="flex gap-4">
 				<button className="add">
@@ -46,13 +50,19 @@ const TableActions = function ({ model }) {
 					className="remove disabled:opacity-60 disabled:cursor-default cursor-pointer"
 					disabled={Boolean(!selectedCow)}
 				>
-					<FontAwesomeIcon icon={faTrashCan} />
+					<FontAwesomeIcon
+						icon={faTrashCan}
+						onClick={() => interact({ type: "Remove" })}
+					/>
 				</button>
 				<button
 					className="edit disabled:opacity-60 disabled:cursor-default cursor-pointer"
 					disabled={Boolean(!selectedCow)}
 				>
-					<FontAwesomeIcon icon={faEdit} />
+					<FontAwesomeIcon
+						icon={faEdit}
+						onClick={() => interact({ type: "Edit" })}
+					/>
 				</button>
 			</div>
 		</div>

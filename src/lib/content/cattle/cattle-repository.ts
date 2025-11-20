@@ -8,13 +8,15 @@ import { AddCowFormModelView } from "@/lib/components/livestock-table/table-acti
 import { Location } from "@/lib/types/miscellaneous";
 
 export interface CattleRepositoryModelView {
-	cattleModels: CowModel[];
+	cowModels: CowModel[];
 	locations: Location[];
 }
 
 export type CattleRepositoryModelInteraction =
 	| RepositoryModelInteraction
-	| InputModelInteraction<"Add_Cow", { form: AddCowFormModelView }>;
+	| InputModelInteraction<"Add_Cow", { form: AddCowFormModelView }>
+	| InputModelInteraction<"Edit_Cow", { cowModel: CowModel }>
+	| InputModelInteraction<"Remove_Cow", { cowModel: CowModel }>;
 
 export type CattleRepositoryModel = RepositoryModel<
 	CattleRepositoryModelView,

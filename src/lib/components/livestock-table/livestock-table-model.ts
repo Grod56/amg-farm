@@ -7,10 +7,15 @@ export interface LivestockTableModelView {
 	selectedLocation?: Location;
 }
 
-export type LivestockTableModelInteraction = InputModelInteraction<
-	"Change_Location",
-	{ currentModelView: LivestockTableModelView; location: Location }
->;
+export type LivestockTableModelInteraction =
+	| InputModelInteraction<
+			"Change_Location",
+			{ currentModelView: LivestockTableModelView; location: Location }
+	  >
+	| InputModelInteraction<
+			"SELECT_COW",
+			{ currentModelView: LivestockTableModelView; cowModel: CowModel }
+	  >;
 
 export type LivestockTableModel = InteractiveModel<
 	LivestockTableModelView,
