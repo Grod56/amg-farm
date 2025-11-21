@@ -2,7 +2,7 @@
 
 import PDFDocument from "pdfkit";
 import { CowRecord } from "../../content/cattle/cattle-api";
-import { retrieveRecords } from "../../implementations/repositories/server-actions";
+import { retrieveCattle } from "../../implementations/repositories/server-actions";
 import { IBlobStream } from "blob-stream";
 import { toZonedTime } from "date-fns-tz";
 
@@ -44,7 +44,7 @@ export async function generateRegister(destinationStream: IBlobStream) {
 		})}`,
 	);
 	addHorizontalRule(doc, -1, 1);
-	const cowRecords = await retrieveRecords();
+	const cowRecords = await retrieveCattle();
 	const totals: Map<string, number> = new Map();
 	totals.set("All", cowRecords.length);
 	new Set(cowRecords.map(record => record.type.trim()).sort()).forEach(type =>

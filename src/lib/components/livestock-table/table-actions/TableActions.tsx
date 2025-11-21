@@ -33,7 +33,11 @@ const TableActions = function ({ model }) {
 					...locationsMap
 						.entries()
 						.map(([location_name, location_id]) => (
-							<option key={location_id} value={location_name}>
+							<option
+								className="text-sm"
+								key={location_id}
+								value={location_name}
+							>
 								{location_name}
 							</option>
 						)),

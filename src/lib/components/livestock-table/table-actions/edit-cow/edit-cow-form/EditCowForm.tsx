@@ -14,6 +14,7 @@ const EditCowForm = function ({ model }) {
 			<Form.Control
 				type="text"
 				placeholder="Name"
+				required
 				value={name}
 				onChange={e =>
 					interact({
@@ -31,6 +32,7 @@ const EditCowForm = function ({ model }) {
 			<Form.Control
 				type="text"
 				placeholder="Type"
+				required
 				value={type}
 				onChange={e =>
 					interact({
@@ -65,6 +67,7 @@ const EditCowForm = function ({ model }) {
 			<Form.Control
 				type="date"
 				placeholder="Date of Birth"
+				required
 				value={Intl.DateTimeFormat("sv-SE").format(dob)} // TODO: eww...
 				onChange={event =>
 					interact({
@@ -83,6 +86,7 @@ const EditCowForm = function ({ model }) {
 				name="locations"
 				id="edit-form-location-selector"
 				defaultValue={selectedLocation.name}
+				required
 				onChange={event =>
 					interact({
 						type: "Update_Form",

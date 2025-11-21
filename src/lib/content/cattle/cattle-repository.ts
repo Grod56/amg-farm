@@ -9,14 +9,36 @@ import { Location } from "@/lib/types/miscellaneous";
 
 export interface CattleRepositoryModelView {
 	cowModels: CowModel[];
-	locations: Location[];
+	activeLocations: Location[];
+	allLocations: Location[];
 }
 
 export type CattleRepositoryModelInteraction =
 	| RepositoryModelInteraction
-	| InputModelInteraction<"Add_Cow", { form: AddCowFormModelView }>
-	| InputModelInteraction<"Edit_Cow", { cowModel: CowModel }>
-	| InputModelInteraction<"Remove_Cow", { cowModel: CowModel }>;
+	| InputModelInteraction<
+			"Add_Cow",
+			{
+				form: AddCowFormModelView;
+				successCallback: () => void;
+				failureCallback: (error: unknown) => void;
+			}
+	  >
+	| InputModelInteraction<
+			"Edit_Cow",
+			{
+				cowModel: CowModel;
+				successCallback: () => void;
+				failureCallback: (error: unknown) => void;
+			}
+	  >
+	| InputModelInteraction<
+			"Remove_Cow",
+			{
+				cowModel: CowModel;
+				successCallback: () => void;
+				failureCallback: (error: unknown) => void;
+			}
+	  >;
 
 export type CattleRepositoryModel = RepositoryModel<
 	CattleRepositoryModelView,

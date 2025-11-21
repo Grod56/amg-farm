@@ -12,24 +12,47 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 		produceModelView: async interaction => {
 			switch (interaction.type) {
 				case "Toggle_Dialog": {
-					const { cattleRepositoryModel, shown, location } =
+					const { cattleRepositoryModel, shown, location, notifier } =
 						interaction.input.currentDialogModelView;
 					return {
 						cattleRepositoryModel,
 						location,
+						notifier,
 						shown: !shown,
 					};
 				}
 				case "Submit": {
-					const { cattleRepositoryModel, location } =
+					const { cattleRepositoryModel, location, notifier } =
 						interaction.input.currentDialogModelView;
+					const { name } = interaction.input.currentFormModelView;
 					cattleRepositoryModel.interact({
 						type: "Add_Cow",
-						input: { form: interaction.input.currentFormModelView },
+						input: {
+							form: interaction.input.currentFormModelView,
+							successCallback() {
+								notifier.interact({
+									type: "Notify",
+									input: {
+										text: `${name} successfully added`,
+										variant: "success",
+									},
+								});
+							},
+							failureCallback(error) {
+								notifier.interact({
+									type: "Notify",
+									input: {
+										text: `Could not add cow. Error: ${error}`,
+										variant: "failure",
+									},
+								});
+							},
+						},
 					});
 					return {
 						cattleRepositoryModel,
 						location,
+						notifier,
 						shown: false,
 					};
 				}

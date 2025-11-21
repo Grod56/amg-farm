@@ -23,11 +23,11 @@ const LivestockTable = function ({ model }) {
 		viewInteractionInterface: cattleRepositoryViewInteractionInterface,
 	});
 	const { modelView, interact } = model;
-	const { selectedCow, selectedLocation } = modelView!;
+	const { selectedCow, selectedLocation, notifier } = modelView!;
 	const { modelView: repositoryModelView } = cattleRepositoryModel;
 	const computedSelectedLocation = selectedLocation
 		? selectedLocation
-		: repositoryModelView?.locations[0];
+		: repositoryModelView?.activeLocations[0];
 
 	const addCowDialogModel = useNewStatefulInteractiveModel(
 		addCowDialogVIInterface(),
@@ -51,7 +51,8 @@ const LivestockTable = function ({ model }) {
 								model={{
 									modelView: {
 										locations:
-											repositoryModelView!.locations,
+											repositoryModelView!
+												.activeLocations,
 										selectedCow,
 										selectedLocation:
 											computedSelectedLocation!,
@@ -66,6 +67,7 @@ const LivestockTable = function ({ model }) {
 													input: {
 														currentDialogModelView:
 															{
+																notifier,
 																cattleRepositoryModel,
 																shown: false,
 																location:
@@ -82,6 +84,8 @@ const LivestockTable = function ({ model }) {
 															input: {
 																currentDialogModelView:
 																	{
+																		livestockTableModel:
+																			model,
 																		cattleRepositoryModel,
 																		shown: false,
 																		cowModel:
@@ -99,13 +103,15 @@ const LivestockTable = function ({ model }) {
 															input: {
 																currentDialogModelView:
 																	{
+																		livestockTableModel:
+																			model,
 																		cattleRepositoryModel,
 																		shown: false,
 																		cowModel:
 																			selectedCow,
 																		locations:
 																			repositoryModelView!
-																				.locations,
+																				.allLocations,
 																	},
 															},
 														},
@@ -177,6 +183,7 @@ const LivestockTable = function ({ model }) {
 									: {
 											shown: false,
 											cattleRepositoryModel,
+											notifier,
 											location: computedSelectedLocation!,
 										},
 							}}
@@ -201,9 +208,10 @@ const LivestockTable = function ({ model }) {
 											cowModel: selectedCow!,
 											shown: false,
 											cattleRepositoryModel,
+											livestockTableModel: model,
 											locations:
 												cattleRepositoryModel.modelView!
-													.locations,
+													.allLocations,
 										},
 							}}
 						/>
@@ -225,6 +233,7 @@ const LivestockTable = function ({ model }) {
 									? removeCowDialogModel.modelView
 									: {
 											cowModel: selectedCow!,
+											livestockTableModel: model,
 											shown: false,
 											cattleRepositoryModel,
 										},

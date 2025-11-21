@@ -2,12 +2,18 @@
 
 import { AddCowFormModelView } from "@/lib/components/livestock-table/table-actions/add-cow/add-cow-form/add-cow-form-model";
 import { CowRecord } from "@/lib/content/cattle/cattle-api";
-import { CowModelView } from "@/lib/content/cattle/cow-model";
+import { CowModel } from "@/lib/content/cattle/cow-model";
 import neon from "@/lib/third-party/clients/neon";
+import { Location } from "@/lib/types/miscellaneous";
 
-export async function retrieveRecords() {
+export async function retrieveCattle() {
 	const records = await neon()`SELECT * FROM "Cattle"`;
 	return records.rows as CowRecord[];
+}
+
+export async function retrieveAllLocations() {
+	const records = await neon()`SELECT * FROM "Location"`;
+	return records.rows as Location[];
 }
 
 export async function addCow({
@@ -17,26 +23,24 @@ export async function addCow({
 	dob,
 	location,
 }: AddCowFormModelView) {
-	return await neon()`
+	return (
+		await neon()`
 		INSERT INTO "CattleTable"(name, type, tag, dob, location_id) 
-		VALUES (${name}, ${type}, ${tag}, ${dob}, ${location.id})`;
+		VALUES (${name}, ${type}, ${tag}, ${dob}, ${location.id})`
+	).rows;
 }
 
-export async function removeCow({ id }: CowModelView) {
+export async function removeCow(cow: CowModel) {
+	const { id } = cow.modelView;
 	return (await neon()`DELETE FROM "CattleTable" WHERE id = ${id}`).rows;
 }
 
-export async function editCow({
-	id,
-	name,
-	tag,
-	dob,
-	location,
-	type,
-}: CowModelView) {
-	const result = await neon()`
+export async function editCow(cow: CowModel) {
+	const { id, name, tag, dob, location, type } = cow.modelView;
+	return (
+		await neon()`
 		UPDATE "CattleTable" 
 		SET name = ${name}, tag = ${tag}, dob = ${dob}, location_id = ${location.id}, type = ${type}
-		WHERE id = ${id}`;
-	return result.rows;
+		WHERE id = ${id}`
+	).rows;
 }
