@@ -4,19 +4,26 @@ import PDFDocument from "pdfkit";
 import { CowRecord } from "../../content/cattle/cattle-api";
 import { retrieveCattle } from "../../implementations/repositories/server-actions";
 import { IBlobStream } from "blob-stream";
-import { toZonedTime } from "date-fns-tz";
+import { formatInTimeZone } from "date-fns-tz";
 
-export async function generateRegister(destinationStream: IBlobStream) {
-	const timeGenerated = toZonedTime(new Date(), "CAT");
+export async function generateRegister(
+	destinationStream: IBlobStream,
+	timeZone: string,
+	title: string,
+	registerNo: string,
+) {
+	const timeGenerated = new Date();
+	const timeGeneratedString = formatInTimeZone(
+		timeGenerated,
+		timeZone,
+		"EEEE, dd MMMM yyyy 'at' h:mm a z",
+	);
 	const doc = new PDFDocument({
 		info: {
-			Title: `A & M Farm Register — ${timeGenerated.toLocaleString(
-				"en-UK",
-				{
-					dateStyle: "long",
-					timeStyle: "short",
-				},
-			)}`,
+			Title: `${title} — ${timeGenerated.toLocaleString("en-UK", {
+				dateStyle: "long",
+				timeStyle: "short",
+			})}`,
 		},
 		layout: "landscape",
 		font: "Helvetica",
@@ -32,17 +39,11 @@ export async function generateRegister(destinationStream: IBlobStream) {
 	// TODO: cowRecords only has to be declared after this for some reason
 	doc.pipe(destinationStream);
 	doc.fontSize(14);
-	doc.font("Helvetica-Bold").text("A & M CATTLE RANCHING FARM REGISTER");
+	doc.font("Helvetica-Bold").text(title);
 	doc.fontSize(11);
 	doc.moveDown();
-	doc.font("Helvetica").text("Stock Register No.: 003978");
-	doc.text(
-		`Generated on: ${timeGenerated.toLocaleString("en-UK", {
-			dateStyle: "full",
-			timeStyle: "short",
-			hour12: true,
-		})}`,
-	);
+	doc.font("Helvetica").text(`Stock Register No.: ${registerNo}`);
+	doc.text(`Generated on: ${timeGeneratedString}`);
 	addHorizontalRule(doc, -1, 1);
 	const cowRecords = await retrieveCattle();
 	const totals: Map<string, number> = new Map();

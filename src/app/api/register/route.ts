@@ -1,14 +1,22 @@
 import { generateRegister } from "@/lib/utilities/server-actions/register-pdf";
 import BlobStream from "blob-stream";
 import { NextRequest } from "next/server";
-import { toZonedTime } from "date-fns-tz";
+import { formatInTimeZone } from "date-fns-tz";
 
 export async function GET(_: NextRequest) {
 	const pdfStream = BlobStream();
-	await generateRegister(pdfStream);
+	const registerNo = "003978";
+	const title = "A & M CATTLE RANCHING REGISTER";
+	const timeZone = "CAT";
+	await generateRegister(pdfStream, timeZone, title, registerNo);
 	const blob = pdfStream.toBlob();
-	const timeGenerated = toZonedTime(new Date(), "CAT");
-	const fileName = `farm_register_${timeGenerated.toISOString()}.pdf`;
+	const timeGenerated = new Date();
+	const timeGeneratedString = formatInTimeZone(
+		new Date(),
+		timeZone,
+		"yyyy-MM-dd_HHmmss",
+	);
+	const fileName = `farm_register_${timeGeneratedString}.pdf`;
 	const pdfFile = new File([blob], fileName, {
 		lastModified: timeGenerated.getTime(),
 	});
