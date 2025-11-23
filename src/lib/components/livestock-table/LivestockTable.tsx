@@ -40,7 +40,7 @@ const LivestockTable = function ({ model }) {
 	);
 
 	return (
-		<div className="livestock-table flex flex-col gap-3">
+		<div className="livestock-table flex flex-col max-h-full h-4/5 gap-3">
 			<ConditionalComponent
 				model={newReadonlyModel({
 					condition: repositoryModelView,
@@ -158,6 +158,17 @@ const LivestockTable = function ({ model }) {
 															modelView!,
 													},
 												});
+												break;
+											}
+											case "DESELECT": {
+												interact({
+													type: "RESET_SELECTED_COW",
+													input: {
+														currentModelView:
+															modelView!,
+													},
+												});
+												break;
 											}
 										}
 									},

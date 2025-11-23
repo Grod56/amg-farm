@@ -2,5 +2,5 @@
 
 td,
 th {
-	@apply border-1 p-1.5;
+	@apply p-2;
 }

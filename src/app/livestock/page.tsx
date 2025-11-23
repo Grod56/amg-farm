@@ -6,6 +6,7 @@ import { Variant } from "@/lib/components/notifier/notifier-model";
 import { livestockTableVIInterface } from "@/lib/implementations/models/livestock-table";
 import { notifierVIInterface } from "@/lib/implementations/models/notifier";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
+import "./livestock.css";
 
 const Livestock = function () {
 	const notifierModel = useInitializedStatefulInteractiveModel(
@@ -24,12 +25,14 @@ const Livestock = function () {
 	);
 	return (
 		<>
-			<div className="w-full h-full grow flex flex-col p-8 gap-7">
-				<div>
-					<h2 className="text-5xl">Livestock</h2>
-					<hr />
+			{/* Crazy h-0 to make everything fit together for some reason */}
+			<div className="page-background grow w-full h-0 px-3 p-8 md:!pl-12 md:!pr-12">
+				<div className="bg w-full h-full rounded-3xl shadow gap-8 bg-white grow flex flex-col py-8 px-4 md:w-9/10 md:min-h-80 md:mx-auto md:!pl-12 md:!pr-12">
+					<div>
+						<span className="text-4xl">Livestock</span>
+					</div>
+					<LivestockTable model={livestockTableModel} />
 				</div>
-				<LivestockTable model={livestockTableModel} />
 			</div>
 			<Notifier model={notifierModel} />
 		</>

@@ -2,8 +2,6 @@ import {
 	EditCowDialogModelView,
 	EditCowDialogModelInteraction,
 } from "@/lib/components/livestock-table/table-actions/edit-cow/edit-cow-dialog-model";
-import { CowModel } from "@/lib/content/cattle/cow-model";
-import { newReadonlyModel } from "@mvc-react/mvc";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
 export function editCowDialogVIInterface(): ViewInteractionInterface<
@@ -30,31 +28,21 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 					};
 				}
 				case "Submit": {
-					const { currentDialogModelView, currentFormModelView } =
+					const { currentDialogModelView, updatedCow } =
 						interaction.input;
 					const {
 						cattleRepositoryModel,
 						locations,
-						cowModel,
 						livestockTableModel,
 					} = currentDialogModelView;
-					const { name, selectedLocation, type, tag, dob } =
-						currentFormModelView;
+					const { name } = updatedCow.modelView!;
 					const { modelView: livestockTableModelView } =
 						livestockTableModel;
 					const { notifier } = livestockTableModelView!;
-					const newCowModel: CowModel = newReadonlyModel({
-						id: cowModel.modelView.id,
-						location: selectedLocation,
-						name,
-						type,
-						tag,
-						dob,
-					});
 					cattleRepositoryModel.interact({
 						type: "Edit_Cow",
 						input: {
-							cowModel: newCowModel,
+							cowModel: updatedCow,
 							successCallback() {
 								notifier.interact({
 									type: "Notify",
@@ -84,7 +72,7 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 					});
 					return {
 						cattleRepositoryModel,
-						cowModel: newCowModel,
+						cowModel: updatedCow,
 						locations,
 						livestockTableModel: livestockTableModel,
 						shown: false,

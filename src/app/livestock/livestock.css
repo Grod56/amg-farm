@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+.page-background {
+	background-image: url("/20251101_171651_proc.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}

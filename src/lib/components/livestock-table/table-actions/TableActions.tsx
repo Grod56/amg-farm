@@ -44,15 +44,16 @@ const TableActions = function ({ model }) {
 				]}
 			</select>
 			<div className="flex gap-4">
-				<button className="add">
+				<button className="add" title="Add">
 					<FontAwesomeIcon
 						icon={faAdd}
 						onClick={() => interact({ type: "Add" })}
 					/>
 				</button>
 				<button
-					className="remove disabled:opacity-60 disabled:cursor-default cursor-pointer"
+					className="remove text-red-800 disabled:text-gray-400 disabled:cursor-default cursor-pointer"
 					disabled={Boolean(!selectedCow)}
+					title="Remove"
 				>
 					<FontAwesomeIcon
 						icon={faTrashCan}
@@ -60,8 +61,9 @@ const TableActions = function ({ model }) {
 					/>
 				</button>
 				<button
-					className="edit disabled:opacity-60 disabled:cursor-default cursor-pointer"
+					className="edit disabled:text-gray-400 disabled:cursor-default cursor-pointer"
 					disabled={Boolean(!selectedCow)}
+					title="Edit"
 				>
 					<FontAwesomeIcon
 						icon={faEdit}

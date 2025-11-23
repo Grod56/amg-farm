@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { addCowFormVIInterface } from "@/lib/implementations/models/add-cow-form";
 import AddCowForm from "./add-cow-form/AddCowForm";
+import Form from "react-bootstrap/Form";
 
 const AddCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
@@ -34,36 +35,48 @@ const AddCowDialog = function ({ model }) {
 				<Modal.Title>Add Cow</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<AddCowForm model={addCowFormModel} />
-			</Modal.Body>
-			<Modal.Footer>
-				<Button
-					variant="secondary"
-					onClick={() =>
-						interact({
-							type: "Toggle_Dialog",
-							input: { currentDialogModelView: modelView! },
-						})
-					}
-				>
-					Close
-				</Button>
-				<Button
-					variant="primary"
-					onClick={() =>
+				<Form
+					className="flex flex-col gap-4"
+					onSubmit={e => {
+						e.preventDefault();
+						const { name, type, tag, dob } =
+							addCowFormModel.modelView!;
 						interact({
 							type: "Submit",
 							input: {
 								currentDialogModelView: modelView!,
-								currentFormModelView:
-									addCowFormModel.modelView!,
+								currentFormModelView: {
+									name: name.trim(),
+									dob,
+									type: type.trim(),
+									tag: tag.trim(),
+									location,
+								},
 							},
-						})
-					}
+						});
+					}}
 				>
-					Add Cow
-				</Button>
-			</Modal.Footer>
+					<AddCowForm model={addCowFormModel} />
+					<div className="flex gap-2 justify-end">
+						<Button
+							variant="secondary"
+							onClick={() =>
+								interact({
+									type: "Toggle_Dialog",
+									input: {
+										currentDialogModelView: modelView!,
+									},
+								})
+							}
+						>
+							Close
+						</Button>
+						<Button type="submit" variant="primary">
+							Add Cow
+						</Button>
+					</div>
+				</Form>
+			</Modal.Body>
 		</Modal>
 	);
 } as ModeledVoidComponent<AddCowDialogModel>;

@@ -10,7 +10,7 @@ const EditCowForm = function ({ model }) {
 	);
 
 	return (
-		<Form>
+		<div>
 			<Form.Control
 				type="text"
 				placeholder="Name"
@@ -112,7 +112,7 @@ const EditCowForm = function ({ model }) {
 						)),
 				]}
 			</Form.Select>
-		</Form>
+		</div>
 	);
 } as ModeledVoidComponent<EditCowFormModel>;
 

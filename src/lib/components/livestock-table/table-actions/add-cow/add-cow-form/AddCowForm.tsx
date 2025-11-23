@@ -7,7 +7,7 @@ const AddCowForm = function ({ model }) {
 	const { name, dob, tag, type, location } = modelView!;
 
 	return (
-		<Form>
+		<div>
 			<Form.Control
 				type="text"
 				placeholder="Name"
@@ -86,7 +86,7 @@ const AddCowForm = function ({ model }) {
 				value={location.name}
 				disabled
 			/>
-		</Form>
+		</div>
 	);
 } as ModeledVoidComponent<AddCowFormModel>;
 

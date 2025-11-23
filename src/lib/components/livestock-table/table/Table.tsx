@@ -13,18 +13,27 @@ const Table = function ({ model }) {
 	const { cowModels, selectedCow } = modelView!;
 
 	return (
-		<div>
-			<table className="border-collapse border-1 w-full">
-				<thead>
-					<tr>
-						<th scope="col">No.</th>
+		<div className="h-full w-full overflow-y-auto">
+			<table
+				tabIndex={0}
+				className="w-full h-full border-collapse rounded-lg overflow-hidden border-gray-300"
+			>
+				<thead className="sticky top-0 max-w-full w-full">
+					<tr className="text-white bg-gray-800">
+						<th className="text-center" scope="col">
+							No.
+						</th>
 						<th scope="col">Name</th>
 						<th scope="col">Type</th>
 						<th scope="col">Tag</th>
-						<th scope="col">D.o.B</th>
+						<th scope="col">DOB</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody
+					tabIndex={0}
+					className="bg-gray-100"
+					onBlur={() => interact({ type: "DESELECT" })}
+				>
 					<ComponentList
 						model={newReadonlyModel({
 							Component: TableRow,
