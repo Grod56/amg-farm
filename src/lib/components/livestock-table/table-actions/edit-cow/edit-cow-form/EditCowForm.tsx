@@ -8,14 +8,15 @@ const EditCowForm = function ({ model }) {
 	const locationsMap = new Map<string, string>(
 		locations.map(location => [location.name, location.id]),
 	);
+	const maxDate = Intl.DateTimeFormat("sv-SE").format(new Date());
 
 	return (
 		<div>
 			<Form.Control
 				type="text"
+				defaultValue={name}
 				placeholder="Name"
 				required
-				value={name}
 				onChange={e =>
 					interact({
 						type: "Update_Form",
@@ -31,9 +32,9 @@ const EditCowForm = function ({ model }) {
 			<br />
 			<Form.Control
 				type="text"
+				defaultValue={type}
 				placeholder="Type"
 				required
-				value={type}
 				onChange={e =>
 					interact({
 						type: "Update_Form",
@@ -49,8 +50,8 @@ const EditCowForm = function ({ model }) {
 			<br />
 			<Form.Control
 				type="text"
+				defaultValue={tag}
 				placeholder="Tag"
-				value={tag}
 				onChange={e =>
 					interact({
 						type: "Update_Form",
@@ -68,7 +69,8 @@ const EditCowForm = function ({ model }) {
 				type="date"
 				placeholder="Date of Birth"
 				required
-				value={Intl.DateTimeFormat("sv-SE").format(dob)} // TODO: eww...
+				defaultValue={Intl.DateTimeFormat("sv-SE").format(dob)} // TODO: eww...
+				max={maxDate}
 				onChange={event =>
 					interact({
 						type: "Update_Form",

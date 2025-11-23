@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 const AddCowForm = function ({ model }) {
 	const { interact, modelView } = model;
 	const { name, dob, tag, type, location } = modelView!;
+	const maxDate = Intl.DateTimeFormat("sv-SE").format(new Date());
 
 	return (
 		<div>
@@ -12,7 +13,7 @@ const AddCowForm = function ({ model }) {
 				type="text"
 				placeholder="Name"
 				required
-				value={name}
+				defaultValue={name}
 				onChange={e =>
 					interact({
 						type: "Update_Form",
@@ -30,7 +31,7 @@ const AddCowForm = function ({ model }) {
 				type="text"
 				placeholder="Type"
 				required
-				value={type}
+				defaultValue={type}
 				onChange={e =>
 					interact({
 						type: "Update_Form",
@@ -47,7 +48,7 @@ const AddCowForm = function ({ model }) {
 			<Form.Control
 				type="text"
 				placeholder="Tag"
-				value={tag}
+				defaultValue={tag}
 				onChange={e =>
 					interact({
 						type: "Update_Form",
@@ -65,7 +66,8 @@ const AddCowForm = function ({ model }) {
 				type="date"
 				placeholder="Date of Birth"
 				required
-				value={Intl.DateTimeFormat("sv-SE").format(dob)} // TODO: eww...
+				defaultValue={Intl.DateTimeFormat("sv-SE").format(dob)} // TODO: eww...
+				max={maxDate}
 				onChange={e =>
 					interact({
 						type: "Update_Form",
@@ -83,7 +85,7 @@ const AddCowForm = function ({ model }) {
 				type="text"
 				placeholder="Location"
 				required
-				value={location.name}
+				defaultValue={location.name}
 				disabled
 			/>
 		</div>

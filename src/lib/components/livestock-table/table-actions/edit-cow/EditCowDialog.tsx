@@ -12,7 +12,7 @@ const EditCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
 	const { shown, locations, cowModel } = modelView!;
 	const { id, name, tag, type, location, dob } = cowModel!.modelView;
-	const editCowFormModel = useInitializedStatefulInteractiveModel(
+	const editFormModel = useInitializedStatefulInteractiveModel(
 		editCowFormVIInterface(),
 		{
 			name,
@@ -48,7 +48,7 @@ const EditCowDialog = function ({ model }) {
 							tag: updatedTag,
 							type: updatedType,
 							dob: updatedDob,
-						} = editCowFormModel.modelView!;
+						} = editFormModel.modelView!;
 						const updatedCow = newReadonlyModel({
 							id,
 							name: updatedName.trim(),
@@ -68,10 +68,8 @@ const EditCowDialog = function ({ model }) {
 				>
 					<EditCowForm
 						model={{
-							...editCowFormModel,
-							modelView: {
-								...editCowFormModel.modelView!,
-							},
+							modelView: editFormModel.modelView!,
+							interact: editFormModel.interact,
 						}}
 					/>
 					<div className="flex gap-2 justify-end">

@@ -40,144 +40,129 @@ const LivestockTable = function ({ model }) {
 	);
 
 	return (
-		<div className="livestock-table flex flex-col max-h-full h-4/5 gap-3">
-			<ConditionalComponent
-				model={newReadonlyModel({
-					condition: repositoryModelView,
-					components: new Map([[null, () => <></>]]),
-					FallBackComponent: () => (
-						<>
-							<TableActions
-								model={{
-									modelView: {
-										locations:
-											repositoryModelView!
-												.activeLocations,
-										selectedCow,
-										selectedLocation:
-											computedSelectedLocation!,
-									},
-									interact: (
-										interaction: TableActionsModelInteraction,
-									) => {
-										switch (interaction.type) {
-											case "Add":
-												addCowDialogModel.interact({
-													type: "Toggle_Dialog",
-													input: {
-														currentDialogModelView:
-															{
-																notifier,
-																cattleRepositoryModel,
-																shown: false,
-																location:
-																	computedSelectedLocation!,
-															},
+		<div
+			tabIndex={0}
+			className="livestock-table flex flex-col max-h-full h-4/5 gap-3"
+			// onBlur={() =>
+			// 	interact({
+			// 		type: "RESET_SELECTED_COW",
+			// 		input: { currentModelView: modelView! },
+			// 	})
+			// }
+		>
+			{repositoryModelView && (
+				<>
+					<TableActions
+						model={{
+							modelView: {
+								locations: repositoryModelView!.activeLocations,
+								selectedCow,
+								selectedLocation: computedSelectedLocation!,
+							},
+							interact: (
+								interaction: TableActionsModelInteraction,
+							) => {
+								switch (interaction.type) {
+									case "Add":
+										addCowDialogModel.interact({
+											type: "Toggle_Dialog",
+											input: {
+												currentDialogModelView: {
+													notifier,
+													cattleRepositoryModel,
+													shown: false,
+													location:
+														computedSelectedLocation!,
+												},
+											},
+										});
+										break;
+									case "Remove":
+										if (selectedCow)
+											removeCowDialogModel.interact({
+												type: "TOGGLE_DIALOG",
+												input: {
+													currentDialogModelView: {
+														livestockTableModel:
+															model,
+														cattleRepositoryModel,
+														shown: false,
+														cowModel: selectedCow,
 													},
-												});
-												break;
-											case "Remove":
-												if (selectedCow)
-													removeCowDialogModel.interact(
-														{
-															type: "TOGGLE_DIALOG",
-															input: {
-																currentDialogModelView:
-																	{
-																		livestockTableModel:
-																			model,
-																		cattleRepositoryModel,
-																		shown: false,
-																		cowModel:
-																			selectedCow,
-																	},
-															},
-														},
-													);
-												break;
-											case "Edit":
-												if (selectedCow)
-													editCowDialogModel.interact(
-														{
-															type: "Toggle_Dialog",
-															input: {
-																currentDialogModelView:
-																	{
-																		livestockTableModel:
-																			model,
-																		cattleRepositoryModel,
-																		shown: false,
-																		cowModel:
-																			selectedCow,
-																		locations:
-																			repositoryModelView!
-																				.allLocations,
-																	},
-															},
-														},
-													);
-												break;
-											case "Change_Location": {
-												interact({
-													type: interaction.type,
-													input: {
-														...interaction.input,
-														currentModelView:
-															modelView!,
+												},
+											});
+										break;
+									case "Edit":
+										if (selectedCow)
+											editCowDialogModel.interact({
+												type: "Toggle_Dialog",
+												input: {
+													currentDialogModelView: {
+														livestockTableModel:
+															model,
+														cattleRepositoryModel,
+														shown: false,
+														cowModel: selectedCow,
+														locations:
+															repositoryModelView!
+																.allLocations,
 													},
-												});
-												break;
-											}
-										}
-									},
-								}}
-							/>
-							<Table
-								model={{
-									modelView: {
-										cowModels:
-											repositoryModelView!.cowModels.filter(
-												cattleModel =>
-													cattleModel.modelView
-														.location.id ==
-													computedSelectedLocation!
-														.id,
-											),
-										selectedCow,
-									},
-									interact(interaction) {
-										switch (interaction.type) {
-											case "SELECT_COW": {
-												const { cowModel } =
-													interaction.input;
-												interact({
-													type: "SELECT_COW",
-													input: {
-														cowModel,
-														currentModelView:
-															modelView!,
-													},
-												});
-												break;
-											}
-											case "DESELECT": {
-												interact({
-													type: "RESET_SELECTED_COW",
-													input: {
-														currentModelView:
-															modelView!,
-													},
-												});
-												break;
-											}
-										}
-									},
-								}}
-							/>
-						</>
-					),
-				})}
-			/>
+												},
+											});
+										break;
+									case "Change_Location": {
+										interact({
+											type: interaction.type,
+											input: {
+												...interaction.input,
+												currentModelView: modelView!,
+											},
+										});
+										break;
+									}
+								}
+							},
+						}}
+					/>
+					<Table
+						model={{
+							modelView: {
+								cowModels:
+									repositoryModelView!.cowModels.filter(
+										cattleModel =>
+											cattleModel.modelView.location.id ==
+											computedSelectedLocation!.id,
+									),
+								selectedCow,
+							},
+							interact(interaction) {
+								switch (interaction.type) {
+									case "SELECT_COW": {
+										const { cowModel } = interaction.input;
+										interact({
+											type: "SELECT_COW",
+											input: {
+												cowModel,
+												currentModelView: modelView!,
+											},
+										});
+										break;
+									}
+									case "DESELECT": {
+										interact({
+											type: "RESET_SELECTED_COW",
+											input: {
+												currentModelView: modelView!,
+											},
+										});
+										break;
+									}
+								}
+							},
+						}}
+					/>
+				</>
+			)}
 			<ConditionalComponent
 				model={newReadonlyModel({
 					condition: repositoryModelView,
@@ -202,6 +187,24 @@ const LivestockTable = function ({ model }) {
 					),
 				})}
 			/>
+			{/* {selectedCow && (
+				<EditCowDialog
+					model={{
+						...editCowDialogModel,
+						modelView: editCowDialogModel.modelView
+							? editCowDialogModel.modelView
+							: {
+									cowModel: selectedCow!,
+									shown: false,
+									cattleRepositoryModel,
+									livestockTableModel: model,
+									locations:
+										cattleRepositoryModel.modelView!
+											.allLocations,
+								},
+					}}
+				/>
+			)} */}
 			<ConditionalComponent
 				model={newReadonlyModel({
 					condition: selectedCow,

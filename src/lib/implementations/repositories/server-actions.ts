@@ -8,7 +8,10 @@ import { Location } from "@/lib/types/miscellaneous";
 
 export async function retrieveCattle() {
 	const records = await neon()`SELECT * FROM "Cattle"`;
-	return records.rows as CowRecord[];
+	return records.rows.map(record => ({
+		...record,
+		tag: record.tag == null ? "" : record.tag,
+	})) as CowRecord[];
 }
 
 export async function retrieveAllLocations() {
@@ -23,10 +26,11 @@ export async function addCow({
 	dob,
 	location,
 }: AddCowFormModelView) {
+	const processedTag = tag == "" ? null : tag;
 	return (
 		await neon()`
 		INSERT INTO "CattleTable"(name, type, tag, dob, location_id) 
-		VALUES (${name}, ${type}, ${tag}, ${dob}, ${location.id})`
+		VALUES (${name}, ${type}, ${processedTag}, ${dob}, ${location.id})`
 	).rows;
 }
 

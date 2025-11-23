@@ -8,16 +8,13 @@ import TableRow from "../table-row/TableRow";
 import { TableModel } from "./table-model";
 import "./table.css";
 
-const Table = function ({ model }) {
+const Table = function ({ model }: { model: TableModel }) {
 	const { modelView, interact } = model;
 	const { cowModels, selectedCow } = modelView!;
 
 	return (
 		<div className="h-full w-full overflow-y-auto">
-			<table
-				tabIndex={0}
-				className="w-full h-full border-collapse rounded-lg overflow-hidden border-gray-300"
-			>
+			<table className="w-full h-full border-collapse rounded-lg overflow-hidden border-gray-300">
 				<thead className="sticky top-0 max-w-full w-full">
 					<tr className="text-white bg-gray-800">
 						<th className="text-center" scope="col">
@@ -29,11 +26,7 @@ const Table = function ({ model }) {
 						<th scope="col">DOB</th>
 					</tr>
 				</thead>
-				<tbody
-					tabIndex={0}
-					className="bg-gray-100"
-					onBlur={() => interact({ type: "DESELECT" })}
-				>
+				<tbody className="bg-gray-100">
 					<ComponentList
 						model={newReadonlyModel({
 							Component: TableRow,
