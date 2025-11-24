@@ -6,16 +6,18 @@ import { TableActionsModel } from "./table-actions-model";
 
 const TableActions = function ({ model }) {
 	const { interact, modelView } = model;
-	const { locations, selectedLocation, selectedCow } = modelView!;
+	const { locations, selectedLocation, selectedCow, isPending } = modelView!;
 	const locationsMap = new Map<string, string>(
 		locations.map(location => [location.name, location.id]),
 	);
+	console.log(isPending);
 
 	return (
 		<div className="flex gap-7 justify-between w-full">
 			<select
 				name="locations"
 				id="location-selector"
+				disabled={isPending}
 				defaultValue={selectedLocation.name}
 				onChange={event =>
 					interact({
@@ -43,8 +45,12 @@ const TableActions = function ({ model }) {
 						)),
 				]}
 			</select>
-			<div className="flex gap-4">
-				<button className="add" title="Add">
+			<div className="flex gap-4 pr-5">
+				<button
+					className="add disabled:text-gray-400 disabled:cursor-default cursor-pointer"
+					title="Add"
+					disabled={isPending}
+				>
 					<FontAwesomeIcon
 						icon={faAdd}
 						onClick={() => interact({ type: "Add" })}
@@ -52,7 +58,8 @@ const TableActions = function ({ model }) {
 				</button>
 				<button
 					className="remove text-red-800 disabled:text-gray-400 disabled:cursor-default cursor-pointer"
-					disabled={Boolean(!selectedCow)}
+					hidden={Boolean(!selectedCow)}
+					disabled={isPending}
 					title="Remove"
 				>
 					<FontAwesomeIcon
@@ -62,8 +69,9 @@ const TableActions = function ({ model }) {
 				</button>
 				<button
 					className="edit disabled:text-gray-400 disabled:cursor-default cursor-pointer"
-					disabled={Boolean(!selectedCow)}
+					hidden={Boolean(!selectedCow)}
 					title="Edit"
+					disabled={isPending}
 				>
 					<FontAwesomeIcon
 						icon={faEdit}

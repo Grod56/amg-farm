@@ -16,7 +16,7 @@ export function notifierVIInterface(): ViewInteractionInterface<
 					return {
 						variant,
 						text,
-						shown: true,
+						shown: variant != "pending" && variant != "none", // HACK
 					};
 				}
 				case "Close": {

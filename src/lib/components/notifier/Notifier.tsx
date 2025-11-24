@@ -9,7 +9,6 @@ const Notifier = function ({ model }) {
 	const variantMap = new Map<Variant, string>([
 		["success", "success"],
 		["failure", "danger"],
-		["default", "primary"],
 	]);
 
 	return (

@@ -39,6 +39,10 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 					const { modelView: livestockTableModelView } =
 						livestockTableModel;
 					const { notifier } = livestockTableModelView!;
+					notifier.interact({
+						type: "Notify",
+						input: { variant: "pending", text: "" },
+					});
 					cattleRepositoryModel.interact({
 						type: "Edit_Cow",
 						input: {

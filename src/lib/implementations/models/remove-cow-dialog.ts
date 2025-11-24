@@ -33,6 +33,10 @@ export function removeCowDialogVIInterface(): ViewInteractionInterface<
 					} = interaction.input.currentDialogModelView;
 					const { name } = cowModel!.modelView;
 					const { notifier } = livestockTableModel.modelView!;
+					notifier.interact({
+						type: "Notify",
+						input: { variant: "pending", text: "" },
+					});
 					cattleRepositoryModel.interact({
 						type: "Remove_Cow",
 						input: {

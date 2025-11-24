@@ -1,6 +1,6 @@
 import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
 
-export type Variant = "success" | "failure" | "default";
+export type Variant = "success" | "failure" | "pending" | "none";
 
 export interface NotifierModelView {
 	text: string;

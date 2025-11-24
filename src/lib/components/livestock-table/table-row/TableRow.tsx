@@ -9,7 +9,7 @@ const TableRow = function ({ model }) {
 	return (
 		<tr
 			tabIndex={0}
-			className="hover:bg-orange-300 [&[data-isselected='true']]:bg-orange-400"
+			className="hover:bg-orange-100 [&[data-isselected='true']]:bg-orange-300"
 			data-isselected={isSelected}
 			onClick={() => {
 				interact({

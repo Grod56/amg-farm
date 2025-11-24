@@ -16,6 +16,7 @@ import RemoveCowDialog from "./table-actions/remove-cow/RemoveCowDialog";
 import { TableActionsModelInteraction } from "./table-actions/table-actions-model";
 import TableActions from "./table-actions/TableActions";
 import Table from "./table/Table";
+import Spinner from "react-bootstrap/Spinner";
 
 const LivestockTable = function ({ model }) {
 	const cattleRepositoryModel = useStatefulRepository({
@@ -24,6 +25,7 @@ const LivestockTable = function ({ model }) {
 	});
 	const { modelView, interact } = model;
 	const { selectedCow, selectedLocation, notifier } = modelView!;
+	const { variant } = notifier.modelView!;
 	const { modelView: repositoryModelView } = cattleRepositoryModel;
 	const computedSelectedLocation = selectedLocation
 		? selectedLocation
@@ -38,6 +40,7 @@ const LivestockTable = function ({ model }) {
 	const removeCowDialogModel = useNewStatefulInteractiveModel(
 		removeCowDialogVIInterface(),
 	);
+	console.log(variant);
 
 	return (
 		<div
@@ -50,7 +53,7 @@ const LivestockTable = function ({ model }) {
 			// 	})
 			// }
 		>
-			{repositoryModelView && (
+			{repositoryModelView ? (
 				<>
 					<TableActions
 						model={{
@@ -58,6 +61,8 @@ const LivestockTable = function ({ model }) {
 								locations: repositoryModelView!.activeLocations,
 								selectedCow,
 								selectedLocation: computedSelectedLocation!,
+								isPending:
+									notifier.modelView!.variant == "pending",
 							},
 							interact: (
 								interaction: TableActionsModelInteraction,
@@ -162,6 +167,12 @@ const LivestockTable = function ({ model }) {
 						}}
 					/>
 				</>
+			) : (
+				<Spinner
+					animation="border"
+					color="black"
+					className="!size-16 mx-auto my-auto"
+				/>
 			)}
 			<ConditionalComponent
 				model={newReadonlyModel({

@@ -16,6 +16,7 @@ export interface TableActionsModelView {
 	locations: Location[];
 	selectedLocation: Location;
 	selectedCow: CowModel | undefined;
+	isPending: boolean;
 }
 
 export type TableActionsModel = InteractiveModel<

@@ -7,7 +7,7 @@ const Header = function ({ model }) {
 	const { headerTitle } = model.modelView;
 
 	return (
-		<div className="sticky top-0 flex px-6 py-4 bg-gray-950 text-white md:px-9">
+		<div className="sticky shadow top-0 flex px-6 py-4 bg-gray-900 text-white md:px-9">
 			<div className="flex flex-col align-center items-center w-full gap-3 md:flex-row md:flex-wrap md:justify-between md:gap-4">
 				<div className="logo">
 					<Link

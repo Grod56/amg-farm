@@ -25,6 +25,10 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 					const { cattleRepositoryModel, location, notifier } =
 						interaction.input.currentDialogModelView;
 					const { name } = interaction.input.currentFormModelView;
+					notifier.interact({
+						type: "Notify",
+						input: { variant: "pending", text: "" },
+					});
 					cattleRepositoryModel.interact({
 						type: "Add_Cow",
 						input: {
