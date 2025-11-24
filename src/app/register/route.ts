@@ -24,7 +24,7 @@ export async function GET(_: NextRequest) {
 		status: 201,
 		headers: {
 			"Content-Type": "application/pdf",
-			"Content-Disposition": `inline; filename="${fileName}"`,
+			"Content-Disposition": `attachment; filename="${fileName}"`,
 			"Content-Length": `${pdfFile.size}`,
 		},
 	});
