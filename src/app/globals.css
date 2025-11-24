@@ -24,6 +24,9 @@ body {
 	color: var(--foreground);
 	font-family: Arial, Helvetica, sans-serif;
 	min-height: 100%;
+	background-image: url("/20251101_171651_proc.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 body ::-webkit-scrollbar-track {

@@ -2,5 +2,13 @@
 
 td,
 th {
-	@apply p-2;
+	@apply py-2 px-3;
 }
+/* thead:first-child,
+tr:first-child {
+	@apply pl-3;
+}
+thead:last-child,
+tr:last-child {
+	@apply pr-3;
+} */

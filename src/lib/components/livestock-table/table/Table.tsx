@@ -15,9 +15,9 @@ const Table = function ({ model }: { model: TableModel }) {
 	return (
 		<div className="h-full w-full overflow-y-auto">
 			<table className="w-full h-full border-collapse rounded-lg overflow-hidden border-gray-300">
-				<thead className="sticky top-0 max-w-full w-full">
+				<thead className="max-w-full w-full">
 					<tr className="text-white bg-gray-800">
-						<th className="text-center" scope="col">
+						<th className="text-center max-md:hidden" scope="col">
 							No.
 						</th>
 						<th scope="col">Name</th>

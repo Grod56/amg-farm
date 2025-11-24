@@ -18,7 +18,7 @@ const TableRow = function ({ model }) {
 				});
 			}}
 		>
-			<td className="text-center">{rowNumber}</td>
+			<td className="text-center max-md:hidden">{rowNumber}</td>
 			<td>{name}</td>
 			<td>{type}</td>
 			<td>{tag}</td>

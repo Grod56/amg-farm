@@ -20,26 +20,25 @@ const Header = function ({ model }) {
 							width={48}
 							height={48}
 						/>
-						<span className="text-2xl content-center">
+						<span className="text-2xl content-center font-serif">
 							{headerTitle}
 						</span>
 					</Link>
 				</div>
 				<div className="flex gap-4 items-center">
-					<a
+					<Link
 						className="text-decoration-none uppercase text-sm text-white hover:text-amber-200"
 						href={`/livestock`}
 					>
 						Livestock
-					</a>
-					<a
+					</Link>
+					<Link
 						className="text-decoration-none uppercase text-sm text-white hover:text-amber-200"
 						href={`/register`}
 						target="_blank"
-						rel="noreferrer"
 					>
 						Generate Register
-					</a>
+					</Link>
 				</div>
 			</div>
 		</div>
