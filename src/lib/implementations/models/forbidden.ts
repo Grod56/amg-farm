@@ -1,0 +1,44 @@
+import {
+	ForbiddenModelView,
+	ForbiddenModelInteraction,
+} from "@/app/forbidden/forbidden-model";
+import { signOut } from "@/lib/third-party/clients/better-auth";
+import { ViewInteractionInterface } from "@mvc-react/stateful";
+
+export function forbiddenVIInterface(): ViewInteractionInterface<
+	ForbiddenModelView,
+	ForbiddenModelInteraction
+> {
+	return {
+		produceModelView: async interaction => {
+			switch (interaction.type) {
+				case "SIGN_OUT": {
+					const { notifier, router } = interaction.input;
+					await signOut({
+						fetchOptions: {
+							onRequest: () => {
+								notifier.interact({
+									type: "Notify",
+									input: { text: "", variant: "pending" },
+								});
+							},
+							onSuccess: () => {
+								router.push("/");
+							},
+							onError: () => {
+								notifier.interact({
+									type: "Notify",
+									input: { text: "", variant: "none" },
+								});
+							},
+						},
+					});
+					return {
+						notifier,
+						router,
+					};
+				}
+			}
+		},
+	};
+}

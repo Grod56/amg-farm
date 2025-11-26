@@ -2,6 +2,7 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { HeaderModel } from "./header-model";
 import Link from "next/link";
 import Image from "next/image";
+import AuthWidget from "./AuthWidget";
 
 const Header = function ({ model }) {
 	const { headerTitle } = model.modelView;
@@ -25,7 +26,7 @@ const Header = function ({ model }) {
 						</span>
 					</Link>
 				</div>
-				<div className="flex gap-4 items-center">
+				<div className="px-3 flex gap-4 items-center text-center">
 					<Link
 						className="text-decoration-none uppercase text-sm text-white hover:text-amber-200"
 						href={`/livestock`}
@@ -37,8 +38,9 @@ const Header = function ({ model }) {
 						href={`/register`}
 						target="_blank"
 					>
-						Generate Register
+						Get Register
 					</Link>
+					<AuthWidget />
 				</div>
 			</div>
 		</div>

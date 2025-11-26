@@ -2,8 +2,20 @@ import { generateRegister } from "@/lib/utilities/server-actions/register-pdf";
 import BlobStream from "blob-stream";
 import { NextRequest } from "next/server";
 import { formatInTimeZone } from "date-fns-tz";
+import { forbidden, redirect } from "next/navigation";
+import { isAuthorized } from "@/lib/utilities/server-actions/auth";
+import { headers } from "next/headers";
+import { auth } from "../../../auth";
 
 export async function GET(_: NextRequest) {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+	if (session == null) return redirect(`/sign-in?endpoint=${"register"}`);
+
+	const { user } = session;
+	if (!(await isAuthorized(user))) return forbidden();
+
 	const pdfStream = BlobStream();
 	const registerNo = "003978";
 	const title = "A & M CATTLE RANCHING REGISTER";
