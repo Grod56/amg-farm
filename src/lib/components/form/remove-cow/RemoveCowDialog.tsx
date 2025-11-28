@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/esm/Modal";
 
 const RemoveCowDialog = function ({ model }) {
 	const { modelView, interact } = model;
-	const { cowModel, shown } = modelView!;
+	const { cowModel, shown } = modelView;
 
 	return (
 		<Modal
@@ -13,7 +13,7 @@ const RemoveCowDialog = function ({ model }) {
 			onHide={() =>
 				interact({
 					type: "TOGGLE_DIALOG",
-					input: { currentDialogModelView: modelView! },
+					input: { currentDialogModelView: modelView },
 				})
 			}
 		>
@@ -29,7 +29,7 @@ const RemoveCowDialog = function ({ model }) {
 					onClick={() =>
 						interact({
 							type: "TOGGLE_DIALOG",
-							input: { currentDialogModelView: modelView! },
+							input: { currentDialogModelView: modelView },
 						})
 					}
 				>
@@ -41,7 +41,7 @@ const RemoveCowDialog = function ({ model }) {
 						interact({
 							type: "REMOVE_COW",
 							input: {
-								currentDialogModelView: modelView!,
+								currentDialogModelView: modelView,
 							},
 						})
 					}

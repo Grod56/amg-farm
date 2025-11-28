@@ -22,7 +22,7 @@ export default function Home() {
 								</p>
 								<div className="flex gap-3">
 									<button
-										className="p-3 px-4 bg-gray-800 cursor-pointer !rounded-lg overflow-clip w-fit text-white"
+										className="p-3 px-4 bg-gray-800 cursor-pointer rounded-lg! overflow-clip w-fit text-white"
 										onClick={() =>
 											window.open("/livestock", "_self")
 										}
@@ -30,7 +30,7 @@ export default function Home() {
 										Livestock
 									</button>
 									<button
-										className="p-3 px-4 bg-gray-800 cursor-pointer !rounded-lg overflow-clip w-fit text-white"
+										className="p-3 px-4 bg-gray-800 cursor-pointer rounded-lg! overflow-clip w-fit text-white"
 										onClick={() =>
 											window.open("/register", "_blank")
 										}

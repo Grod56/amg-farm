@@ -21,15 +21,19 @@ export function signInVIInterface(
 						{
 							onRequest: () => {
 								notifier.interact({
-									type: "Notify",
-									input: { text: "", variant: "pending" },
+									type: "NOTIFY",
+									input: {
+										notification: { type: "pending" },
+									},
 								});
 							},
 							onResponse: res => {
 								if (!res.response.ok) {
 									notifier.interact({
-										type: "Notify",
-										input: { text: "", variant: "none" },
+										type: "NOTIFY",
+										input: {
+											notification: { type: "failure" },
+										},
 									});
 								}
 							},

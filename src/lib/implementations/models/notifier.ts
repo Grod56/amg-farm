@@ -1,28 +1,20 @@
 import {
-	NotifierModelView,
 	NotifierModelInteraction,
-} from "@/lib/components/notifier/notifier-model";
+	NotifierModelView,
+} from "@/lib/types/models/notifier";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
-export function notifierVIInterface(): ViewInteractionInterface<
-	NotifierModelView,
-	NotifierModelInteraction
+export function notifierVIInterface<T>(): ViewInteractionInterface<
+	NotifierModelView<T>,
+	NotifierModelInteraction<T>
 > {
 	return {
 		produceModelView: async interaction => {
 			switch (interaction.type) {
-				case "Notify": {
-					const { text, variant } = interaction.input;
+				case "NOTIFY": {
+					const { notification } = interaction.input;
 					return {
-						variant,
-						text,
-						shown: variant != "pending" && variant != "none", // HACK
-					};
-				}
-				case "Close": {
-					return {
-						...interaction.input.currentModelView,
-						shown: false,
+						notification,
 					};
 				}
 			}

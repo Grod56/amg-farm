@@ -1,5 +1,5 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { AddCowDialogModel } from "./edit-cow-dialog-model";
+import { EditCowDialogModel } from "./edit-cow-dialog-model";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
@@ -10,7 +10,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 
 const EditCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
-	const { shown, locations, cowModel } = modelView!;
+	const { shown, locations, cowModel } = modelView;
 	const { id, name, tag, type, location, dob } = cowModel!.modelView;
 	const editFormModel = useInitializedStatefulInteractiveModel(
 		editCowFormVIInterface(),
@@ -30,7 +30,7 @@ const EditCowDialog = function ({ model }) {
 			onHide={() =>
 				interact({
 					type: "Toggle_Dialog",
-					input: { currentDialogModelView: modelView! },
+					input: { currentDialogModelView: modelView },
 				})
 			}
 		>
@@ -48,7 +48,7 @@ const EditCowDialog = function ({ model }) {
 							tag: updatedTag,
 							type: updatedType,
 							dob: updatedDob,
-						} = editFormModel.modelView!;
+						} = editFormModel.modelView;
 						const updatedCow = newReadonlyModel({
 							id,
 							name: updatedName.trim(),
@@ -60,7 +60,7 @@ const EditCowDialog = function ({ model }) {
 						interact({
 							type: "Submit",
 							input: {
-								currentDialogModelView: modelView!,
+								currentDialogModelView: modelView,
 								updatedCow: updatedCow,
 							},
 						});
@@ -68,7 +68,7 @@ const EditCowDialog = function ({ model }) {
 				>
 					<EditCowForm
 						model={{
-							modelView: editFormModel.modelView!,
+							modelView: editFormModel.modelView,
 							interact: editFormModel.interact,
 						}}
 					/>
@@ -79,7 +79,7 @@ const EditCowDialog = function ({ model }) {
 								interact({
 									type: "Toggle_Dialog",
 									input: {
-										currentDialogModelView: modelView!,
+										currentDialogModelView: modelView,
 									},
 								})
 							}
@@ -94,6 +94,6 @@ const EditCowDialog = function ({ model }) {
 			</Modal.Body>
 		</Modal>
 	);
-} as ModeledVoidComponent<AddCowDialogModel>;
+} as ModeledVoidComponent<EditCowDialogModel>;
 
 export default EditCowDialog;

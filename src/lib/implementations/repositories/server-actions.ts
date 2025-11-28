@@ -1,10 +1,10 @@
 "use server";
 
-import { AddCowFormModelView } from "@/lib/components/livestock-table/table-actions/add-cow/add-cow-form/add-cow-form-model";
-import { CowRecord } from "@/lib/content/cattle/cattle-api";
-import { CowModel } from "@/lib/content/cattle/cow-model";
+import { CowRecord } from "@/lib/types/cow-record";
+import { CowModel } from "@/lib/types/models/cow";
 import neon from "@/lib/third-party/clients/neon";
 import { Location } from "@/lib/types/miscellaneous";
+import { AddCowFormModelView } from "@/lib/components/form/add-cow/add-cow-form/add-cow-form-model";
 
 export async function retrieveCattle() {
 	const records = await neon()`SELECT * FROM "Cattle"`;

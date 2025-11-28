@@ -4,11 +4,12 @@ import { forbiddenVIInterface } from "@/lib/implementations/models/forbidden";
 import { notifierVIInterface } from "@/lib/implementations/models/notifier";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { useRouter } from "next/navigation";
+import { NotificationType } from "./forbidden-model";
 
 const Forbidden = () => {
 	const notifier = useInitializedStatefulInteractiveModel(
-		notifierVIInterface(),
-		{ shown: false, text: "", variant: "none" as const },
+		notifierVIInterface<NotificationType>(),
+		{ notification: null },
 	);
 	const router = useRouter();
 	const { interact } = useInitializedStatefulInteractiveModel(
@@ -30,8 +31,11 @@ const Forbidden = () => {
 							resource.
 						</p>
 						<button
-							className="flex w-fit p-4 py-3 items-center gap-2 !rounded-lg text-white bg-gray-800 disabled:bg-gray-400"
-							disabled={notifier.modelView!.variant == "pending"}
+							className="flex w-fit p-4 py-3 items-center gap-2 rounded-lg! text-white bg-gray-800 disabled:bg-gray-400"
+							disabled={
+								notifier.modelView.notification?.type ==
+								"pending"
+							}
 							onClick={() => {
 								interact({
 									type: "SIGN_OUT",

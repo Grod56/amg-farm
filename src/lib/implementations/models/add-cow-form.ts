@@ -1,7 +1,7 @@
 import {
-	AddCowFormModelInteraction,
 	AddCowFormModelView,
-} from "@/lib/components/livestock-table/table-actions/add-cow/add-cow-form/add-cow-form-model";
+	AddCowFormModelInteraction,
+} from "@/lib/components/form/add-cow/add-cow-form/add-cow-form-model";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
 export function addCowFormVIInterface(): ViewInteractionInterface<

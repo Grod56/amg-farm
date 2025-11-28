@@ -1,19 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import { useSession } from "@/lib/third-party/clients/better-auth";
-import { useRouter } from "next/navigation";
-import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
-import { notifierVIInterface } from "@/lib/implementations/models/notifier";
 import { authWidgetVIInterface } from "@/lib/implementations/models/auth-widget";
+import { notifierVIInterface } from "@/lib/implementations/models/notifier";
+import { useSession } from "@/lib/third-party/clients/better-auth";
+import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Dropdown from "react-bootstrap/NavDropdown";
+import { AuthWidgetNotificationType } from "./auth-widget-model";
 
 const AuthWidget = () => {
 	const { data } = useSession();
 	const router = useRouter();
 	const notifier = useInitializedStatefulInteractiveModel(
-		notifierVIInterface(),
-		{ shown: false, text: "", variant: "none" as const },
+		notifierVIInterface<AuthWidgetNotificationType>(),
+		{ notification: null },
 	);
 	const { interact } = useInitializedStatefulInteractiveModel(
 		authWidgetVIInterface(),

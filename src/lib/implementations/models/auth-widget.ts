@@ -19,7 +19,7 @@ export function authWidgetVIInterface(): ViewInteractionInterface<
 							onRequest: () => {
 								notifier.interact({
 									type: "Notify",
-									input: { text: "", variant: "pending" },
+									input: { text: "", type: "pending" },
 								});
 							},
 							onSuccess: () => {
@@ -28,7 +28,7 @@ export function authWidgetVIInterface(): ViewInteractionInterface<
 							onError: () => {
 								notifier.interact({
 									type: "Notify",
-									input: { text: "", variant: "none" },
+									input: { text: "", type: "none" },
 								});
 							},
 						},

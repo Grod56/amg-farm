@@ -1,5 +1,6 @@
-import { CowModel } from "@/lib/content/cattle/cow-model";
+import { CowModel } from "@/lib/types/models/cow";
 import {
+	InitializedModel,
 	InputModelInteraction,
 	InteractiveModel,
 	ModelInteraction,
@@ -14,7 +15,6 @@ export type TableModelInteraction =
 	| InputModelInteraction<"SELECT_COW", { cowModel: CowModel }>
 	| ModelInteraction<"DESELECT">;
 
-export type TableModel = InteractiveModel<
-	TableModelView,
-	TableModelInteraction
+export type TableModel = InitializedModel<
+	InteractiveModel<TableModelView, TableModelInteraction>
 >;

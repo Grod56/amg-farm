@@ -1,12 +1,17 @@
-import { CowModel } from "@/lib/content/cattle/cow-model";
+import { CowModel } from "@/lib/types/models/cow";
 import { Location } from "@/lib/types/miscellaneous";
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { NotifierModel } from "../notifier/notifier-model";
+import {
+	InteractiveModel,
+	InitializedModel,
+	InputModelInteraction,
+} from "@mvc-react/mvc";
+import { NotifierModel } from "@/lib/types/models/notifier";
+import { LivestockNotificationType } from "@/app/livestock/Livestock";
 
 export interface LivestockTableModelView {
 	selectedCow?: CowModel;
 	selectedLocation?: Location;
-	notifier: NotifierModel;
+	notifier: NotifierModel<LivestockNotificationType>;
 }
 
 export type LivestockTableModelInteraction =
@@ -23,7 +28,6 @@ export type LivestockTableModelInteraction =
 			{ currentModelView: LivestockTableModelView }
 	  >;
 
-export type LivestockTableModel = InteractiveModel<
-	LivestockTableModelView,
-	LivestockTableModelInteraction
+export type LivestockTableModel = InitializedModel<
+	InteractiveModel<LivestockTableModelView, LivestockTableModelInteraction>
 >;

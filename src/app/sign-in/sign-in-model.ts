@@ -1,16 +1,21 @@
-import { NotifierModel } from "@/lib/components/notifier/notifier-model";
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { NotifierModel } from "@/lib/types/models/notifier";
+import {
+	InitializedModel,
+	InputModelInteraction,
+	InteractiveModel,
+} from "@mvc-react/mvc";
+
+export type SignInNotificationType = "success" | "failure" | "pending";
 
 export interface SignInModelView {
-	notifier: NotifierModel;
+	notifier: NotifierModel<SignInNotificationType>;
 }
 
 export type SignInModelInteraction = InputModelInteraction<
 	"GOOGLE",
-	{ notifier: NotifierModel }
+	{ notifier: NotifierModel<SignInNotificationType> }
 >;
 
-export type SignInModel = InteractiveModel<
-	SignInModelView,
-	SignInModelInteraction
+export type SignInModel = InitializedModel<
+	InteractiveModel<SignInModelView, SignInModelInteraction>
 >;

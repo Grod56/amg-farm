@@ -1,6 +1,7 @@
-import { CowModel } from "@/lib/content/cattle/cow-model";
+import { CowModel } from "@/lib/types/models/cow";
 import { Location } from "@/lib/types/miscellaneous";
 import {
+	InitializedModel,
 	InputModelInteraction,
 	InteractiveModel,
 	ModelInteraction,
@@ -19,7 +20,6 @@ export interface TableActionsModelView {
 	isPending: boolean;
 }
 
-export type TableActionsModel = InteractiveModel<
-	TableActionsModelView,
-	TableActionsModelInteraction
+export type TableActionsModel = InitializedModel<
+	InteractiveModel<TableActionsModelView, TableActionsModelInteraction>
 >;

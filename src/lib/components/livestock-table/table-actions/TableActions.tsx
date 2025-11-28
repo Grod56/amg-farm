@@ -6,7 +6,7 @@ import { TableActionsModel } from "./table-actions-model";
 
 const TableActions = function ({ model }) {
 	const { interact, modelView } = model;
-	const { locations, selectedLocation, selectedCow, isPending } = modelView!;
+	const { locations, selectedLocation, selectedCow, isPending } = modelView;
 	const locationsMap = new Map<string, string>(
 		locations.map(location => [location.name, location.id]),
 	);

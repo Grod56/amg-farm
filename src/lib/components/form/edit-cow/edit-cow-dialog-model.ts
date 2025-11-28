@@ -1,8 +1,12 @@
-import { CattleRepositoryModel } from "@/lib/content/cattle/cattle-repository";
-import { CowModel } from "@/lib/content/cattle/cow-model";
+import { CattleRepositoryModel } from "@/lib/types/models/cattle-repository";
+import { CowModel } from "@/lib/types/models/cow";
 import { Location } from "@/lib/types/miscellaneous";
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
-import { LivestockTableModel } from "../../livestock-table-model";
+import {
+	InitializedModel,
+	InputModelInteraction,
+	InteractiveModel,
+} from "@mvc-react/mvc";
+import { LivestockTableModel } from "../../livestock-table/livestock-table-model";
 
 export interface EditCowDialogModelView {
 	shown: boolean;
@@ -25,7 +29,6 @@ export type EditCowDialogModelInteraction =
 			}
 	  >;
 
-export type AddCowDialogModel = InteractiveModel<
-	EditCowDialogModelView,
-	EditCowDialogModelInteraction
+export type EditCowDialogModel = InitializedModel<
+	InteractiveModel<EditCowDialogModelView, EditCowDialogModelInteraction>
 >;

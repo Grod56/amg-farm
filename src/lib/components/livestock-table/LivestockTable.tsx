@@ -9,14 +9,14 @@ import {
 } from "@mvc-react/components";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
+import Spinner from "react-bootstrap/Spinner";
 import { LivestockTableModel } from "./livestock-table-model";
-import AddCowDialog from "./table-actions/add-cow/AddCowDialog";
-import EditCowDialog from "./table-actions/edit-cow/EditCowDialog";
-import RemoveCowDialog from "./table-actions/remove-cow/RemoveCowDialog";
+import AddCowDialog from "../form/add-cow/AddCowDialog";
+import EditCowDialog from "../form/edit-cow/EditCowDialog";
+import RemoveCowDialog from "../form/remove-cow/RemoveCowDialog";
 import { TableActionsModelInteraction } from "./table-actions/table-actions-model";
 import TableActions from "./table-actions/TableActions";
 import Table from "./table/Table";
-import Spinner from "react-bootstrap/Spinner";
 
 const LivestockTable = function ({ model }) {
 	const cattleRepositoryModel = useStatefulRepository({
@@ -24,12 +24,11 @@ const LivestockTable = function ({ model }) {
 		viewInteractionInterface: cattleRepositoryViewInteractionInterface,
 	});
 	const { modelView, interact } = model;
-	const { selectedCow, selectedLocation, notifier } = modelView!;
-	const { variant } = notifier.modelView!;
+	const { selectedCow, selectedLocation, notifier } = modelView;
 	const { modelView: repositoryModelView } = cattleRepositoryModel;
-	const computedSelectedLocation = selectedLocation
-		? selectedLocation
-		: repositoryModelView?.activeLocations[0];
+	const computedSelectedLocation =
+		selectedLocation ?? repositoryModelView?.activeLocations[0];
+	const { notification } = notifier.modelView;
 
 	const addCowDialogModel = useNewStatefulInteractiveModel(
 		addCowDialogVIInterface(),
@@ -40,7 +39,6 @@ const LivestockTable = function ({ model }) {
 	const removeCowDialogModel = useNewStatefulInteractiveModel(
 		removeCowDialogVIInterface(),
 	);
-	console.log(variant);
 
 	return (
 		<div
@@ -58,11 +56,10 @@ const LivestockTable = function ({ model }) {
 					<TableActions
 						model={{
 							modelView: {
-								locations: repositoryModelView!.activeLocations,
+								locations: repositoryModelView.activeLocations,
 								selectedCow,
 								selectedLocation: computedSelectedLocation!,
-								isPending:
-									notifier.modelView!.variant == "pending",
+								isPending: notification?.type == "pending",
 							},
 							interact: (
 								interaction: TableActionsModelInteraction,
@@ -109,8 +106,7 @@ const LivestockTable = function ({ model }) {
 														shown: false,
 														cowModel: selectedCow,
 														locations:
-															repositoryModelView!
-																.allLocations,
+															repositoryModelView.allLocations,
 													},
 												},
 											});
@@ -120,7 +116,7 @@ const LivestockTable = function ({ model }) {
 											type: interaction.type,
 											input: {
 												...interaction.input,
-												currentModelView: modelView!,
+												currentModelView: modelView,
 											},
 										});
 										break;
@@ -132,12 +128,11 @@ const LivestockTable = function ({ model }) {
 					<Table
 						model={{
 							modelView: {
-								cowModels:
-									repositoryModelView!.cowModels.filter(
-										cattleModel =>
-											cattleModel.modelView.location.id ==
-											computedSelectedLocation!.id,
-									),
+								cowModels: repositoryModelView.cowModels.filter(
+									cattleModel =>
+										cattleModel.modelView.location.id ==
+										computedSelectedLocation!.id,
+								),
 								selectedCow,
 							},
 							interact(interaction) {
@@ -148,7 +143,7 @@ const LivestockTable = function ({ model }) {
 											type: "SELECT_COW",
 											input: {
 												cowModel,
-												currentModelView: modelView!,
+												currentModelView: modelView,
 											},
 										});
 										break;
@@ -157,7 +152,7 @@ const LivestockTable = function ({ model }) {
 										interact({
 											type: "RESET_SELECTED_COW",
 											input: {
-												currentModelView: modelView!,
+												currentModelView: modelView,
 											},
 										});
 										break;
@@ -171,7 +166,7 @@ const LivestockTable = function ({ model }) {
 				<Spinner
 					animation="border"
 					color="black"
-					className="!size-16 mx-auto my-auto"
+					className="size-16! mx-auto my-auto"
 				/>
 			)}
 			<ConditionalComponent
@@ -181,7 +176,7 @@ const LivestockTable = function ({ model }) {
 						[null, () => <></>],
 						[undefined, () => <></>],
 					]),
-					FallBackComponent: () => (
+					FallbackComponent: () => (
 						<AddCowDialog
 							model={{
 								...addCowDialogModel,
@@ -223,7 +218,7 @@ const LivestockTable = function ({ model }) {
 						[null, () => <></>],
 						[undefined, () => <></>],
 					]),
-					FallBackComponent: () => (
+					FallbackComponent: () => (
 						<EditCowDialog
 							model={{
 								...editCowDialogModel,
@@ -235,7 +230,7 @@ const LivestockTable = function ({ model }) {
 											cattleRepositoryModel,
 											livestockTableModel: model,
 											locations:
-												cattleRepositoryModel.modelView!
+												repositoryModelView!
 													.allLocations,
 										},
 							}}
@@ -250,7 +245,7 @@ const LivestockTable = function ({ model }) {
 						[null, () => <></>],
 						[undefined, () => <></>],
 					]),
-					FallBackComponent: () => (
+					FallbackComponent: () => (
 						<RemoveCowDialog
 							model={{
 								...removeCowDialogModel,

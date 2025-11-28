@@ -1,7 +1,7 @@
 "use server";
 
 import PDFDocument from "pdfkit";
-import { CowRecord } from "../../content/cattle/cattle-api";
+import { CowRecord } from "../../types/cow-record";
 import { retrieveCattle } from "../../implementations/repositories/server-actions";
 import { IBlobStream } from "blob-stream";
 import { formatInTimeZone } from "date-fns-tz";

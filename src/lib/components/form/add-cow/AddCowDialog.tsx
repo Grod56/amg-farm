@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 
 const AddCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
-	const { shown, location } = modelView!;
+	const { shown, location } = modelView;
 	const addCowFormModel = useInitializedStatefulInteractiveModel(
 		addCowFormVIInterface(),
 		{
@@ -27,7 +27,7 @@ const AddCowDialog = function ({ model }) {
 			onHide={() =>
 				interact({
 					type: "Toggle_Dialog",
-					input: { currentDialogModelView: modelView! },
+					input: { currentDialogModelView: modelView },
 				})
 			}
 		>
@@ -40,11 +40,11 @@ const AddCowDialog = function ({ model }) {
 					onSubmit={e => {
 						e.preventDefault();
 						const { name, type, tag, dob } =
-							addCowFormModel.modelView!;
+							addCowFormModel.modelView;
 						interact({
 							type: "Submit",
 							input: {
-								currentDialogModelView: modelView!,
+								currentDialogModelView: modelView,
 								currentFormModelView: {
 									name: name.trim(),
 									dob,
@@ -64,7 +64,7 @@ const AddCowDialog = function ({ model }) {
 								interact({
 									type: "Toggle_Dialog",
 									input: {
-										currentDialogModelView: modelView!,
+										currentDialogModelView: modelView,
 									},
 								})
 							}

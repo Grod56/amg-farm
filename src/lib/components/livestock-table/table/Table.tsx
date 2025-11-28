@@ -8,9 +8,9 @@ import TableRow from "../table-row/TableRow";
 import { TableModel } from "./table-model";
 import "./table.css";
 
-const Table = function ({ model }: { model: TableModel }) {
+const Table = function ({ model }) {
 	const { modelView, interact } = model;
-	const { cowModels, selectedCow } = modelView!;
+	const { cowModels, selectedCow } = modelView;
 
 	return (
 		<div className="h-full w-full overflow-y-auto">

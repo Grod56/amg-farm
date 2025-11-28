@@ -1,8 +1,8 @@
-import { CowModelView } from "@/lib/content/cattle/cow-model";
+import { CowModelView } from "@/lib/types/models/cow";
 import {
 	CattleRepositoryModelInteraction,
 	CattleRepositoryModelView,
-} from "@/lib/content/cattle/cattle-repository";
+} from "@/lib/types/models/cattle-repository";
 import { RepositoryInteractionType } from "@/lib/utilities/repositories/repository-model";
 import { newReadonlyModel } from "@mvc-react/mvc";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
@@ -49,8 +49,11 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 				};
 			}
 			case "Add_Cow": {
-				const { form, successCallback, failureCallback } =
-					interaction.input;
+				const {
+					cowToBeAdded: form,
+					successCallback,
+					failureCallback,
+				} = interaction.input;
 				await addCow(form)
 					.then(successCallback)
 					.catch(error => {
@@ -62,8 +65,11 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 				});
 			}
 			case "Remove_Cow": {
-				const { cowModel, successCallback, failureCallback } =
-					interaction.input;
+				const {
+					cowToBeRemoved: cowModel,
+					successCallback,
+					failureCallback,
+				} = interaction.input;
 				await removeCow(cowModel)
 					.then(successCallback)
 					.catch(error => {
@@ -75,8 +81,11 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 				});
 			}
 			case "Edit_Cow": {
-				const { cowModel, successCallback, failureCallback } =
-					interaction.input;
+				const {
+					updatedCow: cowModel,
+					successCallback,
+					failureCallback,
+				} = interaction.input;
 				await editCow(cowModel)
 					.then(successCallback)
 					.catch(error => {

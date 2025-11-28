@@ -1,5 +1,9 @@
-import { CowModel } from "@/lib/content/cattle/cow-model";
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { CowModel } from "@/lib/types/models/cow";
+import {
+	InitializedModel,
+	InputModelInteraction,
+	InteractiveModel,
+} from "@mvc-react/mvc";
 
 export interface TableRowModelView {
 	rowNumber: number;
@@ -11,7 +15,6 @@ export type TableRowModelInteraction = InputModelInteraction<
 	{ cowModel: CowModel }
 >;
 
-export type TableRowModel = InteractiveModel<
-	TableRowModelView,
-	TableRowModelInteraction
+export type TableRowModel = InitializedModel<
+	InteractiveModel<TableRowModelView, TableRowModelInteraction>
 >;

@@ -1,18 +1,26 @@
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { NotifierModel } from "@/lib/types/models/notifier";
+import {
+	InitializedModel,
+	InputModelInteraction,
+	InteractiveModel,
+} from "@mvc-react/mvc";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { NotifierModel } from "../notifier/notifier-model";
+
+export type AuthWidgetNotificationType = "success" | "failure" | "pending";
 
 export interface AuthWidgetModelView {
-	notifier: NotifierModel;
+	notifier: NotifierModel<AuthWidgetNotificationType>;
 	router: AppRouterInstance;
 }
 
 export type AuthWidgetModelInteraction = InputModelInteraction<
 	"SIGN_OUT",
-	{ notifier: NotifierModel; router: AppRouterInstance }
+	{
+		notifier: NotifierModel<AuthWidgetNotificationType>;
+		router: AppRouterInstance;
+	}
 >;
 
-export type AuthWidgetModel = InteractiveModel<
-	AuthWidgetModelView,
-	AuthWidgetModelInteraction
+export type AuthWidgetModel = InitializedModel<
+	InteractiveModel<AuthWidgetModelView, AuthWidgetModelInteraction>
 >;

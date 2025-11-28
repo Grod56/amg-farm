@@ -3,13 +3,13 @@ import { TableRowModel } from "./table-row-model";
 
 const TableRow = function ({ model }) {
 	const { modelView, interact } = model;
-	const { rowNumber, cowModel, isSelected } = modelView!;
+	const { rowNumber, cowModel, isSelected } = modelView;
 	const { name, type, tag, dob } = cowModel.modelView;
 
 	return (
 		<tr
 			tabIndex={0}
-			className="hover:bg-orange-100 [&[data-isselected='true']]:bg-orange-300"
+			className="hover:bg-orange-100 data-[isselected='true']:bg-orange-300"
 			data-isselected={isSelected}
 			onClick={() => {
 				interact({

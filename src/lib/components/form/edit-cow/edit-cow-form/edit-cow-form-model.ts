@@ -1,5 +1,6 @@
 import { Location } from "@/lib/types/miscellaneous";
 import {
+	InitializedModel,
 	InputModelInteraction,
 	InteractiveModel,
 	ModelInteraction,
@@ -21,7 +22,6 @@ export type EditCowFormModelInteraction =
 	  >
 	| ModelInteraction<"Clear_Form">;
 
-export type EditCowFormModel = InteractiveModel<
-	EditCowFormModelView,
-	EditCowFormModelInteraction
+export type EditCowFormModel = InitializedModel<
+	InteractiveModel<EditCowFormModelView, EditCowFormModelInteraction>
 >;

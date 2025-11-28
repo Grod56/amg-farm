@@ -1,7 +1,7 @@
 import {
 	RemoveCowDialogModelView,
 	RemoveCowDialogModelInteraction,
-} from "@/lib/components/livestock-table/table-actions/remove-cow/remove-cow-dialog-model";
+} from "@/lib/components/form/remove-cow/remove-cow-dialog-model";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
 export function removeCowDialogVIInterface(): ViewInteractionInterface<
@@ -32,37 +32,42 @@ export function removeCowDialogVIInterface(): ViewInteractionInterface<
 						livestockTableModel,
 					} = interaction.input.currentDialogModelView;
 					const { name } = cowModel!.modelView;
-					const { notifier } = livestockTableModel.modelView!;
+					const { notifier: notifier } =
+						livestockTableModel.modelView;
 					notifier.interact({
-						type: "Notify",
-						input: { variant: "pending", text: "" },
+						type: "NOTIFY",
+						input: { notification: { type: "pending" } },
 					});
 					cattleRepositoryModel.interact({
 						type: "Remove_Cow",
 						input: {
-							cowModel: cowModel!,
+							cowToBeRemoved: cowModel!,
 							successCallback() {
 								notifier.interact({
-									type: "Notify",
+									type: "NOTIFY",
 									input: {
-										text: `${name} successfully removed`,
-										variant: "success",
+										notification: {
+											text: `${name} successfully removed`,
+											type: "success",
+										},
 									},
 								});
 								livestockTableModel.interact({
 									type: "RESET_SELECTED_COW",
 									input: {
 										currentModelView:
-											livestockTableModel.modelView!,
+											livestockTableModel.modelView,
 									},
 								});
 							},
 							failureCallback(error) {
 								notifier.interact({
-									type: "Notify",
+									type: "NOTIFY",
 									input: {
-										text: `Could not remove cow. Error: ${error}`,
-										variant: "failure",
+										notification: {
+											text: `Could not remove cow. Error: ${error}`,
+											type: "failure",
+										},
 									},
 								});
 							},

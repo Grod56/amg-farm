@@ -11,10 +11,10 @@ export async function GET(_: NextRequest) {
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	});
-	if (session == null) return redirect(`/sign-in?endpoint=${"register"}`);
+	if (session == null) redirect(`/sign-in?endpoint=${"register"}`);
 
 	const { user } = session;
-	if (!(await isAuthorized(user))) return forbidden();
+	if (!(await isAuthorized(user))) forbidden();
 
 	const pdfStream = BlobStream();
 	const registerNo = "003978";

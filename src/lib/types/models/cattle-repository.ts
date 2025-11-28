@@ -1,11 +1,10 @@
+import { Location } from "@/lib/types/miscellaneous";
 import { InputModelInteraction } from "@mvc-react/mvc";
 import {
 	RepositoryModel,
 	RepositoryModelInteraction,
 } from "../../utilities/repositories/repository-model";
-import { CowModel } from "./cow-model";
-import { AddCowFormModelView } from "@/lib/components/livestock-table/table-actions/add-cow/add-cow-form/add-cow-form-model";
-import { Location } from "@/lib/types/miscellaneous";
+import { CowModel, CowModelView } from "./cow";
 
 export interface CattleRepositoryModelView {
 	cowModels: CowModel[];
@@ -18,7 +17,7 @@ export type CattleRepositoryModelInteraction =
 	| InputModelInteraction<
 			"Add_Cow",
 			{
-				form: AddCowFormModelView;
+				cowToBeAdded: Omit<CowModelView, "id">;
 				successCallback: () => void;
 				failureCallback: (error: unknown) => void;
 			}
@@ -26,7 +25,7 @@ export type CattleRepositoryModelInteraction =
 	| InputModelInteraction<
 			"Edit_Cow",
 			{
-				cowModel: CowModel;
+				updatedCow: CowModel;
 				successCallback: () => void;
 				failureCallback: (error: unknown) => void;
 			}
@@ -34,7 +33,7 @@ export type CattleRepositoryModelInteraction =
 	| InputModelInteraction<
 			"Remove_Cow",
 			{
-				cowModel: CowModel;
+				cowToBeRemoved: CowModel;
 				successCallback: () => void;
 				failureCallback: (error: unknown) => void;
 			}

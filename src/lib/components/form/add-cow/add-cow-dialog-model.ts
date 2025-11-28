@@ -1,13 +1,18 @@
-import { CattleRepositoryModel } from "@/lib/content/cattle/cattle-repository";
+import { LivestockNotificationType } from "@/app/livestock/Livestock";
 import { Location } from "@/lib/types/miscellaneous";
-import { InputModelInteraction, InteractiveModel } from "@mvc-react/mvc";
+import { CattleRepositoryModel } from "@/lib/types/models/cattle-repository";
+import { NotifierModel } from "@/lib/types/models/notifier";
+import {
+	InitializedModel,
+	InputModelInteraction,
+	InteractiveModel,
+} from "@mvc-react/mvc";
 import { AddCowFormModelView } from "./add-cow-form/add-cow-form-model";
-import { NotifierModel } from "@/lib/components/notifier/notifier-model";
 
 export interface AddCowDialogModelView {
 	shown: boolean;
 	cattleRepositoryModel: CattleRepositoryModel;
-	notifier: NotifierModel;
+	notifier: NotifierModel<LivestockNotificationType>;
 	location: Location;
 }
 
@@ -24,7 +29,6 @@ export type AddCowDialogModelInteraction =
 			}
 	  >;
 
-export type AddCowDialogModel = InteractiveModel<
-	AddCowDialogModelView,
-	AddCowDialogModelInteraction
+export type AddCowDialogModel = InitializedModel<
+	InteractiveModel<AddCowDialogModelView, AddCowDialogModelInteraction>
 >;

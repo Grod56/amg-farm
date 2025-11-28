@@ -18,8 +18,10 @@ export function forbiddenVIInterface(): ViewInteractionInterface<
 						fetchOptions: {
 							onRequest: () => {
 								notifier.interact({
-									type: "Notify",
-									input: { text: "", variant: "pending" },
+									type: "NOTIFY",
+									input: {
+										notification: { type: "pending" },
+									},
 								});
 							},
 							onSuccess: () => {
@@ -27,8 +29,10 @@ export function forbiddenVIInterface(): ViewInteractionInterface<
 							},
 							onError: () => {
 								notifier.interact({
-									type: "Notify",
-									input: { text: "", variant: "none" },
+									type: "NOTIFY",
+									input: {
+										notification: { type: "failure" },
+									},
 								});
 							},
 						},

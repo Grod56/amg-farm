@@ -1,7 +1,7 @@
 import {
-	AddCowDialogModelInteraction,
 	AddCowDialogModelView,
-} from "@/lib/components/livestock-table/table-actions/add-cow/add-cow-dialog-model";
+	AddCowDialogModelInteraction,
+} from "@/lib/components/form/add-cow/add-cow-dialog-model";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
 export function addCowDialogVIInterface(): ViewInteractionInterface<
@@ -26,28 +26,33 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						interaction.input.currentDialogModelView;
 					const { name } = interaction.input.currentFormModelView;
 					notifier.interact({
-						type: "Notify",
-						input: { variant: "pending", text: "" },
+						type: "NOTIFY",
+						input: { notification: { type: "pending" } },
 					});
 					cattleRepositoryModel.interact({
 						type: "Add_Cow",
 						input: {
-							form: interaction.input.currentFormModelView,
+							cowToBeAdded:
+								interaction.input.currentFormModelView,
 							successCallback() {
 								notifier.interact({
-									type: "Notify",
+									type: "NOTIFY",
 									input: {
-										text: `${name} successfully added`,
-										variant: "success",
+										notification: {
+											text: `${name} successfully added`,
+											type: "success",
+										},
 									},
 								});
 							},
 							failureCallback(error) {
 								notifier.interact({
-									type: "Notify",
+									type: "NOTIFY",
 									input: {
-										text: `Could not add cow. Error: ${error}`,
-										variant: "failure",
+										notification: {
+											text: `Could not add cow. Error: ${error}`,
+											type: "failure",
+										},
 									},
 								});
 							},
