@@ -8,7 +8,7 @@ export default function Home() {
 					<div className="flex flex-col gap-6 justify-center md:flex-nowrap">
 						<div className="md:max-w-2/4">
 							<span className="text-4xl md:text-5xl/normal font-serif">
-								Welcome to the AMG Farm Manager
+								Welcome to the AMG Farm App
 							</span>
 						</div>
 						<div className="text-base flex flex-col w-full h-full gap-6">
