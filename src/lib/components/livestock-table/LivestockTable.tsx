@@ -125,6 +125,14 @@ const LivestockTable = function ({ model }) {
 										});
 										break;
 									}
+									case "Clear_Selected": {
+										interact({
+											type: "RESET_SELECTED_COW",
+											input: {
+												currentModelView: modelView,
+											},
+										});
+									}
 								}
 							},
 						}}

@@ -1,5 +1,5 @@
 import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
-import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { TableActionsModel } from "./table-actions-model";
@@ -10,11 +10,11 @@ const TableActions = function ({ model }) {
 	const locationsMap = new Map<string, string>(
 		locations.map(location => [location.name, location.id]),
 	);
-	console.log(isPending);
 
 	return (
 		<div className="flex gap-7 justify-between w-full">
 			<select
+				className="focus-visible:outline-none"
 				name="locations"
 				id="location-selector"
 				disabled={isPending}
@@ -76,6 +76,17 @@ const TableActions = function ({ model }) {
 					<FontAwesomeIcon
 						icon={faEdit}
 						onClick={() => interact({ type: "Edit" })}
+					/>
+				</button>
+				<button
+					className="edit disabled:text-gray-400 disabled:cursor-default cursor-pointer"
+					hidden={Boolean(!selectedCow)}
+					title="Edit"
+					disabled={isPending}
+				>
+					<FontAwesomeIcon
+						icon={faX}
+						onClick={() => interact({ type: "Clear_Selected" })}
 					/>
 				</button>
 			</div>

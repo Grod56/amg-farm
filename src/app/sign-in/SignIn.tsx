@@ -32,6 +32,13 @@ const SignIn = () => {
 								{notification.text}
 							</span>
 						)}
+						{notification?.type == "success" && (
+							<span className="text-center">
+								{
+									"Redirecting you to Google sign-in shortly. Please wait..."
+								}
+							</span>
+						)}
 						<button
 							className="flex w-full p-4 py-3 items-center justify-center gap-2 rounded-lg! text-white bg-gray-800 disabled:bg-gray-400 hover:bg-gray-900"
 							disabled={notification?.type == "pending"}

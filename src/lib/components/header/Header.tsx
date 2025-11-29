@@ -13,7 +13,7 @@ const Header = function ({ model }) {
 				<div className="logo">
 					<Link
 						href="/"
-						className="inline-flex gap-2 items-center text-decoration-none text-white content-center"
+						className="inline-flex gap-2 items-center text-decoration-none text-white content-center focus-visible:outline-none"
 					>
 						<Image
 							alt="logo"
