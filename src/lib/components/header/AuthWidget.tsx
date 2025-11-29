@@ -23,12 +23,17 @@ const AuthWidget = () => {
 
 	return data ? (
 		<Dropdown
-			className="uppercase text-sm text-white"
+			className="uppercase text-sm text-white hover:text-orange-300!"
 			title={`Hello, ${data.user.name.split(" ")[0]}`}
+			menuVariant="dark"
 		>
 			<Dropdown.Item
+				className="capitalize text-white text-sm"
 				onClick={() => {
-					interact({ type: "SIGN_OUT", input: { router, notifier } });
+					interact({
+						type: "SIGN_OUT",
+						input: { router, notifier },
+					});
 				}}
 			>
 				Sign Out
@@ -36,7 +41,7 @@ const AuthWidget = () => {
 		</Dropdown>
 	) : (
 		<Link
-			className="text-decoration-none uppercase text-sm text-white hover:text-amber-200"
+			className="text-decoration-none uppercase text-sm text-white hover:text-orange-300!"
 			href={`/sign-in`}
 		>
 			Sign In

@@ -27,15 +27,26 @@ export function signInVIInterface(
 									},
 								});
 							},
-							onResponse: res => {
-								if (!res.response.ok) {
-									notifier.interact({
-										type: "NOTIFY",
-										input: {
-											notification: { type: "failure" },
+							onSuccess: () => {
+								notifier.interact({
+									type: "NOTIFY",
+									input: {
+										notification: {
+											type: "success",
 										},
-									});
-								}
+									},
+								});
+							},
+							onError: context => {
+								notifier.interact({
+									type: "NOTIFY",
+									input: {
+										notification: {
+											text: context.error.message,
+											type: "failure",
+										},
+									},
+								});
 							},
 						},
 					);

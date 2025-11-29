@@ -24,11 +24,16 @@ const SignIn = () => {
 	return (
 		<main className="w-full grow flex items-center">
 			<div className="flex w-full justify-center p-8 md:p-12">
-				<div className="h-full flex items-center bg-white/90 shadow rounded-3xl p-12 md:min-w-1/3 md:p-14">
+				<div className="w-full max-w-[400px] h-full flex items-center bg-white/90 shadow rounded-3xl p-12 md:w-[400px] md:p-14">
 					<div className="flex flex-col grow gap-6 justify-center items-center md:flex-nowrap">
-						<span className="text-2xl">Sign In</span>
+						<span className="text-3xl">Sign In</span>
+						{notification?.type == "failure" && (
+							<span className="text-red-800 text-center">
+								{notification.text}
+							</span>
+						)}
 						<button
-							className="flex w-full p-4 py-3 items-center justify-center gap-2 rounded-lg! text-white bg-gray-800 disabled:bg-gray-400"
+							className="flex w-full p-4 py-3 items-center justify-center gap-2 rounded-lg! text-white bg-gray-800 disabled:bg-gray-400 hover:bg-gray-900"
 							disabled={notification?.type == "pending"}
 							onClick={() => {
 								interact({
@@ -39,7 +44,6 @@ const SignIn = () => {
 						>
 							{notification?.type == "pending" ? (
 								<Spinner
-									hidden={notification?.type != "pending"}
 									animation="border"
 									color="white"
 									className="size-6!"

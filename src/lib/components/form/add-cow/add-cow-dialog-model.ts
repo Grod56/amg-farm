@@ -8,12 +8,14 @@ import {
 	InteractiveModel,
 } from "@mvc-react/mvc";
 import { AddCowFormModelView } from "./add-cow-form/add-cow-form-model";
+import { CowType } from "@/lib/types/models/cow";
 
 export interface AddCowDialogModelView {
 	shown: boolean;
 	cattleRepositoryModel: CattleRepositoryModel;
 	notifier: NotifierModel<LivestockNotificationType>;
 	location: Location;
+	cowTypes: { type: CowType }[];
 }
 
 export type AddCowDialogModelInteraction =

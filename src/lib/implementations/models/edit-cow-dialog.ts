@@ -17,13 +17,15 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 						shown,
 						cowModel,
 						locations,
-						livestockTableModel: notifier,
+						cowTypes,
+						livestockTableModel,
 					} = interaction.input.currentDialogModelView;
 					return {
 						cattleRepositoryModel,
 						cowModel,
 						locations,
-						livestockTableModel: notifier,
+						cowTypes,
+						livestockTableModel,
 						shown: !shown,
 					};
 				}
@@ -33,6 +35,7 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 					const {
 						cattleRepositoryModel,
 						locations,
+						cowTypes,
 						livestockTableModel,
 					} = currentDialogModelView;
 					const { name } = updatedCow.modelView;
@@ -82,7 +85,8 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 						cattleRepositoryModel,
 						cowModel: updatedCow,
 						locations,
-						livestockTableModel: livestockTableModel,
+						cowTypes,
+						livestockTableModel,
 						shown: false,
 					};
 				}

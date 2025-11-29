@@ -10,6 +10,7 @@ import {
 	addCow,
 	editCow,
 	removeCow,
+	retrieveAllCowTypes,
 	retrieveAllLocations,
 	retrieveCattle,
 } from "./server-actions";
@@ -23,6 +24,8 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 			case RepositoryInteractionType.RETRIEVE: {
 				const records = await retrieveCattle();
 				const allLocations = await retrieveAllLocations();
+				const cowTypes = await retrieveAllCowTypes();
+
 				return {
 					cowModels: records.map(record =>
 						newReadonlyModel<CowModelView>({
@@ -46,15 +49,13 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 						),
 					],
 					allLocations,
+					cowTypes,
 				};
 			}
 			case "Add_Cow": {
-				const {
-					cowToBeAdded: form,
-					successCallback,
-					failureCallback,
-				} = interaction.input;
-				await addCow(form)
+				const { cowToBeAdded, successCallback, failureCallback } =
+					interaction.input;
+				await addCow(cowToBeAdded)
 					.then(successCallback)
 					.catch(error => {
 						failureCallback(error);
@@ -65,12 +66,9 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 				});
 			}
 			case "Remove_Cow": {
-				const {
-					cowToBeRemoved: cowModel,
-					successCallback,
-					failureCallback,
-				} = interaction.input;
-				await removeCow(cowModel)
+				const { cowToBeRemoved, successCallback, failureCallback } =
+					interaction.input;
+				await removeCow(cowToBeRemoved)
 					.then(successCallback)
 					.catch(error => {
 						failureCallback(error);
@@ -81,12 +79,9 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 				});
 			}
 			case "Edit_Cow": {
-				const {
-					updatedCow: cowModel,
-					successCallback,
-					failureCallback,
-				} = interaction.input;
-				await editCow(cowModel)
+				const { updatedCow, successCallback, failureCallback } =
+					interaction.input;
+				await editCow(updatedCow)
 					.then(successCallback)
 					.catch(error => {
 						failureCallback(error);

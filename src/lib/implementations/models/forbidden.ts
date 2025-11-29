@@ -27,11 +27,14 @@ export function forbiddenVIInterface(): ViewInteractionInterface<
 							onSuccess: () => {
 								router.push("/");
 							},
-							onError: () => {
+							onError: context => {
 								notifier.interact({
 									type: "NOTIFY",
 									input: {
-										notification: { type: "failure" },
+										notification: {
+											text: context.error.message,
+											type: "failure",
+										},
 									},
 								});
 							},

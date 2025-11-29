@@ -17,7 +17,7 @@ const RemoveCowDialog = function ({ model }) {
 				})
 			}
 		>
-			<Modal.Header closeButton>
+			<Modal.Header className="bg-gray-700 text-white">
 				<Modal.Title>Remove Cow</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
@@ -36,7 +36,8 @@ const RemoveCowDialog = function ({ model }) {
 					Close
 				</Button>
 				<Button
-					variant="primary"
+					className="bg-gray-800! hover:bg-gray-900! text-white border-none!"
+					type="submit"
 					onClick={() =>
 						interact({
 							type: "REMOVE_COW",

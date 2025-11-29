@@ -12,18 +12,28 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 		produceModelView: async interaction => {
 			switch (interaction.type) {
 				case "Toggle_Dialog": {
-					const { cattleRepositoryModel, shown, location, notifier } =
-						interaction.input.currentDialogModelView;
+					const {
+						cattleRepositoryModel,
+						shown,
+						location,
+						notifier,
+						cowTypes,
+					} = interaction.input.currentDialogModelView;
 					return {
 						cattleRepositoryModel,
 						location,
 						notifier,
+						cowTypes,
 						shown: !shown,
 					};
 				}
 				case "Submit": {
-					const { cattleRepositoryModel, location, notifier } =
-						interaction.input.currentDialogModelView;
+					const {
+						cattleRepositoryModel,
+						location,
+						notifier,
+						cowTypes,
+					} = interaction.input.currentDialogModelView;
 					const { name } = interaction.input.currentFormModelView;
 					notifier.interact({
 						type: "NOTIFY",
@@ -62,6 +72,7 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						cattleRepositoryModel,
 						location,
 						notifier,
+						cowTypes,
 						shown: false,
 					};
 				}

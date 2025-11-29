@@ -1,10 +1,9 @@
 "use server";
 
-import { CowRecord } from "@/lib/types/cow-record";
-import { CowModel } from "@/lib/types/models/cow";
 import neon from "@/lib/third-party/clients/neon";
+import { CowRecord } from "@/lib/types/cow-record";
 import { Location } from "@/lib/types/miscellaneous";
-import { AddCowFormModelView } from "@/lib/components/form/add-cow/add-cow-form/add-cow-form-model";
+import { CowModel, CowModelView, CowType } from "@/lib/types/models/cow";
 
 export async function retrieveCattle() {
 	const records = await neon()`SELECT * FROM "Cattle"`;
@@ -19,13 +18,18 @@ export async function retrieveAllLocations() {
 	return records.rows as Location[];
 }
 
+export async function retrieveAllCowTypes() {
+	const records = await neon()`SELECT type FROM "CowType"`;
+	return records.rows as { type: CowType }[];
+}
+
 export async function addCow({
 	name,
 	type,
 	tag,
 	dob,
 	location,
-}: AddCowFormModelView) {
+}: Omit<CowModelView, "id">) {
 	const processedTag = tag == "" ? null : tag;
 	return (
 		await neon()`

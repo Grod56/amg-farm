@@ -1,5 +1,5 @@
 import { CattleRepositoryModel } from "@/lib/types/models/cattle-repository";
-import { CowModel } from "@/lib/types/models/cow";
+import { CowModel, CowType } from "@/lib/types/models/cow";
 import { Location } from "@/lib/types/miscellaneous";
 import {
 	InitializedModel,
@@ -14,6 +14,7 @@ export interface EditCowDialogModelView {
 	livestockTableModel: LivestockTableModel;
 	cowModel: CowModel;
 	locations: Location[];
+	cowTypes: { type: CowType }[];
 }
 
 export type EditCowDialogModelInteraction =

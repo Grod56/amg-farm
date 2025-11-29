@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 
 const AddCowForm = function ({ model }) {
 	const { interact, modelView } = model;
-	const { name, dob, tag, type, location } = modelView;
+	const { name, dob, tag, location, cowTypes } = modelView;
 	const maxDate = Intl.DateTimeFormat("sv-SE").format(new Date());
 
 	return (
@@ -27,11 +27,9 @@ const AddCowForm = function ({ model }) {
 				}
 			/>
 			<br />
-			<Form.Control
-				type="text"
-				placeholder="Type"
+			<Form.Select
 				required
-				defaultValue={type}
+				defaultValue={cowTypes[0].type}
 				onChange={e =>
 					interact({
 						type: "Update_Form",
@@ -43,7 +41,13 @@ const AddCowForm = function ({ model }) {
 						},
 					})
 				}
-			/>
+			>
+				{[
+					...cowTypes.map((cowType, index) => (
+						<option key={index}>{cowType.type}</option>
+					)),
+				]}
+			</Form.Select>
 			<br />
 			<Form.Control
 				type="text"

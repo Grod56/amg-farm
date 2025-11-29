@@ -4,7 +4,8 @@ import Form from "react-bootstrap/Form";
 
 const EditCowForm = function ({ model }) {
 	const { interact, modelView } = model;
-	const { name, dob, tag, type, selectedLocation, locations } = modelView;
+	const { name, dob, type, tag, selectedLocation, locations, cowTypes } =
+		modelView;
 	const locationsMap = new Map<string, string>(
 		locations.map(location => [location.name, location.id]),
 	);
@@ -30,10 +31,8 @@ const EditCowForm = function ({ model }) {
 				}
 			/>
 			<br />
-			<Form.Control
-				type="text"
+			<Form.Select
 				defaultValue={type}
-				placeholder="Type"
 				required
 				onChange={e =>
 					interact({
@@ -46,7 +45,13 @@ const EditCowForm = function ({ model }) {
 						},
 					})
 				}
-			/>
+			>
+				{[
+					...cowTypes.map((cowType, index) => (
+						<option key={index}>{cowType.type}</option>
+					)),
+				]}
+			</Form.Select>
 			<br />
 			<Form.Control
 				type="text"

@@ -28,13 +28,13 @@ const Header = function ({ model }) {
 				</div>
 				<div className="px-3 flex gap-4 items-center text-center">
 					<Link
-						className="text-decoration-none uppercase text-sm text-white hover:text-amber-200"
+						className="text-decoration-none uppercase text-sm text-white hover:text-orange-300!"
 						href={`/livestock`}
 					>
 						Livestock
 					</Link>
 					<Link
-						className="text-decoration-none uppercase text-sm text-white hover:text-amber-200"
+						className="text-decoration-none uppercase text-sm text-white hover:text-orange-300!"
 						href={`/register`}
 						target="_blank"
 					>

@@ -18,17 +18,24 @@ export function authWidgetVIInterface(): ViewInteractionInterface<
 						fetchOptions: {
 							onRequest: () => {
 								notifier.interact({
-									type: "Notify",
-									input: { text: "", type: "pending" },
+									type: "NOTIFY",
+									input: {
+										notification: { type: "pending" },
+									},
 								});
 							},
 							onSuccess: () => {
 								router.push("/");
 							},
-							onError: () => {
+							onError: cxz => {
 								notifier.interact({
-									type: "Notify",
-									input: { text: "", type: "none" },
+									type: "NOTIFY",
+									input: {
+										notification: {
+											text: cxz.error.message,
+											type: "failure",
+										},
+									},
 								});
 							},
 						},

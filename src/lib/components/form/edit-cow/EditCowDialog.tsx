@@ -10,7 +10,7 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 
 const EditCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
-	const { shown, locations, cowModel } = modelView;
+	const { shown, locations, cowModel, cowTypes } = modelView;
 	const { id, name, tag, type, location, dob } = cowModel!.modelView;
 	const editFormModel = useInitializedStatefulInteractiveModel(
 		editCowFormVIInterface(),
@@ -21,6 +21,7 @@ const EditCowDialog = function ({ model }) {
 			dob,
 			locations,
 			selectedLocation: location,
+			cowTypes,
 		},
 	);
 
@@ -34,7 +35,7 @@ const EditCowDialog = function ({ model }) {
 				})
 			}
 		>
-			<Modal.Header closeButton>
+			<Modal.Header className="bg-gray-700 text-white">
 				<Modal.Title>Edit Cow</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
@@ -86,7 +87,10 @@ const EditCowDialog = function ({ model }) {
 						>
 							Close
 						</Button>
-						<Button type="submit" variant="primary">
+						<Button
+							className="bg-gray-800! hover:bg-gray-900! text-white border-none!"
+							type="submit"
+						>
 							Update Cow
 						</Button>
 					</div>

@@ -20,6 +20,7 @@ export function addCowFormVIInterface(): ViewInteractionInterface<
 						tag: "",
 						location: { id: "", name: "" },
 						dob: new Date(),
+						cowTypes: [], // HACK
 					};
 			}
 		},

@@ -4,12 +4,13 @@ import {
 	RepositoryModel,
 	RepositoryModelInteraction,
 } from "../../utilities/repositories/repository-model";
-import { CowModel, CowModelView } from "./cow";
+import { CowModel, CowModelView, CowType } from "./cow";
 
 export interface CattleRepositoryModelView {
 	cowModels: CowModel[];
 	activeLocations: Location[];
 	allLocations: Location[];
+	cowTypes: { type: CowType }[];
 }
 
 export type CattleRepositoryModelInteraction =

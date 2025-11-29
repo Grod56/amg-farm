@@ -1,4 +1,5 @@
 import { Location } from "@/lib/types/miscellaneous";
+import { CowType } from "@/lib/types/models/cow";
 import {
 	InitializedModel,
 	InputModelInteraction,
@@ -12,6 +13,7 @@ export interface AddCowFormModelView {
 	type: string;
 	tag: string;
 	location: Location;
+	cowTypes: { type: CowType }[];
 }
 
 export type AddCowFormModelInteraction =

@@ -75,6 +75,8 @@ const LivestockTable = function ({ model }) {
 													shown: false,
 													location:
 														computedSelectedLocation!,
+													cowTypes:
+														repositoryModelView.cowTypes,
 												},
 											},
 										});
@@ -107,6 +109,8 @@ const LivestockTable = function ({ model }) {
 														cowModel: selectedCow,
 														locations:
 															repositoryModelView.allLocations,
+														cowTypes:
+															repositoryModelView.cowTypes,
 													},
 												},
 											});
@@ -187,6 +191,8 @@ const LivestockTable = function ({ model }) {
 											cattleRepositoryModel,
 											notifier,
 											location: computedSelectedLocation!,
+											cowTypes:
+												repositoryModelView!.cowTypes,
 										},
 							}}
 						/>
@@ -232,6 +238,8 @@ const LivestockTable = function ({ model }) {
 											locations:
 												repositoryModelView!
 													.allLocations,
+											cowTypes:
+												repositoryModelView!.cowTypes,
 										},
 							}}
 						/>

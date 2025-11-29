@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 
 const AddCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
-	const { shown, location } = modelView;
+	const { shown, location, cowTypes } = modelView;
 	const addCowFormModel = useInitializedStatefulInteractiveModel(
 		addCowFormVIInterface(),
 		{
@@ -18,6 +18,7 @@ const AddCowDialog = function ({ model }) {
 			tag: "",
 			dob: new Date(),
 			location,
+			cowTypes,
 		},
 	);
 
@@ -31,7 +32,7 @@ const AddCowDialog = function ({ model }) {
 				})
 			}
 		>
-			<Modal.Header closeButton>
+			<Modal.Header className="bg-gray-700 text-white">
 				<Modal.Title>Add Cow</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
@@ -51,6 +52,7 @@ const AddCowDialog = function ({ model }) {
 									type: type.trim(),
 									tag: tag.trim(),
 									location,
+									cowTypes,
 								},
 							},
 						});
@@ -71,7 +73,10 @@ const AddCowDialog = function ({ model }) {
 						>
 							Close
 						</Button>
-						<Button type="submit" variant="primary">
+						<Button
+							className="bg-gray-800! hover:bg-gray-900! text-white border-none!"
+							type="submit"
+						>
 							Add Cow
 						</Button>
 					</div>

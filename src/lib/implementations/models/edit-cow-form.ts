@@ -24,6 +24,7 @@ export function editCowFormVIInterface(): ViewInteractionInterface<
 						},
 						dob: new Date(),
 						locations: [],
+						cowTypes: [], // HACK
 					};
 			}
 		},
