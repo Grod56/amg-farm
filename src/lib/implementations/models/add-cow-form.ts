@@ -21,6 +21,7 @@ export function addCowFormVIInterface(): ViewInteractionInterface<
 						location: { id: "", name: "" },
 						dob: new Date(),
 						cowTypes: [], // HACK
+						allLocations: [],
 					};
 			}
 		},

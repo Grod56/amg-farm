@@ -18,12 +18,14 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						location,
 						notifier,
 						cowTypes,
+						allLocations,
 					} = interaction.input.currentDialogModelView;
 					return {
 						cattleRepositoryModel,
 						location,
 						notifier,
 						cowTypes,
+						allLocations,
 						shown: !shown,
 					};
 				}
@@ -33,6 +35,7 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						location,
 						notifier,
 						cowTypes,
+						allLocations,
 					} = interaction.input.currentDialogModelView;
 					const { name } = interaction.input.currentFormModelView;
 					notifier.interact({
@@ -73,6 +76,7 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						location,
 						notifier,
 						cowTypes,
+						allLocations,
 						shown: false,
 					};
 				}
