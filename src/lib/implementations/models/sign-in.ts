@@ -33,6 +33,7 @@ export function signInVIInterface(
 									input: {
 										notification: {
 											type: "success",
+											text: "Redirecting you to Google sign-in shortly. Please wait...",
 										},
 									},
 								});
@@ -42,8 +43,8 @@ export function signInVIInterface(
 									type: "NOTIFY",
 									input: {
 										notification: {
-											text: context.error.message,
 											type: "failure",
+											text: `Error: ${context.error.message}`,
 										},
 									},
 								});

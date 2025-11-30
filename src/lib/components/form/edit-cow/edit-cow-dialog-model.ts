@@ -19,11 +19,11 @@ export interface EditCowDialogModelView {
 
 export type EditCowDialogModelInteraction =
 	| InputModelInteraction<
-			"Toggle_Dialog",
+			"TOGGLE_DIALOG",
 			{ currentDialogModelView: EditCowDialogModelView }
 	  >
 	| InputModelInteraction<
-			"Submit",
+			"SUBMIT",
 			{
 				currentDialogModelView: EditCowDialogModelView;
 				updatedCow: CowModel;

@@ -11,7 +11,7 @@ export function notificationToastVIInterface(): ViewInteractionInterface<
 	return {
 		produceModelView: async interaction => {
 			switch (interaction.type) {
-				case "Notify": {
+				case "NOTIFY": {
 					const { currentModelView, notification } =
 						interaction.input;
 					const { notificationMap, notifier } = currentModelView;
@@ -33,7 +33,7 @@ export function notificationToastVIInterface(): ViewInteractionInterface<
 						shown: notification?.type != "pending",
 					};
 				}
-				case "Close": {
+				case "CLOSE": {
 					return {
 						...interaction.input.currentModelView,
 						shown: false,

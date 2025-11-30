@@ -15,14 +15,14 @@ export interface NotificationToastModelView {
 
 export type NotificationToastModelInteraction =
 	| InputModelInteraction<
-			"Notify",
+			"NOTIFY",
 			{
 				notification: Notification<unknown>;
 				currentModelView: NotificationToastModelView;
 			}
 	  >
 	| InputModelInteraction<
-			"Close",
+			"CLOSE",
 			{ currentModelView: NotificationToastModelView }
 	  >;
 

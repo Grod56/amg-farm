@@ -25,6 +25,15 @@ export function forbiddenVIInterface(): ViewInteractionInterface<
 								});
 							},
 							onSuccess: () => {
+								notifier.interact({
+									type: "NOTIFY",
+									input: {
+										notification: {
+											type: "success",
+											text: "You are now logged out. Please wait...",
+										},
+									},
+								});
 								router.push("/");
 							},
 							onError: context => {
@@ -32,8 +41,8 @@ export function forbiddenVIInterface(): ViewInteractionInterface<
 									type: "NOTIFY",
 									input: {
 										notification: {
-											text: context.error.message,
 											type: "failure",
+											text: `Error: ${context.error.message}`,
 										},
 									},
 								});

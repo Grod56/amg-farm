@@ -65,9 +65,9 @@ const LivestockTable = function ({ model }) {
 								interaction: TableActionsModelInteraction,
 							) => {
 								switch (interaction.type) {
-									case "Add":
+									case "ADD":
 										addCowDialogModel.interact({
-											type: "Toggle_Dialog",
+											type: "TOGGLE_DIALOG",
 											input: {
 												currentDialogModelView: {
 													notifier,
@@ -75,13 +75,15 @@ const LivestockTable = function ({ model }) {
 													shown: false,
 													location:
 														computedSelectedLocation!,
+													allLocations:
+														repositoryModelView.allLocations,
 													cowTypes:
 														repositoryModelView.cowTypes,
 												},
 											},
 										});
 										break;
-									case "Remove":
+									case "REMOVE":
 										if (selectedCow)
 											removeCowDialogModel.interact({
 												type: "TOGGLE_DIALOG",
@@ -96,10 +98,10 @@ const LivestockTable = function ({ model }) {
 												},
 											});
 										break;
-									case "Edit":
+									case "EDIT":
 										if (selectedCow)
 											editCowDialogModel.interact({
-												type: "Toggle_Dialog",
+												type: "TOGGLE_DIALOG",
 												input: {
 													currentDialogModelView: {
 														livestockTableModel:
@@ -115,7 +117,7 @@ const LivestockTable = function ({ model }) {
 												},
 											});
 										break;
-									case "Change_Location": {
+									case "CHANGE_LOCATION": {
 										interact({
 											type: interaction.type,
 											input: {
@@ -125,7 +127,7 @@ const LivestockTable = function ({ model }) {
 										});
 										break;
 									}
-									case "Clear_Selected": {
+									case "CLEAR_SELECTED": {
 										interact({
 											type: "RESET_SELECTED_COW",
 											input: {
@@ -199,6 +201,9 @@ const LivestockTable = function ({ model }) {
 											cattleRepositoryModel,
 											notifier,
 											location: computedSelectedLocation!,
+											allLocations:
+												repositoryModelView!
+													.allLocations,
 											cowTypes:
 												repositoryModelView!.cowTypes,
 										},

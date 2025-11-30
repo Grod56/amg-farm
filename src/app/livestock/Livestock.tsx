@@ -63,7 +63,7 @@ const Livestock = function () {
 										switch (interaction.type) {
 											case "NOTIFY": {
 												notificationToast.interact({
-													type: "Notify",
+													type: "NOTIFY",
 													input: {
 														notification:
 															interaction.input

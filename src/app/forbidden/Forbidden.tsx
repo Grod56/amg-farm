@@ -21,6 +21,8 @@ const Forbidden = () => {
 		},
 	);
 	const { notification } = notifier.modelView;
+	const signOutDisabled =
+		notification?.type == "pending" || notification?.type == "success";
 
 	return (
 		<div className="w-full grow flex items-center">
@@ -29,15 +31,13 @@ const Forbidden = () => {
 					<div className="flex flex-col gap-6 justify-center items-center md:flex-nowrap">
 						<span className="text-3xl">Unauthorized</span>
 						<p className="text-base text-center">
-							Your account is not authorized to access this
-							resource.
+							{notification?.type == "success"
+								? notification.text
+								: "Your account is not authorized to access this resource."}
 						</p>
 						<button
 							className="flex w-full p-4 py-3 items-center justify-center gap-2 rounded-lg! text-white bg-gray-800 disabled:bg-gray-400 hover:bg-gray-900"
-							disabled={
-								notifier.modelView.notification?.type ==
-								"pending"
-							}
+							disabled={signOutDisabled}
 							onClick={() => {
 								interact({
 									type: "SIGN_OUT",
@@ -45,7 +45,7 @@ const Forbidden = () => {
 								});
 							}}
 						>
-							{notification?.type == "pending" ? (
+							{signOutDisabled ? (
 								<Spinner
 									animation="border"
 									color="white"

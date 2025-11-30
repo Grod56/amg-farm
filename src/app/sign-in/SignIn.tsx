@@ -34,9 +34,7 @@ const SignIn = () => {
 						)}
 						{notification?.type == "success" && (
 							<span className="text-center">
-								{
-									"Redirecting you to Google sign-in shortly. Please wait..."
-								}
+								{notification.text}
 							</span>
 						)}
 						<button

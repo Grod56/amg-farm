@@ -52,7 +52,7 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 					cowTypes,
 				};
 			}
-			case "Add_Cow": {
+			case "ADD_COW": {
 				const { cowToBeAdded, successCallback, failureCallback } =
 					interaction.input;
 				await addCow(cowToBeAdded)
@@ -65,7 +65,7 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 					type: RepositoryInteractionType.RETRIEVE,
 				});
 			}
-			case "Remove_Cow": {
+			case "REMOVE_COW": {
 				const { cowToBeRemoved, successCallback, failureCallback } =
 					interaction.input;
 				await removeCow(cowToBeRemoved)
@@ -78,7 +78,7 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 					type: RepositoryInteractionType.RETRIEVE,
 				});
 			}
-			case "Edit_Cow": {
+			case "EDIT_COW": {
 				const { updatedCow, successCallback, failureCallback } =
 					interaction.input;
 				await editCow(updatedCow)

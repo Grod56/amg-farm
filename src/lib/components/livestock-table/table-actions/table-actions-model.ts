@@ -15,11 +15,11 @@ export interface TableActionsModelView {
 }
 
 export type TableActionsModelInteraction =
-	| ModelInteraction<"Add">
-	| ModelInteraction<"Remove">
-	| ModelInteraction<"Edit">
-	| ModelInteraction<"Clear_Selected">
-	| InputModelInteraction<"Change_Location", { location: Location }>;
+	| ModelInteraction<"ADD">
+	| ModelInteraction<"REMOVE">
+	| ModelInteraction<"EDIT">
+	| ModelInteraction<"CLEAR_SELECTED">
+	| InputModelInteraction<"CHANGE_LOCATION", { location: Location }>;
 
 export type TableActionsModel = InitializedModel<
 	InteractiveModel<TableActionsModelView, TableActionsModelInteraction>

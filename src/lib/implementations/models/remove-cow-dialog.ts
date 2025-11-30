@@ -39,7 +39,7 @@ export function removeCowDialogVIInterface(): ViewInteractionInterface<
 						input: { notification: { type: "pending" } },
 					});
 					cattleRepositoryModel.interact({
-						type: "Remove_Cow",
+						type: "REMOVE_COW",
 						input: {
 							cowToBeRemoved: cowModel!,
 							successCallback() {

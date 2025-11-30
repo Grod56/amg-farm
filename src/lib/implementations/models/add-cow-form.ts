@@ -11,9 +11,9 @@ export function addCowFormVIInterface(): ViewInteractionInterface<
 	return {
 		produceModelView: async interaction => {
 			switch (interaction.type) {
-				case "Update_Form":
+				case "UPDATE_FORM":
 					return interaction.input.updatedFormModelView;
-				case "Clear_Form":
+				case "CLEAR_FORM":
 					return {
 						name: "",
 						type: "",

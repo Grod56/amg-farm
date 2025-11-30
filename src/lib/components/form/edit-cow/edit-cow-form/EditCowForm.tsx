@@ -20,7 +20,7 @@ const EditCowForm = function ({ model }) {
 				required
 				onChange={e =>
 					interact({
-						type: "Update_Form",
+						type: "UPDATE_FORM",
 						input: {
 							updatedFormModelView: {
 								...modelView,
@@ -36,7 +36,7 @@ const EditCowForm = function ({ model }) {
 				required
 				onChange={e =>
 					interact({
-						type: "Update_Form",
+						type: "UPDATE_FORM",
 						input: {
 							updatedFormModelView: {
 								...modelView,
@@ -59,7 +59,7 @@ const EditCowForm = function ({ model }) {
 				placeholder="Tag"
 				onChange={e =>
 					interact({
-						type: "Update_Form",
+						type: "UPDATE_FORM",
 						input: {
 							updatedFormModelView: {
 								...modelView,
@@ -78,7 +78,7 @@ const EditCowForm = function ({ model }) {
 				max={maxDate}
 				onChange={event =>
 					interact({
-						type: "Update_Form",
+						type: "UPDATE_FORM",
 						input: {
 							updatedFormModelView: {
 								...modelView,
@@ -96,7 +96,7 @@ const EditCowForm = function ({ model }) {
 				required
 				onChange={event =>
 					interact({
-						type: "Update_Form",
+						type: "UPDATE_FORM",
 						input: {
 							updatedFormModelView: {
 								...modelView,

@@ -16,7 +16,7 @@ export interface CattleRepositoryModelView {
 export type CattleRepositoryModelInteraction =
 	| RepositoryModelInteraction
 	| InputModelInteraction<
-			"Add_Cow",
+			"ADD_COW",
 			{
 				cowToBeAdded: Omit<CowModelView, "id">;
 				successCallback: () => void;
@@ -24,7 +24,7 @@ export type CattleRepositoryModelInteraction =
 			}
 	  >
 	| InputModelInteraction<
-			"Edit_Cow",
+			"EDIT_COW",
 			{
 				updatedCow: CowModel;
 				successCallback: () => void;
@@ -32,7 +32,7 @@ export type CattleRepositoryModelInteraction =
 			}
 	  >
 	| InputModelInteraction<
-			"Remove_Cow",
+			"REMOVE_COW",
 			{
 				cowToBeRemoved: CowModel;
 				successCallback: () => void;

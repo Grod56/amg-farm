@@ -4,8 +4,11 @@ import Form from "react-bootstrap/Form";
 
 const AddCowForm = function ({ model }) {
 	const { interact, modelView } = model;
-	const { name, dob, tag, location, cowTypes } = modelView;
+	const { name, dob, tag, location, allLocations, cowTypes } = modelView;
 	const maxDate = Intl.DateTimeFormat("sv-SE").format(new Date());
+	const locationsMap = new Map<string, string>(
+		allLocations.map(location => [location.name, location.id]),
+	);
 
 	return (
 		<div>
@@ -16,7 +19,7 @@ const AddCowForm = function ({ model }) {
 				defaultValue={name}
 				onChange={e =>
 					interact({
-						type: "Update_Form",
+						type: "UPDATE_FORM",
 						input: {
 							updatedFormModelView: {
 								...modelView,
@@ -32,7 +35,7 @@ const AddCowForm = function ({ model }) {
 				defaultValue={cowTypes[0].type}
 				onChange={e =>
 					interact({
-						type: "Update_Form",
+						type: "UPDATE_FORM",
 						input: {
 							updatedFormModelView: {
 								...modelView,
@@ -55,7 +58,7 @@ const AddCowForm = function ({ model }) {
 				defaultValue={tag}
 				onChange={e =>
 					interact({
-						type: "Update_Form",
+						type: "UPDATE_FORM",
 						input: {
 							updatedFormModelView: {
 								...modelView,
@@ -74,7 +77,7 @@ const AddCowForm = function ({ model }) {
 				max={maxDate}
 				onChange={e =>
 					interact({
-						type: "Update_Form",
+						type: "UPDATE_FORM",
 						input: {
 							updatedFormModelView: {
 								...modelView,
@@ -85,13 +88,30 @@ const AddCowForm = function ({ model }) {
 				}
 			/>
 			<br />
-			<Form.Control
-				type="text"
-				placeholder="Location"
+			<Form.Select
 				required
 				defaultValue={location.name}
-				disabled
-			/>
+				onChange={event =>
+					interact({
+						type: "UPDATE_FORM",
+						input: {
+							updatedFormModelView: {
+								...modelView,
+								location: {
+									id: locationsMap.get(event.target.value)!,
+									name: event.target.value,
+								},
+							},
+						},
+					})
+				}
+			>
+				{[
+					...allLocations.map(location => (
+						<option key={location.id}>{location.name}</option>
+					)),
+				]}
+			</Form.Select>
 		</div>
 	);
 } as ModeledVoidComponent<AddCowFormModel>;

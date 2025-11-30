@@ -30,7 +30,7 @@ const EditCowDialog = function ({ model }) {
 			show={shown}
 			onHide={() =>
 				interact({
-					type: "Toggle_Dialog",
+					type: "TOGGLE_DIALOG",
 					input: { currentDialogModelView: modelView },
 				})
 			}
@@ -59,7 +59,7 @@ const EditCowDialog = function ({ model }) {
 							location: selectedLocation,
 						});
 						interact({
-							type: "Submit",
+							type: "SUBMIT",
 							input: {
 								currentDialogModelView: modelView,
 								updatedCow: updatedCow,
@@ -78,7 +78,7 @@ const EditCowDialog = function ({ model }) {
 							variant="secondary"
 							onClick={() =>
 								interact({
-									type: "Toggle_Dialog",
+									type: "TOGGLE_DIALOG",
 									input: {
 										currentDialogModelView: modelView,
 									},

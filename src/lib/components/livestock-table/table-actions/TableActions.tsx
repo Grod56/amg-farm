@@ -1,5 +1,5 @@
 import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
-import { faAdd, faX } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { TableActionsModel } from "./table-actions-model";
@@ -21,7 +21,7 @@ const TableActions = function ({ model }) {
 				defaultValue={selectedLocation.name}
 				onChange={event =>
 					interact({
-						type: "Change_Location",
+						type: "CHANGE_LOCATION",
 						input: {
 							location: {
 								name: event.target.value,
@@ -48,45 +48,45 @@ const TableActions = function ({ model }) {
 			<div className="flex gap-4 pr-5">
 				<button
 					className="add disabled:text-gray-400 disabled:cursor-default cursor-pointer"
-					title="Add"
+					title="ADD"
 					disabled={isPending}
 				>
 					<FontAwesomeIcon
 						icon={faAdd}
-						onClick={() => interact({ type: "Add" })}
+						onClick={() => interact({ type: "ADD" })}
 					/>
 				</button>
 				<button
 					className="remove text-red-800 disabled:text-gray-400 disabled:cursor-default cursor-pointer"
-					hidden={Boolean(!selectedCow)}
+					hidden={!selectedCow}
 					disabled={isPending}
-					title="Remove"
+					title="REMOVE"
 				>
 					<FontAwesomeIcon
 						icon={faTrashCan}
-						onClick={() => interact({ type: "Remove" })}
+						onClick={() => interact({ type: "REMOVE" })}
 					/>
 				</button>
 				<button
 					className="edit disabled:text-gray-400 disabled:cursor-default cursor-pointer"
-					hidden={Boolean(!selectedCow)}
-					title="Edit"
+					hidden={!selectedCow}
+					title="EDIT"
 					disabled={isPending}
 				>
 					<FontAwesomeIcon
 						icon={faEdit}
-						onClick={() => interact({ type: "Edit" })}
+						onClick={() => interact({ type: "EDIT" })}
 					/>
 				</button>
 				<button
 					className="edit disabled:text-gray-400 disabled:cursor-default cursor-pointer"
-					hidden={Boolean(!selectedCow)}
-					title="Edit"
+					hidden={!selectedCow}
+					title="Cancel Selection"
 					disabled={isPending}
 				>
 					<FontAwesomeIcon
-						icon={faX}
-						onClick={() => interact({ type: "Clear_Selected" })}
+						icon={faXmark}
+						onClick={() => interact({ type: "CLEAR_SELECTED" })}
 					/>
 				</button>
 			</div>

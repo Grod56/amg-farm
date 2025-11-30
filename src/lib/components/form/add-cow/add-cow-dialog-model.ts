@@ -15,19 +15,20 @@ export interface AddCowDialogModelView {
 	cattleRepositoryModel: CattleRepositoryModel;
 	notifier: NotifierModel<LivestockNotificationType>;
 	location: Location;
+	allLocations: Location[];
 	cowTypes: { type: CowType }[];
 }
 
 export type AddCowDialogModelInteraction =
 	| InputModelInteraction<
-			"Toggle_Dialog",
+			"TOGGLE_DIALOG",
 			{ currentDialogModelView: AddCowDialogModelView }
 	  >
 	| InputModelInteraction<
-			"Submit",
+			"SUBMIT",
 			{
 				currentDialogModelView: AddCowDialogModelView;
-				currentFormModelView: AddCowFormModelView;
+				currentFormModelView: Omit<AddCowFormModelView, "allLocations">;
 			}
 	  >;
 

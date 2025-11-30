@@ -19,10 +19,10 @@ export interface EditCowFormModelView {
 
 export type EditCowFormModelInteraction =
 	| InputModelInteraction<
-			"Update_Form",
+			"UPDATE_FORM",
 			{ updatedFormModelView: EditCowFormModelView }
 	  >
-	| ModelInteraction<"Clear_Form">;
+	| ModelInteraction<"CLEAR_FORM">;
 
 export type EditCowFormModel = InitializedModel<
 	InteractiveModel<EditCowFormModelView, EditCowFormModelInteraction>

@@ -13,15 +13,16 @@ export interface AddCowFormModelView {
 	type: string;
 	tag: string;
 	location: Location;
+	allLocations: Location[];
 	cowTypes: { type: CowType }[];
 }
 
 export type AddCowFormModelInteraction =
 	| InputModelInteraction<
-			"Update_Form",
+			"UPDATE_FORM",
 			{ updatedFormModelView: AddCowFormModelView }
 	  >
-	| ModelInteraction<"Clear_Form">;
+	| ModelInteraction<"CLEAR_FORM">;
 
 export type AddCowFormModel = InitializedModel<
 	InteractiveModel<AddCowFormModelView, AddCowFormModelInteraction>

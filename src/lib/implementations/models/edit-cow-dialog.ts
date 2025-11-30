@@ -11,7 +11,7 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 	return {
 		produceModelView: async interaction => {
 			switch (interaction.type) {
-				case "Toggle_Dialog": {
+				case "TOGGLE_DIALOG": {
 					const {
 						cattleRepositoryModel,
 						shown,
@@ -29,7 +29,7 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 						shown: !shown,
 					};
 				}
-				case "Submit": {
+				case "SUBMIT": {
 					const { currentDialogModelView, updatedCow } =
 						interaction.input;
 					const {
@@ -47,7 +47,7 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 						input: { notification: { type: "pending" } },
 					});
 					cattleRepositoryModel.interact({
-						type: "Edit_Cow",
+						type: "EDIT_COW",
 						input: {
 							updatedCow: updatedCow,
 							successCallback() {

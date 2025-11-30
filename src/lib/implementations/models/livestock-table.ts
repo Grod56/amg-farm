@@ -13,7 +13,7 @@ export function livestockTableVIInterface(): ViewInteractionInterface<
 			interaction: LivestockTableModelInteraction,
 		): Promise<LivestockTableModelView> {
 			switch (interaction.type) {
-				case "Change_Location": {
+				case "CHANGE_LOCATION": {
 					const { currentModelView, location: location } =
 						interaction.input;
 					return {

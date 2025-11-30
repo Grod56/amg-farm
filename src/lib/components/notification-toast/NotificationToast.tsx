@@ -33,7 +33,7 @@ const NotificationToast = function ({ model }) {
 				show={shown}
 				onClose={() =>
 					interact({
-						type: "Close",
+						type: "CLOSE",
 						input: { currentModelView: modelView },
 					})
 				}
