@@ -37,7 +37,7 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						cowTypes,
 						allLocations,
 					} = interaction.input.currentDialogModelView;
-					const { name } = interaction.input.currentFormModelView;
+					const { name } = interaction.input.cowToBeAdded;
 					notifier.interact({
 						type: "NOTIFY",
 						input: { notification: { type: "pending" } },
@@ -45,8 +45,7 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 					cattleRepositoryModel.interact({
 						type: "ADD_COW",
 						input: {
-							cowToBeAdded:
-								interaction.input.currentFormModelView,
+							cowToBeAdded: interaction.input.cowToBeAdded,
 							successCallback() {
 								notifier.interact({
 									type: "NOTIFY",

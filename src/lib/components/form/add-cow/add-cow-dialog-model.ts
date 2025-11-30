@@ -7,8 +7,7 @@ import {
 	InputModelInteraction,
 	InteractiveModel,
 } from "@mvc-react/mvc";
-import { AddCowFormModelView } from "./add-cow-form/add-cow-form-model";
-import { CowType } from "@/lib/types/models/cow";
+import { CowModelView, CowType } from "@/lib/types/models/cow";
 
 export interface AddCowDialogModelView {
 	shown: boolean;
@@ -28,7 +27,7 @@ export type AddCowDialogModelInteraction =
 			"SUBMIT",
 			{
 				currentDialogModelView: AddCowDialogModelView;
-				currentFormModelView: Omit<AddCowFormModelView, "allLocations">;
+				cowToBeAdded: Omit<CowModelView, "id">;
 			}
 	  >;
 

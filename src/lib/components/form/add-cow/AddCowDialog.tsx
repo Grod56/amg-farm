@@ -14,7 +14,7 @@ const AddCowDialog = function ({ model }) {
 		addCowFormVIInterface(),
 		{
 			name: "",
-			type: "",
+			type: cowTypes[0].type,
 			tag: "",
 			dob: new Date(),
 			location,
@@ -41,19 +41,18 @@ const AddCowDialog = function ({ model }) {
 					className="flex flex-col gap-4"
 					onSubmit={e => {
 						e.preventDefault();
-						const { name, type, tag, dob } =
+						const { name, type, tag, dob, location } =
 							addCowFormModel.modelView;
 						interact({
 							type: "SUBMIT",
 							input: {
 								currentDialogModelView: modelView,
-								currentFormModelView: {
+								cowToBeAdded: {
 									name: name.trim(),
 									dob,
-									type: type.trim(),
+									type,
 									tag: tag.trim(),
 									location,
-									cowTypes,
 								},
 							},
 						});

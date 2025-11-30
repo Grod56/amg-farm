@@ -48,7 +48,7 @@ const TableActions = function ({ model }) {
 			<div className="flex gap-4 pr-5">
 				<button
 					className="add disabled:text-gray-400 disabled:cursor-default cursor-pointer"
-					title="ADD"
+					title="Add Cow"
 					disabled={isPending}
 				>
 					<FontAwesomeIcon
@@ -60,7 +60,7 @@ const TableActions = function ({ model }) {
 					className="remove text-red-800 disabled:text-gray-400 disabled:cursor-default cursor-pointer"
 					hidden={!selectedCow}
 					disabled={isPending}
-					title="REMOVE"
+					title="Remove"
 				>
 					<FontAwesomeIcon
 						icon={faTrashCan}
@@ -70,7 +70,7 @@ const TableActions = function ({ model }) {
 				<button
 					className="edit disabled:text-gray-400 disabled:cursor-default cursor-pointer"
 					hidden={!selectedCow}
-					title="EDIT"
+					title="Edit Cow"
 					disabled={isPending}
 				>
 					<FontAwesomeIcon
