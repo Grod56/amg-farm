@@ -19,6 +19,7 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						notifier,
 						cowTypes,
 						allLocations,
+						livestockTableModel,
 					} = interaction.input.currentDialogModelView;
 					return {
 						cattleRepositoryModel,
@@ -26,6 +27,7 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						notifier,
 						cowTypes,
 						allLocations,
+						livestockTableModel,
 						shown: !shown,
 					};
 				}
@@ -36,6 +38,7 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						notifier,
 						cowTypes,
 						allLocations,
+						livestockTableModel,
 					} = interaction.input.currentDialogModelView;
 					const { name } = interaction.input.cowToBeAdded;
 					notifier.interact({
@@ -54,6 +57,13 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 											text: `${name} successfully added`,
 											type: "success",
 										},
+									},
+								});
+								livestockTableModel.interact({
+									type: "RESET_SELECTED_COW",
+									input: {
+										currentModelView:
+											livestockTableModel.modelView,
 									},
 								});
 							},
@@ -76,6 +86,7 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 						notifier,
 						cowTypes,
 						allLocations,
+						livestockTableModel,
 						shown: false,
 					};
 				}

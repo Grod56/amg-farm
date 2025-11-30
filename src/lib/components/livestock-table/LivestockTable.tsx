@@ -72,6 +72,7 @@ const LivestockTable = function ({ model }) {
 												currentDialogModelView: {
 													notifier,
 													cattleRepositoryModel,
+													livestockTableModel: model,
 													shown: false,
 													location:
 														computedSelectedLocation!,
@@ -199,6 +200,7 @@ const LivestockTable = function ({ model }) {
 									: {
 											shown: false,
 											cattleRepositoryModel,
+											livestockTableModel: model,
 											notifier,
 											location: computedSelectedLocation!,
 											allLocations:
