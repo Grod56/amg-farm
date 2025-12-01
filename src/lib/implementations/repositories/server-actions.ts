@@ -6,7 +6,7 @@ import { Location } from "@/lib/types/miscellaneous";
 import { CowModel, CowModelView, CowType } from "@/lib/types/models/cow";
 
 export async function retrieveCattle() {
-	const records = await neon()`SELECT * FROM "Cattle"`;
+	const records = await neon()`SELECT * FROM "ActiveCow"`;
 	return records.rows.map(record => ({
 		...record,
 		tag: record.tag == null ? "" : record.tag,
@@ -33,21 +33,21 @@ export async function addCow({
 	const processedTag = tag == "" ? null : tag;
 	return (
 		await neon()`
-		INSERT INTO "CattleTable"(name, type, tag, dob, location_id) 
+		INSERT INTO "CowTable"(name, type, tag, dob, location_id) 
 		VALUES (${name}, ${type}, ${processedTag}, ${dob}, ${location.id})`
 	).rows;
 }
 
 export async function removeCow(cow: CowModel) {
 	const { id } = cow.modelView;
-	return (await neon()`DELETE FROM "CattleTable" WHERE id = ${id}`).rows;
+	return (await neon()`INSERT INTO "RemovedCow"(id) VALUES (${id})`).rows;
 }
 
 export async function editCow(cow: CowModel) {
 	const { id, name, tag, dob, location, type } = cow.modelView;
 	return (
 		await neon()`
-		UPDATE "CattleTable" 
+		UPDATE "CowTable" 
 		SET name = ${name}, tag = ${tag}, dob = ${dob}, location_id = ${location.id}, type = ${type}
 		WHERE id = ${id}`
 	).rows;
