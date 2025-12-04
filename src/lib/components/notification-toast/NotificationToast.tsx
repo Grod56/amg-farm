@@ -5,18 +5,37 @@ import {
 } from "./notification-toast-model";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
+import { useCallback, useEffect } from "react";
 
 type Variant = "success" | "danger" | "primary" | "info";
 const NotificationToast = function ({ model }) {
 	const { modelView, interact } = model;
-	const { notifier, notificationMap, shown } = modelView;
-	const { notification } = notifier.modelView;
-	const variantMap = new Map<ToastNotificationType | undefined, Variant>([
-		["success", "success"],
-		["failure", "danger"],
-		["info", "info"],
-		[undefined, "primary"],
-	]);
+	const { notification, typeToToastTypeMap, open, wasDisplayed } = modelView;
+
+	const getToastBg = useCallback(() => {
+		const variantMap = new Map<ToastNotificationType | undefined, Variant>([
+			["success", "success"],
+			["failure", "danger"],
+			["info", "info"],
+			[undefined, "primary"],
+		]);
+		return notification
+			? variantMap.get(typeToToastTypeMap.get(notification.type))
+			: undefined;
+	}, [notification, typeToToastTypeMap]);
+
+	useEffect(() => {
+		if (
+			!notification?.cleared &&
+			!wasDisplayed &&
+			!open &&
+			notification?.text
+		) {
+			interact({
+				type: "OPEN",
+			});
+		}
+	}, [notification, interact, wasDisplayed, typeToToastTypeMap, open]);
 
 	return (
 		<ToastContainer
@@ -25,18 +44,18 @@ const NotificationToast = function ({ model }) {
 			style={{ zIndex: 10 }}
 		>
 			<Toast
-				bg={
-					notification
-						? variantMap.get(notificationMap.get(notification.type))
-						: undefined
-				}
-				show={shown}
+				bg={getToastBg()}
+				show={open}
 				onClose={() =>
 					interact({
 						type: "CLOSE",
-						input: { currentModelView: modelView },
 					})
 				}
+				onExited={() => {
+					interact({
+						type: "CLEAR_NOTIFICATION",
+					});
+				}}
 				delay={5000}
 				autohide
 			>

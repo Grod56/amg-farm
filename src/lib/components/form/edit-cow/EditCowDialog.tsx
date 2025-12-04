@@ -10,8 +10,8 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 
 const EditCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
-	const { shown, locations, cowModel, cowTypes } = modelView;
-	const { id, name, tag, type, location, dob } = cowModel!.modelView;
+	const { shown, locations, cow, cowTypes } = modelView;
+	const { id, name, tag, type, location, dob } = cow.modelView;
 	const editFormModel = useInitializedStatefulInteractiveModel(
 		editCowFormVIInterface(),
 		{
@@ -20,7 +20,7 @@ const EditCowDialog = function ({ model }) {
 			tag,
 			dob,
 			locations,
-			selectedLocation: location,
+			location,
 			cowTypes,
 		},
 	);
@@ -30,8 +30,7 @@ const EditCowDialog = function ({ model }) {
 			show={shown}
 			onHide={() =>
 				interact({
-					type: "TOGGLE_DIALOG",
-					input: { currentDialogModelView: modelView },
+					type: "CLOSE",
 				})
 			}
 		>
@@ -45,7 +44,7 @@ const EditCowDialog = function ({ model }) {
 						e.preventDefault();
 						const {
 							name: updatedName,
-							selectedLocation,
+							location: updatedLocation,
 							tag: updatedTag,
 							type: updatedType,
 							dob: updatedDob,
@@ -56,12 +55,11 @@ const EditCowDialog = function ({ model }) {
 							dob: updatedDob,
 							type: updatedType.trim(),
 							tag: updatedTag.trim(),
-							location: selectedLocation,
+							location: updatedLocation,
 						});
 						interact({
 							type: "SUBMIT",
 							input: {
-								currentDialogModelView: modelView,
 								updatedCow: updatedCow,
 							},
 						});
@@ -78,10 +76,7 @@ const EditCowDialog = function ({ model }) {
 							variant="secondary"
 							onClick={() =>
 								interact({
-									type: "TOGGLE_DIALOG",
-									input: {
-										currentDialogModelView: modelView,
-									},
+									type: "CLOSE",
 								})
 							}
 						>

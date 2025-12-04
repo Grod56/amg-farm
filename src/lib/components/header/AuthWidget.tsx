@@ -18,7 +18,7 @@ const AuthWidget = () => {
 	);
 	const { interact } = useInitializedStatefulInteractiveModel(
 		authWidgetVIInterface(),
-		{ notifier, router },
+		{ notifier },
 	);
 
 	return data ? (

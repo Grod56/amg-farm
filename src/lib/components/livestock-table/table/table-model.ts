@@ -7,12 +7,12 @@ import {
 } from "@mvc-react/mvc";
 
 export interface TableModelView {
-	cowModels: CowModel[];
+	cattle: CowModel[];
 	selectedCow: CowModel | undefined;
 }
 
 export type TableModelInteraction =
-	| InputModelInteraction<"SELECT_COW", { cowModel: CowModel }>
+	| InputModelInteraction<"SELECT_COW", { cow: CowModel }>
 	| ModelInteraction<"DESELECT">;
 
 export type TableModel = InitializedModel<

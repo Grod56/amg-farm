@@ -13,11 +13,11 @@ export function useStatefulRepository<V extends ModelView>(
 	statifiableModel: StatifiableModel<V, RepositoryModelInteraction>,
 ) {
 	const model = useTransformedStatefulInteractiveModel(statifiableModel);
-	const { interact } = model;
 
 	useEffect(() => {
-		interact({ type: RepositoryInteractionType.RETRIEVE });
-	}, [interact]);
+		if (!model.modelView)
+			model.interact({ type: RepositoryInteractionType.RETRIEVE });
+	}, [model]);
 
 	return model;
 }

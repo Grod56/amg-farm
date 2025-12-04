@@ -18,7 +18,7 @@ const TableActions = function ({ model }) {
 				name="locations"
 				id="location-selector"
 				disabled={isPending}
-				defaultValue={selectedLocation.name}
+				value={selectedLocation.name}
 				onChange={event =>
 					interact({
 						type: "CHANGE_LOCATION",

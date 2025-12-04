@@ -12,7 +12,7 @@ export interface EditCowFormModelView {
 	dob: Date;
 	type: string;
 	tag: string;
-	selectedLocation: Location;
+	location: Location;
 	locations: Location[];
 	cowTypes: { type: CowType }[];
 }

@@ -10,7 +10,6 @@ export type AuthWidgetNotificationType = "success" | "failure" | "pending";
 
 export interface AuthWidgetModelView {
 	notifier: NotifierModel<AuthWidgetNotificationType>;
-	router: AppRouterInstance;
 }
 
 export type AuthWidgetModelInteraction = InputModelInteraction<

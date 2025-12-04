@@ -4,11 +4,26 @@ import LivestockTable from "@/lib/components/livestock-table/LivestockTable";
 import NotificationToast from "@/lib/components/notification-toast/NotificationToast";
 import { livestockTableVIInterface } from "@/lib/implementations/models/livestock-table";
 import { notificationToastVIInterface } from "@/lib/implementations/models/notification-toast";
-import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
+import {
+	useInitializedStatefulInteractiveModel,
+	useNewStatefulInteractiveModel,
+} from "@mvc-react/stateful";
 import Spinner from "react-bootstrap/Spinner";
-import "./livestock.css";
 import { notifierVIInterface } from "@/lib/implementations/models/notifier";
 import { ToastNotificationType } from "@/lib/components/notification-toast/notification-toast-model";
+import AddCowDialog from "@/lib/components/form/add-cow/AddCowDialog";
+import EditCowDialog from "@/lib/components/form/edit-cow/EditCowDialog";
+import RemoveCowDialog from "@/lib/components/form/remove-cow/RemoveCowDialog";
+import { addCowDialogVIInterface } from "@/lib/implementations/models/add-cow-dialog";
+import { editCowDialogVIInterface } from "@/lib/implementations/models/edit-cow-dialog";
+import { removeCowDialogVIInterface } from "@/lib/implementations/models/remove-cow-dialog";
+import { cattleRepositoryViewInteractionInterface } from "@/lib/implementations/repositories/cattle-repository";
+import { useStatefulRepository } from "@/lib/utilities/repositories/use-repository";
+import { ConditionalComponent } from "@mvc-react/components";
+import { newReadonlyModel } from "@mvc-react/mvc";
+import { Location } from "@/lib/types/miscellaneous";
+import { CowModel } from "@/lib/types/models/cow";
+import "./livestock.css";
 
 export type LivestockNotificationType = "success" | "pending" | "failure";
 
@@ -17,27 +32,90 @@ const Livestock = function () {
 		notifierVIInterface<LivestockNotificationType>(),
 		{ notification: null },
 	);
+	const { notification } = notifier.modelView;
 	const notificationToast = useInitializedStatefulInteractiveModel(
-		notificationToastVIInterface(),
+		notificationToastVIInterface(notifier),
 		{
-			notifier,
-			notificationMap: new Map<
+			notification,
+			typeToToastTypeMap: new Map<
 				LivestockNotificationType,
 				ToastNotificationType
 			>([
 				["success", "success"],
 				["failure", "failure"],
 			]),
-			shown: false,
+			open: false,
+			wasDisplayed: false,
 		},
 	);
-	const livestockTableModel = useInitializedStatefulInteractiveModel(
+	const cattleRepository = useStatefulRepository({
+		modelView: null,
+		viewInteractionInterface: cattleRepositoryViewInteractionInterface,
+	});
+	const { modelView: repositoryModelView } = cattleRepository;
+	const submitSuccessCallback = () => {
+		livestockTable.interact({ type: "RESET_SELECTED_COW" });
+	};
+	const addCowCallback = (defaultLocation: Location) => {
+		addCowDialog.interact({
+			type: "OPEN",
+			input: {
+				defaultLocation: defaultLocation,
+				locations: repositoryModelView!.allLocations,
+				cowTypes: repositoryModelView!.cowTypes,
+			},
+		});
+	};
+	const removeCowCallback = (cow: CowModel) => {
+		removeCowDialog.interact({
+			type: "OPEN",
+			input: {
+				cowToBeRemoved: cow,
+			},
+		});
+	};
+	const editCowCallback = (cow: CowModel) => {
+		editCowDialog.interact({
+			type: "OPEN",
+			input: {
+				cowToBeEdited: cow,
+				cowTypes: repositoryModelView!.cowTypes,
+				locations: repositoryModelView!.allLocations,
+			},
+		});
+	};
+	const livestockTable = useInitializedStatefulInteractiveModel(
 		livestockTableVIInterface(),
 		{
-			notifier,
+			notification,
+			cattleRepositoryModelView: repositoryModelView,
+			addCowCallback,
+			editCowCallback,
+			removeCowCallback,
 		},
 	);
-	const { notification } = notifier.modelView;
+	const { selectedCow, selectedLocation } = livestockTable.modelView;
+	const addCowDialog = useNewStatefulInteractiveModel(
+		addCowDialogVIInterface(
+			cattleRepository,
+			notifier,
+			submitSuccessCallback,
+		),
+	);
+	const editCowDialog = useNewStatefulInteractiveModel(
+		editCowDialogVIInterface(
+			cattleRepository,
+			notifier,
+			submitSuccessCallback,
+		),
+	);
+	const removeCowDialog = useNewStatefulInteractiveModel(
+		removeCowDialogVIInterface(
+			cattleRepository,
+			notifier,
+			submitSuccessCallback,
+		),
+	);
 
 	return (
 		<>
@@ -56,38 +134,118 @@ const Livestock = function () {
 					<LivestockTable
 						model={{
 							modelView: {
-								...livestockTableModel.modelView,
-								notifier: {
-									modelView: notifier.modelView,
-									interact(interaction) {
-										switch (interaction.type) {
-											case "NOTIFY": {
-												notificationToast.interact({
-													type: "NOTIFY",
-													input: {
-														notification:
-															interaction.input
-																.notification,
-														currentModelView:
-															notificationToast.modelView,
-													},
-												});
-											}
-										}
-									},
-								},
+								...livestockTable.modelView,
+								cattleRepositoryModelView: repositoryModelView,
+								notification,
+								addCowCallback,
+								editCowCallback,
+								removeCowCallback,
 							},
-							interact: livestockTableModel.interact,
+							interact: livestockTable.interact,
 						}}
 					/>
 				</div>
 			</div>
 			<NotificationToast
 				model={{
-					// NOTE: Seems like sub-model with state has to be explicitly stated
-					modelView: { ...notificationToast.modelView, notifier },
+					// NOTE: Seems like if there's sub-model state it has to be specified explicitly
+					modelView: { ...notificationToast.modelView, notification },
 					interact: notificationToast.interact,
 				}}
+			/>
+			<ConditionalComponent
+				model={newReadonlyModel({
+					condition: selectedLocation,
+					components: new Map([
+						[null, () => <></>],
+						[undefined, () => <></>],
+					]),
+					FallbackComponent: () => (
+						<AddCowDialog
+							model={{
+								...addCowDialog,
+								modelView: addCowDialog.modelView
+									? addCowDialog.modelView
+									: {
+											shown: false,
+											location: selectedLocation!,
+											allLocations:
+												repositoryModelView!
+													.allLocations,
+											cowTypes:
+												repositoryModelView!.cowTypes,
+										},
+							}}
+						/>
+					),
+				})}
+			/>
+			{/* {selectedCow && (
+				<EditCowDialog
+					model={{
+						...editCowDialogModel,
+						modelView: editCowDialogModel.modelView
+							? editCowDialogModel.modelView
+							: {
+									cowModel: selectedCow!,
+									shown: false,
+									cattleRepositoryModel,
+									livestockTableModel: model,
+									locations:
+										cattleRepositoryModel.modelView!
+											.allLocations,
+								},
+					}}
+				/>
+			)} */}
+			<ConditionalComponent
+				model={newReadonlyModel({
+					condition: selectedCow,
+					components: new Map([
+						[null, () => <></>],
+						[undefined, () => <></>],
+					]),
+					FallbackComponent: () => (
+						<EditCowDialog
+							model={{
+								...editCowDialog,
+								modelView: editCowDialog.modelView
+									? editCowDialog.modelView
+									: {
+											cow: selectedCow!,
+											shown: false,
+											locations:
+												repositoryModelView!
+													.allLocations,
+											cowTypes:
+												repositoryModelView!.cowTypes,
+										},
+							}}
+						/>
+					),
+				})}
+			/>
+			<ConditionalComponent
+				model={newReadonlyModel({
+					condition: selectedCow,
+					components: new Map([
+						[null, () => <></>],
+						[undefined, () => <></>],
+					]),
+					FallbackComponent: () => (
+						<RemoveCowDialog
+							model={{
+								...removeCowDialog,
+								modelView: removeCowDialog.modelView
+									? removeCowDialog.modelView
+									: {
+											cow: selectedCow!,
+											shown: false,
+										},
+							}}
+						/>
+					),
+				})}
 			/>
 		</>
 	);

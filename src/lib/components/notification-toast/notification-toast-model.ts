@@ -1,30 +1,22 @@
-import { Notification } from "@/lib/types/miscellaneous";
-import { NotifierModel } from "@/lib/types/models/notifier";
+import { Notification } from "@/lib/types/models/notification";
 import {
 	InitializedModel,
-	InputModelInteraction,
 	InteractiveModel,
+	ModelInteraction,
 } from "@mvc-react/mvc";
 
 export type ToastNotificationType = "success" | "failure" | "info";
 export interface NotificationToastModelView {
-	notificationMap: Map<unknown, ToastNotificationType>;
-	notifier: NotifierModel<unknown>;
-	shown: boolean;
+	typeToToastTypeMap: Map<unknown, ToastNotificationType>;
+	notification: Notification<unknown> | null;
+	open: boolean;
+	wasDisplayed: boolean;
 }
 
 export type NotificationToastModelInteraction =
-	| InputModelInteraction<
-			"NOTIFY",
-			{
-				notification: Notification<unknown>;
-				currentModelView: NotificationToastModelView;
-			}
-	  >
-	| InputModelInteraction<
-			"CLOSE",
-			{ currentModelView: NotificationToastModelView }
-	  >;
+	| ModelInteraction<"OPEN">
+	| ModelInteraction<"CLOSE">
+	| ModelInteraction<"CLEAR_NOTIFICATION">;
 
 export type NotificationToastModel = InitializedModel<
 	InteractiveModel<

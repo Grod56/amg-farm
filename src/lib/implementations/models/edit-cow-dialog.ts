@@ -1,52 +1,51 @@
+import { LivestockNotificationType } from "@/app/livestock/Livestock";
 import {
 	EditCowDialogModelView,
 	EditCowDialogModelInteraction,
 } from "@/lib/components/form/edit-cow/edit-cow-dialog-model";
+import { CattleRepositoryModel } from "@/lib/types/models/cattle-repository";
+import { CowModel } from "@/lib/types/models/cow";
+import { NotifierModel } from "@/lib/types/models/notifier";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
-export function editCowDialogVIInterface(): ViewInteractionInterface<
+export function editCowDialogVIInterface(
+	cattleRepository: CattleRepositoryModel,
+	notifier: NotifierModel<LivestockNotificationType>,
+	successCallback?: (updatedCow: CowModel) => void,
+	failureCallback?: (error: unknown) => void,
+): ViewInteractionInterface<
 	EditCowDialogModelView,
 	EditCowDialogModelInteraction
 > {
 	return {
-		produceModelView: async interaction => {
+		produceModelView: async (interaction, currentDialogModelView) => {
 			switch (interaction.type) {
-				case "TOGGLE_DIALOG": {
-					const {
-						cattleRepositoryModel,
-						shown,
-						cowModel,
-						locations,
-						cowTypes,
-						livestockTableModel,
-					} = interaction.input.currentDialogModelView;
+				case "OPEN": {
+					const { cowToBeEdited, cowTypes, locations } =
+						interaction.input;
 					return {
-						cattleRepositoryModel,
-						cowModel,
+						cow: cowToBeEdited,
 						locations,
 						cowTypes,
-						livestockTableModel,
-						shown: !shown,
+						shown: true,
 					};
 				}
+				case "CLOSE": {
+					if (!currentDialogModelView)
+						throw new Error("Model view is uninitialized");
+					return { ...currentDialogModelView, shown: false };
+				}
 				case "SUBMIT": {
-					const { currentDialogModelView, updatedCow } =
-						interaction.input;
-					const {
-						cattleRepositoryModel,
-						locations,
-						cowTypes,
-						livestockTableModel,
-					} = currentDialogModelView;
+					if (!currentDialogModelView)
+						throw new Error("Model view is uninitialized");
+					const { updatedCow } = interaction.input;
+					const { locations, cowTypes } = currentDialogModelView;
 					const { name } = updatedCow.modelView;
-					const { modelView: livestockTableModelView } =
-						livestockTableModel;
-					const { notifier } = livestockTableModelView;
 					notifier.interact({
 						type: "NOTIFY",
 						input: { notification: { type: "pending" } },
 					});
-					cattleRepositoryModel.interact({
+					cattleRepository.interact({
 						type: "EDIT_COW",
 						input: {
 							updatedCow: updatedCow,
@@ -60,13 +59,7 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 										},
 									},
 								});
-								livestockTableModel.interact({
-									type: "RESET_SELECTED_COW",
-									input: {
-										currentModelView:
-											livestockTableModelView,
-									},
-								});
+								successCallback?.(updatedCow);
 							},
 							failureCallback(error) {
 								notifier.interact({
@@ -78,15 +71,14 @@ export function editCowDialogVIInterface(): ViewInteractionInterface<
 										},
 									},
 								});
+								failureCallback?.(error);
 							},
 						},
 					});
 					return {
-						cattleRepositoryModel,
-						cowModel: updatedCow,
+						cow: updatedCow,
 						locations,
 						cowTypes,
-						livestockTableModel,
 						shown: false,
 					};
 				}

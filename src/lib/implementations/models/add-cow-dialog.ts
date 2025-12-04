@@ -1,51 +1,51 @@
+import { LivestockNotificationType } from "@/app/livestock/Livestock";
 import {
 	AddCowDialogModelView,
 	AddCowDialogModelInteraction,
 } from "@/lib/components/form/add-cow/add-cow-dialog-model";
+import { CattleRepositoryModel } from "@/lib/types/models/cattle-repository";
+import { CowModelView } from "@/lib/types/models/cow";
+import { NotifierModel } from "@/lib/types/models/notifier";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
-export function addCowDialogVIInterface(): ViewInteractionInterface<
+export function addCowDialogVIInterface(
+	cattleRepository: CattleRepositoryModel,
+	notifier: NotifierModel<LivestockNotificationType>,
+	successCallback?: (cow: Omit<CowModelView, "id">) => void,
+	failureCallback?: (error: unknown) => void,
+): ViewInteractionInterface<
 	AddCowDialogModelView,
 	AddCowDialogModelInteraction
 > {
 	return {
-		produceModelView: async interaction => {
+		produceModelView: async (interaction, currentDialogModelView) => {
 			switch (interaction.type) {
-				case "TOGGLE_DIALOG": {
-					const {
-						cattleRepositoryModel,
-						shown,
-						location,
-						notifier,
-						cowTypes,
-						allLocations,
-						livestockTableModel,
-					} = interaction.input.currentDialogModelView;
+				case "OPEN": {
+					const { cowTypes, defaultLocation, locations } =
+						interaction.input;
 					return {
-						cattleRepositoryModel,
-						location,
-						notifier,
+						shown: true,
+						location: defaultLocation,
+						allLocations: locations,
 						cowTypes,
-						allLocations,
-						livestockTableModel,
-						shown: !shown,
 					};
 				}
+				case "CLOSE": {
+					if (!currentDialogModelView)
+						throw new Error("Model view is uninitialized");
+					return { ...currentDialogModelView, shown: false };
+				}
 				case "SUBMIT": {
-					const {
-						cattleRepositoryModel,
-						location,
-						notifier,
-						cowTypes,
-						allLocations,
-						livestockTableModel,
-					} = interaction.input.currentDialogModelView;
+					if (!currentDialogModelView)
+						throw new Error("Model view is uninitialized");
+					const { location, cowTypes, allLocations } =
+						currentDialogModelView;
 					const { name } = interaction.input.cowToBeAdded;
 					notifier.interact({
 						type: "NOTIFY",
 						input: { notification: { type: "pending" } },
 					});
-					cattleRepositoryModel.interact({
+					cattleRepository.interact({
 						type: "ADD_COW",
 						input: {
 							cowToBeAdded: interaction.input.cowToBeAdded,
@@ -59,13 +59,9 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 										},
 									},
 								});
-								livestockTableModel.interact({
-									type: "RESET_SELECTED_COW",
-									input: {
-										currentModelView:
-											livestockTableModel.modelView,
-									},
-								});
+								successCallback?.(
+									interaction.input.cowToBeAdded,
+								);
 							},
 							failureCallback(error) {
 								notifier.interact({
@@ -77,16 +73,14 @@ export function addCowDialogVIInterface(): ViewInteractionInterface<
 										},
 									},
 								});
+								failureCallback?.(error);
 							},
 						},
 					});
 					return {
-						cattleRepositoryModel,
 						location,
-						notifier,
 						cowTypes,
 						allLocations,
-						livestockTableModel,
 						shown: false,
 					};
 				}

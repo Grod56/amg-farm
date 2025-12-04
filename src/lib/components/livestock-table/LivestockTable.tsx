@@ -1,43 +1,25 @@
-import { addCowDialogVIInterface } from "@/lib/implementations/models/add-cow-dialog";
-import { editCowDialogVIInterface } from "@/lib/implementations/models/edit-cow-dialog";
-import { removeCowDialogVIInterface } from "@/lib/implementations/models/remove-cow-dialog";
-import { cattleRepositoryViewInteractionInterface } from "@/lib/implementations/repositories/cattle-repository";
-import { useStatefulRepository } from "@/lib/utilities/repositories/use-repository";
-import {
-	ConditionalComponent,
-	ModeledVoidComponent,
-} from "@mvc-react/components";
-import { newReadonlyModel } from "@mvc-react/mvc";
-import { useNewStatefulInteractiveModel } from "@mvc-react/stateful";
+import { ModeledVoidComponent } from "@mvc-react/components";
 import Spinner from "react-bootstrap/Spinner";
 import { LivestockTableModel } from "./livestock-table-model";
-import AddCowDialog from "../form/add-cow/AddCowDialog";
-import EditCowDialog from "../form/edit-cow/EditCowDialog";
-import RemoveCowDialog from "../form/remove-cow/RemoveCowDialog";
 import { TableActionsModelInteraction } from "./table-actions/table-actions-model";
 import TableActions from "./table-actions/TableActions";
 import Table from "./table/Table";
 
 const LivestockTable = function ({ model }) {
-	const cattleRepositoryModel = useStatefulRepository({
-		modelView: null,
-		viewInteractionInterface: cattleRepositoryViewInteractionInterface,
-	});
 	const { modelView, interact } = model;
-	const { selectedCow, selectedLocation, notifier } = modelView;
-	const { modelView: repositoryModelView } = cattleRepositoryModel;
+	const {
+		selectedCow,
+		selectedLocation,
+		notification,
+		cattleRepositoryModelView,
+		addCowCallback,
+		editCowCallback,
+		removeCowCallback,
+	} = modelView;
 	const computedSelectedLocation =
-		selectedLocation ?? repositoryModelView?.activeLocations[0];
-	const { notification } = notifier.modelView;
-
-	const addCowDialogModel = useNewStatefulInteractiveModel(
-		addCowDialogVIInterface(),
-	);
-	const editCowDialogModel = useNewStatefulInteractiveModel(
-		editCowDialogVIInterface(),
-	);
-	const removeCowDialogModel = useNewStatefulInteractiveModel(
-		removeCowDialogVIInterface(),
+		selectedLocation ?? cattleRepositoryModelView?.activeLocations[0];
+	const displayedCattle = cattleRepositoryModelView?.cattle.filter(
+		cow => cow.modelView.location.id == computedSelectedLocation!.id,
 	);
 
 	return (
@@ -51,12 +33,13 @@ const LivestockTable = function ({ model }) {
 			// 	})
 			// }
 		>
-			{repositoryModelView ? (
+			{cattleRepositoryModelView ? (
 				<>
 					<TableActions
 						model={{
 							modelView: {
-								locations: repositoryModelView.activeLocations,
+								locations:
+									cattleRepositoryModelView.activeLocations,
 								selectedCow,
 								selectedLocation: computedSelectedLocation!,
 								isPending: notification?.type == "pending",
@@ -66,64 +49,41 @@ const LivestockTable = function ({ model }) {
 							) => {
 								switch (interaction.type) {
 									case "ADD":
-										addCowDialogModel.interact({
-											type: "TOGGLE_DIALOG",
-											input: {
-												currentDialogModelView: {
-													notifier,
-													cattleRepositoryModel,
-													livestockTableModel: model,
-													shown: false,
-													location:
-														computedSelectedLocation!,
-													allLocations:
-														repositoryModelView.allLocations,
-													cowTypes:
-														repositoryModelView.cowTypes,
+										if (selectedLocation)
+											interact({
+												type: "ADD_COW",
+												input: {
+													defaultLocation:
+														selectedLocation,
+													addCowCallback,
 												},
-											},
-										});
+											});
 										break;
 									case "REMOVE":
 										if (selectedCow)
-											removeCowDialogModel.interact({
-												type: "TOGGLE_DIALOG",
+											interact({
+												type: "REMOVE_COW",
 												input: {
-													currentDialogModelView: {
-														livestockTableModel:
-															model,
-														cattleRepositoryModel,
-														shown: false,
-														cowModel: selectedCow,
-													},
+													cow: selectedCow,
+													removeCowCallback,
 												},
 											});
 										break;
 									case "EDIT":
 										if (selectedCow)
-											editCowDialogModel.interact({
-												type: "TOGGLE_DIALOG",
+											interact({
+												type: "EDIT_COW",
 												input: {
-													currentDialogModelView: {
-														livestockTableModel:
-															model,
-														cattleRepositoryModel,
-														shown: false,
-														cowModel: selectedCow,
-														locations:
-															repositoryModelView.allLocations,
-														cowTypes:
-															repositoryModelView.cowTypes,
-													},
+													cow: selectedCow,
+													editCowCallback,
 												},
 											});
 										break;
 									case "CHANGE_LOCATION": {
 										interact({
-											type: interaction.type,
+											type: "CHANGE_LOCATION",
 											input: {
 												...interaction.input,
-												currentModelView: modelView,
 											},
 										});
 										break;
@@ -131,9 +91,6 @@ const LivestockTable = function ({ model }) {
 									case "CLEAR_SELECTED": {
 										interact({
 											type: "RESET_SELECTED_COW",
-											input: {
-												currentModelView: modelView,
-											},
 										});
 									}
 								}
@@ -143,22 +100,17 @@ const LivestockTable = function ({ model }) {
 					<Table
 						model={{
 							modelView: {
-								cowModels: repositoryModelView.cowModels.filter(
-									cattleModel =>
-										cattleModel.modelView.location.id ==
-										computedSelectedLocation!.id,
-								),
+								cattle: displayedCattle!,
 								selectedCow,
 							},
 							interact(interaction) {
 								switch (interaction.type) {
 									case "SELECT_COW": {
-										const { cowModel } = interaction.input;
+										const { cow } = interaction.input;
 										interact({
 											type: "SELECT_COW",
 											input: {
-												cowModel,
-												currentModelView: modelView,
+												cow,
 											},
 										});
 										break;
@@ -166,9 +118,6 @@ const LivestockTable = function ({ model }) {
 									case "DESELECT": {
 										interact({
 											type: "RESET_SELECTED_COW",
-											input: {
-												currentModelView: modelView,
-											},
 										});
 										break;
 									}
@@ -184,107 +133,6 @@ const LivestockTable = function ({ model }) {
 					className="size-16! mx-auto my-auto"
 				/>
 			)}
-			<ConditionalComponent
-				model={newReadonlyModel({
-					condition: repositoryModelView,
-					components: new Map([
-						[null, () => <></>],
-						[undefined, () => <></>],
-					]),
-					FallbackComponent: () => (
-						<AddCowDialog
-							model={{
-								...addCowDialogModel,
-								modelView: addCowDialogModel.modelView
-									? addCowDialogModel.modelView
-									: {
-											shown: false,
-											cattleRepositoryModel,
-											livestockTableModel: model,
-											notifier,
-											location: computedSelectedLocation!,
-											allLocations:
-												repositoryModelView!
-													.allLocations,
-											cowTypes:
-												repositoryModelView!.cowTypes,
-										},
-							}}
-						/>
-					),
-				})}
-			/>
-			{/* {selectedCow && (
-				<EditCowDialog
-					model={{
-						...editCowDialogModel,
-						modelView: editCowDialogModel.modelView
-							? editCowDialogModel.modelView
-							: {
-									cowModel: selectedCow!,
-									shown: false,
-									cattleRepositoryModel,
-									livestockTableModel: model,
-									locations:
-										cattleRepositoryModel.modelView!
-											.allLocations,
-								},
-					}}
-				/>
-			)} */}
-			<ConditionalComponent
-				model={newReadonlyModel({
-					condition: selectedCow,
-					components: new Map([
-						[null, () => <></>],
-						[undefined, () => <></>],
-					]),
-					FallbackComponent: () => (
-						<EditCowDialog
-							model={{
-								...editCowDialogModel,
-								modelView: editCowDialogModel.modelView
-									? editCowDialogModel.modelView
-									: {
-											cowModel: selectedCow!,
-											shown: false,
-											cattleRepositoryModel,
-											livestockTableModel: model,
-											locations:
-												repositoryModelView!
-													.allLocations,
-											cowTypes:
-												repositoryModelView!.cowTypes,
-										},
-							}}
-						/>
-					),
-				})}
-			/>
-			<ConditionalComponent
-				model={newReadonlyModel({
-					condition: selectedCow,
-					components: new Map([
-						[null, () => <></>],
-						[undefined, () => <></>],
-					]),
-					FallbackComponent: () => (
-						<RemoveCowDialog
-							model={{
-								...removeCowDialogModel,
-								modelView: removeCowDialogModel.modelView
-									? removeCowDialogModel.modelView
-									: {
-											cowModel: selectedCow!,
-											livestockTableModel: model,
-											shown: false,
-											cattleRepositoryModel,
-										},
-							}}
-						/>
-					),
-				})}
-			/>
 		</div>
 	);
 } as ModeledVoidComponent<LivestockTableModel>;

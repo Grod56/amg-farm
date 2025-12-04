@@ -2,7 +2,7 @@
 
 import PDFDocument from "pdfkit";
 import { CowRecord } from "../../types/cow-record";
-import { retrieveCattle } from "../../implementations/repositories/server-actions";
+import { retrieveCowRecords } from "../../implementations/repositories/server-actions";
 import { IBlobStream } from "blob-stream";
 import { formatInTimeZone } from "date-fns-tz";
 
@@ -45,7 +45,7 @@ export async function generateRegister(
 	doc.font("Helvetica").text(`Stock Register No.: ${registerNo}`);
 	doc.text(`Generated on: ${timeGeneratedString}`);
 	addHorizontalRule(doc, -1, 1);
-	const cowRecords = await retrieveCattle();
+	const cowRecords = await retrieveCowRecords();
 	const totals: Map<string, number> = new Map();
 	totals.set("All", cowRecords.length);
 	new Set(cowRecords.map(record => record.type.trim()).sort()).forEach(type =>

@@ -1,31 +1,32 @@
-import { CattleRepositoryModel } from "@/lib/types/models/cattle-repository";
-import { CowModel, CowType } from "@/lib/types/models/cow";
 import { Location } from "@/lib/types/miscellaneous";
+import { CowModel, CowType } from "@/lib/types/models/cow";
 import {
 	InitializedModel,
 	InputModelInteraction,
 	InteractiveModel,
+	ModelInteraction,
 } from "@mvc-react/mvc";
-import { LivestockTableModel } from "../../livestock-table/livestock-table-model";
 
 export interface EditCowDialogModelView {
 	shown: boolean;
-	cattleRepositoryModel: CattleRepositoryModel;
-	livestockTableModel: LivestockTableModel;
-	cowModel: CowModel;
+	cow: CowModel;
 	locations: Location[];
 	cowTypes: { type: CowType }[];
 }
 
 export type EditCowDialogModelInteraction =
+	| ModelInteraction<"CLOSE">
 	| InputModelInteraction<
-			"TOGGLE_DIALOG",
-			{ currentDialogModelView: EditCowDialogModelView }
+			"OPEN",
+			{
+				cowToBeEdited: CowModel;
+				locations: Location[];
+				cowTypes: { type: CowType }[];
+			}
 	  >
 	| InputModelInteraction<
 			"SUBMIT",
 			{
-				currentDialogModelView: EditCowDialogModelView;
 				updatedCow: CowModel;
 			}
 	  >;

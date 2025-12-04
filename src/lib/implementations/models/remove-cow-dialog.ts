@@ -1,47 +1,51 @@
+import { LivestockNotificationType } from "@/app/livestock/Livestock";
 import {
 	RemoveCowDialogModelView,
 	RemoveCowDialogModelInteraction,
 } from "@/lib/components/form/remove-cow/remove-cow-dialog-model";
+import { CattleRepositoryModel } from "@/lib/types/models/cattle-repository";
+import { CowModel } from "@/lib/types/models/cow";
+import { NotifierModel } from "@/lib/types/models/notifier";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
-export function removeCowDialogVIInterface(): ViewInteractionInterface<
+export function removeCowDialogVIInterface(
+	cattleRepository: CattleRepositoryModel,
+	notifier: NotifierModel<LivestockNotificationType>,
+
+	successCallback?: (removedCow: CowModel) => void,
+	failureCallback?: (error: unknown) => void,
+): ViewInteractionInterface<
 	RemoveCowDialogModelView,
 	RemoveCowDialogModelInteraction
 > {
 	return {
-		produceModelView: async interaction => {
+		produceModelView: async (interaction, currentDialogModelView) => {
 			switch (interaction.type) {
-				case "TOGGLE_DIALOG": {
-					const {
-						cattleRepositoryModel,
-						shown,
-						cowModel,
-						livestockTableModel,
-					} = interaction.input.currentDialogModelView;
+				case "OPEN": {
+					const { cowToBeRemoved } = interaction.input;
 					return {
-						cattleRepositoryModel,
-						cowModel,
-						livestockTableModel,
-						shown: !shown,
+						cow: cowToBeRemoved,
+						shown: true,
 					};
 				}
-				case "REMOVE_COW": {
-					const {
-						cattleRepositoryModel,
-						cowModel,
-						livestockTableModel,
-					} = interaction.input.currentDialogModelView;
-					const { name } = cowModel!.modelView;
-					const { notifier: notifier } =
-						livestockTableModel.modelView;
+				case "CLOSE": {
+					if (!currentDialogModelView)
+						throw new Error("Model view is uninitialized");
+					return { ...currentDialogModelView, shown: false };
+				}
+				case "SUBMIT": {
+					if (!currentDialogModelView)
+						throw new Error("Model view is uninitialized");
+					const { cow } = currentDialogModelView;
+					const { name } = cow.modelView;
 					notifier.interact({
 						type: "NOTIFY",
 						input: { notification: { type: "pending" } },
 					});
-					cattleRepositoryModel.interact({
+					cattleRepository.interact({
 						type: "REMOVE_COW",
 						input: {
-							cowToBeRemoved: cowModel!,
+							cowToBeRemoved: cow,
 							successCallback() {
 								notifier.interact({
 									type: "NOTIFY",
@@ -52,13 +56,7 @@ export function removeCowDialogVIInterface(): ViewInteractionInterface<
 										},
 									},
 								});
-								livestockTableModel.interact({
-									type: "RESET_SELECTED_COW",
-									input: {
-										currentModelView:
-											livestockTableModel.modelView,
-									},
-								});
+								successCallback?.(cow);
 							},
 							failureCallback(error) {
 								notifier.interact({
@@ -70,13 +68,12 @@ export function removeCowDialogVIInterface(): ViewInteractionInterface<
 										},
 									},
 								});
+								failureCallback?.(error);
 							},
 						},
 					});
 					return {
-						cattleRepositoryModel,
-						cowModel,
-						livestockTableModel,
+						cow,
 						shown: false,
 					};
 				}

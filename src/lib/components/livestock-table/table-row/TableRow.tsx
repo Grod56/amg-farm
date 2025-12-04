@@ -3,8 +3,8 @@ import { TableRowModel } from "./table-row-model";
 
 const TableRow = function ({ model }) {
 	const { modelView, interact } = model;
-	const { rowNumber, cowModel, isSelected } = modelView;
-	const { name, type, tag, dob } = cowModel.modelView;
+	const { rowNumber, cow, isSelected } = modelView;
+	const { name, type, tag, dob } = cow.modelView;
 
 	return (
 		<tr
@@ -14,7 +14,7 @@ const TableRow = function ({ model }) {
 			onClick={() => {
 				interact({
 					type: "SELECT_COW",
-					input: { cowModel },
+					input: { cow },
 				});
 			}}
 		>

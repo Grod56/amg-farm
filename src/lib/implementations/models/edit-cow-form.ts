@@ -18,7 +18,7 @@ export function editCowFormVIInterface(): ViewInteractionInterface<
 						name: "",
 						type: "",
 						tag: "",
-						selectedLocation: {
+						location: {
 							id: "",
 							name: "",
 						},

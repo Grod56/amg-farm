@@ -7,7 +7,7 @@ import {
 import { CowModel, CowModelView, CowType } from "./cow";
 
 export interface CattleRepositoryModelView {
-	cowModels: CowModel[];
+	cattle: CowModel[];
 	activeLocations: Location[];
 	allLocations: Location[];
 	cowTypes: { type: CowType }[];

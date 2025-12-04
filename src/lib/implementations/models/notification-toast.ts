@@ -2,41 +2,44 @@ import {
 	NotificationToastModelView,
 	NotificationToastModelInteraction,
 } from "@/lib/components/notification-toast/notification-toast-model";
+import { NotifierModel } from "@/lib/types/models/notifier";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 
-export function notificationToastVIInterface(): ViewInteractionInterface<
+export function notificationToastVIInterface(
+	notifier: NotifierModel<unknown>,
+): ViewInteractionInterface<
 	NotificationToastModelView,
 	NotificationToastModelInteraction
 > {
 	return {
-		produceModelView: async interaction => {
+		produceModelView: async (interaction, currentModelView) => {
 			switch (interaction.type) {
-				case "NOTIFY": {
-					const { currentModelView, notification } =
-						interaction.input;
-					const { notificationMap, notifier } = currentModelView;
-
-					notifier.interact({
-						type: "NOTIFY",
-						input: {
-							notification: {
-								text: notification.text,
-								type:
-									notificationMap.get(notification.type) ??
-									"info",
-							},
-						},
-					});
+				case "OPEN": {
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
 					return {
-						notifier,
-						notificationMap,
-						shown: notification?.type != "pending",
+						...currentModelView,
+						open: true,
 					};
 				}
 				case "CLOSE": {
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
+					const wasDisplayed = currentModelView.open;
 					return {
-						...interaction.input.currentModelView,
-						shown: false,
+						...currentModelView,
+						open: false,
+						wasDisplayed,
+					};
+				}
+				case "CLEAR_NOTIFICATION": {
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
+					notifier.interact({ type: "CLEAR" });
+					return {
+						...currentModelView,
+						open: false,
+						wasDisplayed: false,
 					};
 				}
 			}

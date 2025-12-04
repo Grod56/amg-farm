@@ -1,28 +1,20 @@
-import { CattleRepositoryModel } from "@/lib/types/models/cattle-repository";
 import { CowModel } from "@/lib/types/models/cow";
 import {
 	InitializedModel,
 	InputModelInteraction,
 	InteractiveModel,
+	ModelInteraction,
 } from "@mvc-react/mvc";
-import { LivestockTableModel } from "../../livestock-table/livestock-table-model";
 
 export interface RemoveCowDialogModelView {
 	shown: boolean;
-	cattleRepositoryModel: CattleRepositoryModel;
-	livestockTableModel: LivestockTableModel;
-	cowModel: CowModel;
+	cow: CowModel;
 }
 
 export type RemoveCowDialogModelInteraction =
-	| InputModelInteraction<
-			"REMOVE_COW",
-			{ currentDialogModelView: RemoveCowDialogModelView }
-	  >
-	| InputModelInteraction<
-			"TOGGLE_DIALOG",
-			{ currentDialogModelView: RemoveCowDialogModelView }
-	  >;
+	| ModelInteraction<"SUBMIT">
+	| ModelInteraction<"CLOSE">
+	| InputModelInteraction<"OPEN", { cowToBeRemoved: CowModel }>;
 
 export type RemoveCowDialogModel = InitializedModel<
 	InteractiveModel<RemoveCowDialogModelView, RemoveCowDialogModelInteraction>

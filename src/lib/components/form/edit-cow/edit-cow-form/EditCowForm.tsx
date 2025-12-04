@@ -4,8 +4,7 @@ import Form from "react-bootstrap/Form";
 
 const EditCowForm = function ({ model }) {
 	const { interact, modelView } = model;
-	const { name, dob, type, tag, selectedLocation, locations, cowTypes } =
-		modelView;
+	const { name, dob, type, tag, location, locations, cowTypes } = modelView;
 	const locationsMap = new Map<string, string>(
 		locations.map(location => [location.name, location.id]),
 	);
@@ -92,7 +91,7 @@ const EditCowForm = function ({ model }) {
 			<Form.Select
 				name="locations"
 				id="edit-form-location-selector"
-				defaultValue={selectedLocation.name}
+				defaultValue={location.name}
 				required
 				onChange={event =>
 					interact({
@@ -100,7 +99,7 @@ const EditCowForm = function ({ model }) {
 						input: {
 							updatedFormModelView: {
 								...modelView,
-								selectedLocation: {
+								location: {
 									id: locationsMap.get(event.target.value)!,
 									name: event.target.value,
 								},

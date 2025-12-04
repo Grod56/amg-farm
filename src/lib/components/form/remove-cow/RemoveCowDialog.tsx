@@ -5,15 +5,14 @@ import Modal from "react-bootstrap/esm/Modal";
 
 const RemoveCowDialog = function ({ model }) {
 	const { modelView, interact } = model;
-	const { cowModel, shown } = modelView;
+	const { cow, shown } = modelView;
 
 	return (
 		<Modal
 			show={shown}
 			onHide={() =>
 				interact({
-					type: "TOGGLE_DIALOG",
-					input: { currentDialogModelView: modelView },
+					type: "CLOSE",
 				})
 			}
 		>
@@ -21,15 +20,14 @@ const RemoveCowDialog = function ({ model }) {
 				<Modal.Title>Remove Cow</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<p>{`Are you sure you want to remove "${cowModel?.modelView.name}"?`}</p>
+				<p>{`Are you sure you want to remove "${cow.modelView.name}"?`}</p>
 			</Modal.Body>
 			<Modal.Footer>
 				<Button
 					variant="secondary"
 					onClick={() =>
 						interact({
-							type: "TOGGLE_DIALOG",
-							input: { currentDialogModelView: modelView },
+							type: "CLOSE",
 						})
 					}
 				>
@@ -40,10 +38,7 @@ const RemoveCowDialog = function ({ model }) {
 					type="submit"
 					onClick={() =>
 						interact({
-							type: "REMOVE_COW",
-							input: {
-								currentDialogModelView: modelView,
-							},
+							type: "SUBMIT",
 						})
 					}
 				>

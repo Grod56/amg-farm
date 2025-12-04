@@ -10,7 +10,7 @@ import "./table.css";
 
 const Table = function ({ model }) {
 	const { modelView, interact } = model;
-	const { cowModels, selectedCow } = modelView;
+	const { cattle, selectedCow } = modelView;
 
 	return (
 		<div className="h-full w-full overflow-y-auto">
@@ -30,12 +30,12 @@ const Table = function ({ model }) {
 					<ComponentList
 						model={newReadonlyModel({
 							Component: TableRow,
-							componentModels: cowModels.map(
-								(cowModel, index) =>
+							componentModels: cattle.map(
+								(cow, index) =>
 									({
 										modelView: {
-											cowModel,
-											isSelected: selectedCow == cowModel,
+											cow: cow,
+											isSelected: selectedCow == cow,
 											rowNumber: index + 1,
 										},
 										interact: function (
@@ -43,11 +43,13 @@ const Table = function ({ model }) {
 										) {
 											switch (interaction.type) {
 												case "SELECT_COW": {
-													const { cowModel } =
+													const { cow: cowModel } =
 														interaction.input;
 													interact({
 														type: "SELECT_COW",
-														input: { cowModel },
+														input: {
+															cow: cowModel,
+														},
 													});
 												}
 											}

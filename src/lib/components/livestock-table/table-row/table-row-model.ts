@@ -7,12 +7,12 @@ import {
 
 export interface TableRowModelView {
 	rowNumber: number;
-	cowModel: CowModel;
+	cow: CowModel;
 	isSelected: boolean;
 }
 export type TableRowModelInteraction = InputModelInteraction<
 	"SELECT_COW",
-	{ cowModel: CowModel }
+	{ cow: CowModel }
 >;
 
 export type TableRowModel = InitializedModel<

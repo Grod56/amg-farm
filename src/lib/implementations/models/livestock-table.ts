@@ -10,12 +10,14 @@ export function livestockTableVIInterface(): ViewInteractionInterface<
 > {
 	return {
 		async produceModelView(
-			interaction: LivestockTableModelInteraction,
+			interaction,
+			currentModelView,
 		): Promise<LivestockTableModelView> {
 			switch (interaction.type) {
 				case "CHANGE_LOCATION": {
-					const { currentModelView, location: location } =
-						interaction.input;
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
+					const { location: location } = interaction.input;
 					return {
 						...currentModelView,
 						selectedLocation: location,
@@ -23,16 +25,48 @@ export function livestockTableVIInterface(): ViewInteractionInterface<
 					};
 				}
 				case "SELECT_COW": {
-					const { cowModel, currentModelView } = interaction.input;
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
+					const { cow: cowModel } = interaction.input;
 					return {
 						...currentModelView,
 						selectedCow: cowModel,
 					};
 				}
 				case "RESET_SELECTED_COW": {
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
 					return {
-						...interaction.input.currentModelView,
+						...currentModelView,
 						selectedCow: undefined,
+					};
+				}
+				case "ADD_COW": {
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
+					const { defaultLocation, addCowCallback } =
+						interaction.input;
+					addCowCallback(defaultLocation);
+					return {
+						...currentModelView,
+					};
+				}
+				case "EDIT_COW": {
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
+					const { cow, editCowCallback } = interaction.input;
+					editCowCallback(cow);
+					return {
+						...currentModelView,
+					};
+				}
+				case "REMOVE_COW": {
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
+					const { cow, removeCowCallback } = interaction.input;
+					removeCowCallback(cow);
+					return {
+						...currentModelView,
 					};
 				}
 			}
