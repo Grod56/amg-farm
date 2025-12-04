@@ -15,7 +15,7 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 	CattleRepositoryModelView,
 	CattleRepositoryModelInteraction
 > = {
-	async produceModelView(interaction: CattleRepositoryModelInteraction) {
+	async produceModelView(interaction, currentModelView) {
 		switch (interaction.type) {
 			case RepositoryInteractionType.RETRIEVE: {
 				return await getCattleRepositorySnapshot();
@@ -29,9 +29,12 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 						failureCallback(error);
 						return Promise.reject(error);
 					});
-				return await this.produceModelView({
-					type: RepositoryInteractionType.RETRIEVE,
-				});
+				return await this.produceModelView(
+					{
+						type: RepositoryInteractionType.RETRIEVE,
+					},
+					currentModelView,
+				);
 			}
 			case "REMOVE_COW": {
 				const { cowToBeRemoved, successCallback, failureCallback } =
@@ -42,9 +45,12 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 						failureCallback(error);
 						return Promise.reject(error);
 					});
-				return await this.produceModelView({
-					type: RepositoryInteractionType.RETRIEVE,
-				});
+				return await this.produceModelView(
+					{
+						type: RepositoryInteractionType.RETRIEVE,
+					},
+					currentModelView,
+				);
 			}
 			case "EDIT_COW": {
 				const { updatedCow, successCallback, failureCallback } =
@@ -55,9 +61,12 @@ export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 						failureCallback(error);
 						return Promise.reject(error);
 					});
-				return await this.produceModelView({
-					type: RepositoryInteractionType.RETRIEVE,
-				});
+				return await this.produceModelView(
+					{
+						type: RepositoryInteractionType.RETRIEVE,
+					},
+					currentModelView,
+				);
 			}
 		}
 	},
