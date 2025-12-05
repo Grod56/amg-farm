@@ -15,9 +15,6 @@ export interface LivestockTableModelView {
 	selectedCow?: CowModel;
 	selectedLocation?: Location;
 	notification: Notification<LivestockNotificationType> | null;
-	addCowCallback: (defaultLocation: Location) => void;
-	editCowCallback: (cow: CowModel) => void;
-	removeCowCallback: (cow: CowModel) => void;
 }
 
 export type LivestockTableModelInteraction =
@@ -28,21 +25,18 @@ export type LivestockTableModelInteraction =
 			"ADD_COW",
 			{
 				defaultLocation: Location;
-				addCowCallback: (defaultLocation: Location) => void;
 			}
 	  >
 	| InputModelInteraction<
 			"EDIT_COW",
 			{
 				cow: CowModel;
-				editCowCallback: (cow: CowModel) => void;
 			}
 	  >
 	| InputModelInteraction<
 			"REMOVE_COW",
 			{
 				cow: CowModel;
-				removeCowCallback: (cow: CowModel) => void;
 			}
 	  >;
 

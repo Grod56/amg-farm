@@ -12,9 +12,6 @@ const LivestockTable = function ({ model }) {
 		selectedLocation,
 		notification,
 		cattleRepositoryModelView,
-		addCowCallback,
-		editCowCallback,
-		removeCowCallback,
 	} = modelView;
 	const computedSelectedLocation =
 		selectedLocation ?? cattleRepositoryModelView?.activeLocations[0];
@@ -55,7 +52,6 @@ const LivestockTable = function ({ model }) {
 												input: {
 													defaultLocation:
 														selectedLocation,
-													addCowCallback,
 												},
 											});
 										break;
@@ -65,7 +61,6 @@ const LivestockTable = function ({ model }) {
 												type: "REMOVE_COW",
 												input: {
 													cow: selectedCow,
-													removeCowCallback,
 												},
 											});
 										break;
@@ -75,7 +70,6 @@ const LivestockTable = function ({ model }) {
 												type: "EDIT_COW",
 												input: {
 													cow: selectedCow,
-													editCowCallback,
 												},
 											});
 										break;

@@ -85,13 +85,14 @@ const Livestock = function () {
 		});
 	};
 	const livestockTable = useInitializedStatefulInteractiveModel(
-		livestockTableVIInterface(),
-		{
-			notification,
-			cattleRepositoryModelView: repositoryModelView,
+		livestockTableVIInterface(
 			addCowCallback,
 			editCowCallback,
 			removeCowCallback,
+		),
+		{
+			notification,
+			cattleRepositoryModelView: repositoryModelView,
 		},
 	);
 	const { selectedCow, selectedLocation } = livestockTable.modelView;
@@ -137,9 +138,6 @@ const Livestock = function () {
 								...livestockTable.modelView,
 								cattleRepositoryModelView: repositoryModelView,
 								notification,
-								addCowCallback,
-								editCowCallback,
-								removeCowCallback,
 							},
 							interact: livestockTable.interact,
 						}}
