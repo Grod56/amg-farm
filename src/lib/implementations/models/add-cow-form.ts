@@ -38,12 +38,15 @@ export function addCowFormVIInterface({
 				case "SUBMIT": {
 					if (!currentModelView)
 						throw new Error("Form model view is uninitialized");
-					const { formNotifier } = currentModelView;
-					const { name } = interaction.input.cowToBeAdded;
-					formNotifier.interact({
-						type: "NOTIFY",
-						input: { notification: { type: "submitting" } },
-					});
+					const {
+						cowToBeAdded,
+						failureCallback: formFailureCallback,
+						pendingCallback: formPendingCallback,
+						successCallback: formSuccessCallback,
+					} = interaction.input;
+					const { name } = cowToBeAdded;
+
+					formPendingCallback?.();
 					notifier.interact({
 						type: "NOTIFY",
 						input: { notification: { type: "pending" } },
@@ -53,6 +56,10 @@ export function addCowFormVIInterface({
 						input: {
 							cowToBeAdded: interaction.input.cowToBeAdded,
 							successCallback() {
+								formSuccessCallback?.();
+								successCallback?.(
+									interaction.input.cowToBeAdded,
+								);
 								notifier.interact({
 									type: "NOTIFY",
 									input: {
@@ -62,21 +69,13 @@ export function addCowFormVIInterface({
 										},
 									},
 								});
-								successCallback?.(
-									interaction.input.cowToBeAdded,
-								);
 							},
 							failureCallback(error) {
-								formNotifier.interact({
-									type: "NOTIFY",
-									input: {
-										notification: {
-											type: "failure",
-											text: `Could not add cow. Error: ${error}`,
-										},
-									},
-								});
+								formFailureCallback?.(error);
 								failureCallback?.(error);
+								notifier.interact({
+									type: "CLEAR",
+								});
 							},
 						},
 					});

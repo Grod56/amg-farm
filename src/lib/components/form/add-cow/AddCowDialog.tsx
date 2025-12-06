@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { addCowFormVIInterface } from "@/lib/implementations/models/add-cow-form";
 import AddCowForm from "./add-cow-form/AddCowForm";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 const AddCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
@@ -21,6 +21,41 @@ const AddCowDialog = function ({ model }) {
 			{ ...initialFormModelView },
 		);
 	const [exited, setExited] = useState(false);
+	const [updateScheduled, setUpdateScheduled] = useState(false);
+	const [updated, setUpdated] = useState(false);
+
+	useLayoutEffect(() => {
+		if (
+			shown &&
+			JSON.stringify(formModelView.fields) !=
+				JSON.stringify(initialFormModelView.fields) &&
+			!(updated || updateScheduled)
+		) {
+			formModelInteract({
+				type: "UPDATE_FORM",
+				input: { updatedFormFields: initialFormModelView.fields },
+			});
+			setUpdateScheduled(true);
+		}
+	}, [
+		formModelInteract,
+		formModelView.fields,
+		initialFormModelView.fields,
+		updateScheduled,
+		updated,
+		shown,
+	]);
+
+	useLayoutEffect(() => {
+		if (
+			updateScheduled &&
+			JSON.stringify(formModelView.fields) ==
+				JSON.stringify(initialFormModelView.fields)
+		) {
+			setUpdated(true);
+			setUpdateScheduled(false);
+		}
+	}, [formModelView.fields, initialFormModelView.fields, updateScheduled]);
 
 	useEffect(() => {
 		if (
@@ -56,6 +91,7 @@ const AddCowDialog = function ({ model }) {
 			}
 			onExited={() => {
 				setExited(true);
+				setUpdated(false);
 			}}
 		>
 			<Modal.Header
@@ -66,7 +102,7 @@ const AddCowDialog = function ({ model }) {
 				<Modal.Title>Add Cow</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				{!exited && (
+				{!exited && updated && (
 					<AddCowForm
 						model={{
 							modelView: formModelView,

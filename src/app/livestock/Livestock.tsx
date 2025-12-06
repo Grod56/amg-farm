@@ -24,17 +24,12 @@ import { newReadonlyModel } from "@mvc-react/mvc";
 import { Location } from "@/lib/types/miscellaneous";
 import { CowModel } from "@/lib/types/models/cow";
 import "./livestock.css";
-import { AddCowFormNotificationType } from "@/lib/components/form/add-cow/add-cow-form/add-cow-form-model";
 
 export type LivestockNotificationType = "success" | "pending" | "failure";
 
 const Livestock = function () {
 	const notifier = useInitializedStatefulInteractiveModel(
 		notifierVIInterface<LivestockNotificationType>(),
-		{ notification: null },
-	);
-	const formNotifier = useInitializedStatefulInteractiveModel(
-		notifierVIInterface<AddCowFormNotificationType>(),
 		{ notification: null },
 	);
 	const { notification } = notifier.modelView;
@@ -75,7 +70,6 @@ const Livestock = function () {
 						dob: new Date(),
 						location: defaultLocation,
 					},
-					formNotifier,
 				},
 				formTools: {
 					cattleRepository,

@@ -1,6 +1,5 @@
 import { Location } from "@/lib/types/miscellaneous";
 import { CowModelView, CowType } from "@/lib/types/models/cow";
-import { NotifierModel } from "@/lib/types/models/notifier";
 import {
 	InitializedModel,
 	InputModelInteraction,
@@ -21,7 +20,6 @@ export interface AddCowFormModelView {
 	locations: Location[];
 	cowTypes: { type: CowType }[];
 	fields: AddCowFormFields;
-	formNotifier: NotifierModel<AddCowFormNotificationType>;
 }
 
 export type AddCowFormModelInteraction =
@@ -33,6 +31,9 @@ export type AddCowFormModelInteraction =
 			"SUBMIT",
 			{
 				cowToBeAdded: Omit<CowModelView, "id">;
+				pendingCallback?: () => void;
+				successCallback?: () => void;
+				failureCallback?: (error: unknown) => void;
 			}
 	  >;
 

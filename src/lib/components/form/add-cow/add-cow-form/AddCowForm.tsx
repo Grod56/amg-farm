@@ -1,18 +1,21 @@
+import { Notification } from "@/lib/types/models/notification";
 import { ModeledVoidComponent } from "@mvc-react/components";
-import Button from "react-bootstrap/Button";
+import { useState } from "react";
 import Form from "react-bootstrap/Form";
-import { AddCowFormModel } from "./add-cow-form-model";
 import Spinner from "react-bootstrap/Spinner";
+import { AddCowFormModel } from "./add-cow-form-model";
 
 const AddCowForm = function ({ model }) {
 	const { interact, modelView } = model;
-	const { locations, cowTypes, fields, formNotifier } = modelView;
+	const { locations, cowTypes, fields } = modelView;
 	const { name, type, tag, dob, location } = fields;
-	const { notification } = formNotifier.modelView;
 	const maxDate = Intl.DateTimeFormat("sv-SE").format(new Date());
 	const locationsMap = new Map<string, string>(
 		locations.map(location => [location.name, location.id]),
 	);
+	const [notification, setNotification] = useState<Notification<
+		"submitting" | "failure"
+	> | null>(null);
 
 	return (
 		<>
@@ -20,10 +23,6 @@ const AddCowForm = function ({ model }) {
 				className="flex flex-col gap-4"
 				onSubmit={e => {
 					e.preventDefault();
-					formNotifier.interact({
-						type: "NOTIFY",
-						input: { notification: { type: "submitting" } },
-					});
 					interact({
 						type: "SUBMIT",
 						input: {
@@ -34,11 +33,20 @@ const AddCowForm = function ({ model }) {
 								tag: tag.trim(),
 								location,
 							},
+							pendingCallback() {
+								setNotification({ type: "submitting" });
+							},
+							failureCallback(error) {
+								setNotification({
+									type: "failure",
+									text: `${String(error)}`,
+								});
+							},
 						},
 					});
 				}}
 			>
-				<div className="form-fields flex flex-col">
+				<div className="flex flex-col">
 					<Form.Control
 						type="text"
 						placeholder="Name"
@@ -150,8 +158,8 @@ const AddCowForm = function ({ model }) {
 					</span>
 				)}
 				<div className="flex gap-2 justify-end">
-					<Button
-						className="bg-gray-800! hover:bg-gray-900! text-white border-none! text-center"
+					<button
+						className="flex w-1/5 p-2 items-center justify-center gap-2 rounded-lg! text-white bg-gray-700 disabled:bg-gray-400 hover:bg-gray-800"
 						type="submit"
 						disabled={notification?.type == "submitting"}
 					>
@@ -164,7 +172,7 @@ const AddCowForm = function ({ model }) {
 						) : (
 							"Add Cow"
 						)}
-					</Button>
+					</button>
 				</div>
 			</Form>
 		</>
