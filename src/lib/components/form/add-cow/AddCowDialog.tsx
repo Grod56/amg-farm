@@ -22,7 +22,7 @@ const AddCowDialog = function ({ model }) {
 		);
 	const [exited, setExited] = useState(false);
 	const [updateScheduled, setUpdateScheduled] = useState(false);
-	const [updated, setUpdated] = useState(false);
+	const [updated, setUpdated] = useState(true);
 
 	useLayoutEffect(() => {
 		if (

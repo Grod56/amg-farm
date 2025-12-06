@@ -159,7 +159,7 @@ const AddCowForm = function ({ model }) {
 				)}
 				<div className="flex gap-2 justify-end">
 					<button
-						className="flex w-1/5 p-2 items-center justify-center gap-2 rounded-lg! text-white bg-gray-700 disabled:bg-gray-400 hover:bg-gray-800"
+						className="flex w-1/3 p-2 items-center justify-center gap-2 rounded-lg! text-white bg-gray-700 disabled:bg-gray-400 hover:bg-gray-800"
 						type="submit"
 						disabled={notification?.type == "submitting"}
 					>
