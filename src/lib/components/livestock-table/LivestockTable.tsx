@@ -46,12 +46,12 @@ const LivestockTable = function ({ model }) {
 							) => {
 								switch (interaction.type) {
 									case "ADD":
-										if (selectedLocation)
+										if (computedSelectedLocation)
 											interact({
 												type: "ADD_COW",
 												input: {
 													defaultLocation:
-														selectedLocation,
+														computedSelectedLocation,
 												},
 											});
 										break;

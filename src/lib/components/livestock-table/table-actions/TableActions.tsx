@@ -53,7 +53,9 @@ const TableActions = function ({ model }) {
 				>
 					<FontAwesomeIcon
 						icon={faAdd}
-						onClick={() => interact({ type: "ADD" })}
+						onClick={() => {
+							interact({ type: "ADD" });
+						}}
 					/>
 				</button>
 				<button

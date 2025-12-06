@@ -21,17 +21,10 @@ export function notifierVIInterface<T>(): ViewInteractionInterface<
 					if (!currentModelView)
 						throw new Error("Model view is uninitialized");
 					const { notification } = currentModelView;
-					if (notification)
-						// throw new Error("Cannot clear null notification"); //TODO: To be fixed
-						return {
-							notification: { ...notification, cleared: true },
-						};
+					if (!notification)
+						throw new Error("Cannot clear null notification");
 					return {
-						notification: {
-							cleared: true,
-							text: undefined,
-							type: undefined as T,
-						},
+						notification: { ...notification, cleared: true },
 					};
 				}
 			}

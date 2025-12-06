@@ -52,27 +52,21 @@ export function livestockTableVIInterface(
 						throw new Error("Model view is uninitialized");
 					const { defaultLocation } = interaction.input;
 					addCowCallback(defaultLocation);
-					return {
-						...currentModelView,
-					};
+					return currentModelView;
 				}
 				case "EDIT_COW": {
 					if (!currentModelView)
 						throw new Error("Model view is uninitialized");
 					const { cow } = interaction.input;
 					editCowCallback(cow);
-					return {
-						...currentModelView,
-					};
+					return currentModelView;
 				}
 				case "REMOVE_COW": {
 					if (!currentModelView)
 						throw new Error("Model view is uninitialized");
 					const { cow } = interaction.input;
 					removeCowCallback(cow);
-					return {
-						...currentModelView,
-					};
+					return currentModelView;
 				}
 			}
 		},

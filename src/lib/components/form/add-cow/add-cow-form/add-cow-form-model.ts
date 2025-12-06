@@ -1,28 +1,40 @@
 import { Location } from "@/lib/types/miscellaneous";
-import { CowType } from "@/lib/types/models/cow";
+import { CowModelView, CowType } from "@/lib/types/models/cow";
+import { NotifierModel } from "@/lib/types/models/notifier";
 import {
 	InitializedModel,
 	InputModelInteraction,
 	InteractiveModel,
-	ModelInteraction,
 } from "@mvc-react/mvc";
 
-export interface AddCowFormModelView {
+export type AddCowFormNotificationType = "submitting" | "success" | "failure";
+
+export type AddCowFormFields = {
 	name: string;
-	dob: Date;
 	type: string;
 	tag: string;
+	dob: Date;
 	location: Location;
-	allLocations: Location[];
+};
+
+export interface AddCowFormModelView {
+	locations: Location[];
 	cowTypes: { type: CowType }[];
+	fields: AddCowFormFields;
+	formNotifier: NotifierModel<AddCowFormNotificationType>;
 }
 
 export type AddCowFormModelInteraction =
 	| InputModelInteraction<
 			"UPDATE_FORM",
-			{ updatedFormModelView: AddCowFormModelView }
+			{ updatedFormFields: AddCowFormFields }
 	  >
-	| ModelInteraction<"CLEAR_FORM">;
+	| InputModelInteraction<
+			"SUBMIT",
+			{
+				cowToBeAdded: Omit<CowModelView, "id">;
+			}
+	  >;
 
 export type AddCowFormModel = InitializedModel<
 	InteractiveModel<AddCowFormModelView, AddCowFormModelInteraction>

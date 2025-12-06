@@ -1,17 +1,16 @@
-import { Location } from "@/lib/types/miscellaneous";
-import { CowModelView, CowType } from "@/lib/types/models/cow";
+import { AddCowFormTools } from "@/lib/implementations/models/add-cow-form";
 import {
 	InitializedModel,
 	InputModelInteraction,
 	InteractiveModel,
 	ModelInteraction,
 } from "@mvc-react/mvc";
+import { AddCowFormModelView } from "./add-cow-form/add-cow-form-model";
 
 export interface AddCowDialogModelView {
 	shown: boolean;
-	location: Location;
-	allLocations: Location[];
-	cowTypes: { type: CowType }[];
+	initialFormModelView: AddCowFormModelView;
+	formTools: AddCowFormTools;
 }
 
 export type AddCowDialogModelInteraction =
@@ -19,15 +18,8 @@ export type AddCowDialogModelInteraction =
 	| InputModelInteraction<
 			"OPEN",
 			{
-				defaultLocation: Location;
-				locations: Location[];
-				cowTypes: { type: CowType }[];
-			}
-	  >
-	| InputModelInteraction<
-			"SUBMIT",
-			{
-				cowToBeAdded: Omit<CowModelView, "id">;
+				initialFormModelView: AddCowFormModelView;
+				formTools: AddCowFormTools;
 			}
 	  >;
 

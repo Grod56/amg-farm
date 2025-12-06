@@ -7,14 +7,14 @@ import EditCowForm from "./edit-cow-form/EditCowForm";
 import { editCowFormVIInterface } from "@/lib/implementations/models/edit-cow-form";
 import Form from "react-bootstrap/Form";
 import { newReadonlyModel } from "@mvc-react/mvc";
+import { useLayoutEffect, useEffect, useState, useCallback } from "react";
 
 const EditCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
 	const { shown, locations, cow, cowTypes } = modelView;
 	const { id, name, tag, type, location, dob } = cow.modelView;
-	const editFormModel = useInitializedStatefulInteractiveModel(
-		editCowFormVIInterface(),
-		{
+	const { modelView: formModelView, interact: formModelInteract } =
+		useInitializedStatefulInteractiveModel(editCowFormVIInterface(), {
 			name,
 			type,
 			tag,
@@ -22,8 +22,71 @@ const EditCowDialog = function ({ model }) {
 			locations,
 			location,
 			cowTypes,
-		},
-	);
+		});
+
+	const [updateScheduled, setUpdateScheduled] = useState(false);
+	const [isUpdated, setIsUpdated] = useState(false);
+	const formMatches = useCallback(() => {
+		const {
+			name: formName,
+			type: formType,
+			tag: formTag,
+			location: formLocation,
+			dob: formDob,
+		} = formModelView;
+		return (
+			name == formName &&
+			type == formType &&
+			location == formLocation &&
+			tag == formTag &&
+			dob == formDob
+		);
+	}, [dob, formModelView, location, name, tag, type]);
+
+	useLayoutEffect(() => {
+		if (shown && !(isUpdated || updateScheduled)) {
+			formModelInteract({
+				type: "UPDATE_FORM",
+				input: {
+					updatedFormModelView: {
+						name,
+						dob,
+						type,
+						tag,
+						location,
+						locations,
+						cowTypes,
+					},
+				},
+			});
+			setUpdateScheduled(true);
+		}
+	}, [
+		isUpdated,
+		updateScheduled,
+		cowTypes,
+		formModelInteract,
+		dob,
+		shown,
+		location,
+		locations,
+		name,
+		tag,
+		type,
+	]);
+
+	useLayoutEffect(() => {
+		if (!isUpdated && updateScheduled && formMatches()) {
+			setIsUpdated(true);
+			setUpdateScheduled(false);
+		}
+	}, [isUpdated, updateScheduled, formModelView, formMatches]);
+
+	useEffect(() => {
+		if (!shown) {
+			setIsUpdated(false);
+		}
+	}, [shown]);
 
 	return (
 		<Modal
@@ -48,7 +111,7 @@ const EditCowDialog = function ({ model }) {
 							tag: updatedTag,
 							type: updatedType,
 							dob: updatedDob,
-						} = editFormModel.modelView;
+						} = formModelView;
 						const updatedCow = newReadonlyModel({
 							id,
 							name: updatedName.trim(),
@@ -65,12 +128,14 @@ const EditCowDialog = function ({ model }) {
 						});
 					}}
 				>
-					<EditCowForm
-						model={{
-							modelView: editFormModel.modelView,
-							interact: editFormModel.interact,
-						}}
-					/>
+					{shown && isUpdated && (
+						<EditCowForm
+							model={{
+								modelView: formModelView,
+								interact: formModelInteract,
+							}}
+						/>
+					)}
 					<div className="flex gap-2 justify-end">
 						<Button
 							variant="secondary"

@@ -1,27 +1,50 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
 import { AddCowDialogModel } from "./add-cow-dialog-model";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import { addCowFormVIInterface } from "@/lib/implementations/models/add-cow-form";
 import AddCowForm from "./add-cow-form/AddCowForm";
-import Form from "react-bootstrap/Form";
+import { useEffect, useState } from "react";
 
 const AddCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
-	const { shown, location, cowTypes, allLocations } = modelView;
-	const addCowForm = useInitializedStatefulInteractiveModel(
-		addCowFormVIInterface(),
-		{
-			name: "",
-			type: cowTypes[0].type,
-			tag: "",
-			dob: new Date(),
-			location,
-			cowTypes,
-			allLocations,
-		},
-	);
+	const { shown, initialFormModelView, formTools } = modelView;
+	const { modelView: formModelView, interact: formModelInteract } =
+		useInitializedStatefulInteractiveModel(
+			addCowFormVIInterface({
+				...formTools,
+				successCallback(cow) {
+					interact({ type: "CLOSE" });
+					formTools.successCallback?.(cow);
+				},
+			}),
+			{ ...initialFormModelView },
+		);
+	const [exited, setExited] = useState(false);
+
+	useEffect(() => {
+		if (
+			exited &&
+			JSON.stringify(formModelView.fields) !=
+				JSON.stringify(initialFormModelView.fields)
+		) {
+			formModelInteract({
+				type: "UPDATE_FORM",
+				input: { updatedFormFields: initialFormModelView.fields },
+			});
+		}
+	}, [
+		formModelInteract,
+		exited,
+		formModelView.fields,
+		initialFormModelView.fields,
+	]);
+
+	useEffect(() => {
+		if (shown) {
+			setExited(false);
+		}
+	}, [shown]);
 
 	return (
 		<Modal
@@ -31,51 +54,26 @@ const AddCowDialog = function ({ model }) {
 					type: "CLOSE",
 				})
 			}
+			onExited={() => {
+				setExited(true);
+			}}
 		>
-			<Modal.Header className="bg-gray-700 text-white">
+			<Modal.Header
+				className="bg-gray-700 text-white"
+				closeButton
+				closeVariant="white"
+			>
 				<Modal.Title>Add Cow</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<Form
-					className="flex flex-col gap-4"
-					onSubmit={e => {
-						e.preventDefault();
-						const { name, type, tag, dob, location } =
-							addCowForm.modelView;
-						interact({
-							type: "SUBMIT",
-							input: {
-								cowToBeAdded: {
-									name: name.trim(),
-									dob,
-									type,
-									tag: tag.trim(),
-									location,
-								},
-							},
-						});
-					}}
-				>
-					<AddCowForm model={addCowForm} />
-					<div className="flex gap-2 justify-end">
-						<Button
-							variant="secondary"
-							onClick={() =>
-								interact({
-									type: "CLOSE",
-								})
-							}
-						>
-							Close
-						</Button>
-						<Button
-							className="bg-gray-800! hover:bg-gray-900! text-white border-none!"
-							type="submit"
-						>
-							Add Cow
-						</Button>
-					</div>
-				</Form>
+				{!exited && (
+					<AddCowForm
+						model={{
+							modelView: formModelView,
+							interact: formModelInteract,
+						}}
+					/>
+				)}
 			</Modal.Body>
 		</Modal>
 	);
