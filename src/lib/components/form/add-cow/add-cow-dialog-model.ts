@@ -19,7 +19,6 @@ export type AddCowDialogModelInteraction =
 			"OPEN",
 			{
 				initialFormModelView: AddCowFormModelView;
-				formTools: AddCowFormTools;
 			}
 	  >;
 

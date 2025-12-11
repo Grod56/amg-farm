@@ -1,33 +1,35 @@
 "use client";
 
+import AddCowDialog from "@/lib/components/form/add-cow/AddCowDialog";
+import EditCowDialog from "@/lib/components/form/edit-cow/EditCowDialog";
+import RemoveCowDialog from "@/lib/components/form/remove-cow/RemoveCowDialog";
 import LivestockTable from "@/lib/components/livestock-table/LivestockTable";
+import { ToastNotificationType } from "@/lib/components/notification-toast/notification-toast-model";
 import NotificationToast from "@/lib/components/notification-toast/NotificationToast";
+import { addCowDialogVIInterface } from "@/lib/implementations/models/add-cow-dialog";
+import { editCowDialogVIInterface } from "@/lib/implementations/models/edit-cow-dialog";
 import { livestockTableVIInterface } from "@/lib/implementations/models/livestock-table";
 import { notificationToastVIInterface } from "@/lib/implementations/models/notification-toast";
+import { notifierVIInterface } from "@/lib/implementations/models/notifier";
+import { removeCowDialogVIInterface } from "@/lib/implementations/models/remove-cow-dialog";
+import { cattleRepositoryViewInteractionInterface } from "@/lib/implementations/repositories/cattle-repository";
+import { CowModel } from "@/lib/types/models/cow";
+import { useStatefulRepository } from "@/lib/utilities/repositories/use-repository";
 import {
 	useInitializedStatefulInteractiveModel,
 	useNewStatefulInteractiveModel,
 } from "@mvc-react/stateful";
 import Spinner from "react-bootstrap/Spinner";
-import { notifierVIInterface } from "@/lib/implementations/models/notifier";
-import { ToastNotificationType } from "@/lib/components/notification-toast/notification-toast-model";
-import AddCowDialog from "@/lib/components/form/add-cow/AddCowDialog";
-import EditCowDialog from "@/lib/components/form/edit-cow/EditCowDialog";
-import RemoveCowDialog from "@/lib/components/form/remove-cow/RemoveCowDialog";
-import { addCowDialogVIInterface } from "@/lib/implementations/models/add-cow-dialog";
-import { editCowDialogVIInterface } from "@/lib/implementations/models/edit-cow-dialog";
-import { removeCowDialogVIInterface } from "@/lib/implementations/models/remove-cow-dialog";
-import { cattleRepositoryViewInteractionInterface } from "@/lib/implementations/repositories/cattle-repository";
-import { useStatefulRepository } from "@/lib/utilities/repositories/use-repository";
-import { ConditionalComponent } from "@mvc-react/components";
-import { newReadonlyModel } from "@mvc-react/mvc";
-import { Location } from "@/lib/types/miscellaneous";
-import { CowModel } from "@/lib/types/models/cow";
 import "./livestock.css";
 
 export type LivestockNotificationType = "success" | "pending" | "failure";
 
 const Livestock = function () {
+	const cattleRepository = useStatefulRepository({
+		modelView: null,
+		viewInteractionInterface: cattleRepositoryViewInteractionInterface,
+	});
+	const { modelView: repositoryModelView } = cattleRepository;
 	const notifier = useInitializedStatefulInteractiveModel(
 		notifierVIInterface<LivestockNotificationType>(),
 		{ notification: null },
@@ -48,33 +50,27 @@ const Livestock = function () {
 			wasDisplayed: false,
 		},
 	);
-	const cattleRepository = useStatefulRepository({
-		modelView: null,
-		viewInteractionInterface: cattleRepositoryViewInteractionInterface,
-	});
-	const { modelView: repositoryModelView } = cattleRepository;
 	const submitSuccessCallback = () => {
 		livestockTable.interact({ type: "RESET_SELECTED_COW" });
 	};
-	const addCowCallback = (defaultLocation: Location) => {
+	const addCowCallback = () => {
+		if (!(repositoryModelView && livestockTable.modelView))
+			throw new Error("Cannot add cow when repository is uninitialized");
 		addCowDialog.interact({
 			type: "OPEN",
 			input: {
 				initialFormModelView: {
-					locations: repositoryModelView!.allLocations,
-					cowTypes: repositoryModelView!.cowTypes,
+					locations: repositoryModelView.allLocations,
+					cowTypes: repositoryModelView.cowTypes,
 					fields: {
 						name: "",
-						type: repositoryModelView!.cowTypes[0].type,
+						type: repositoryModelView.cowTypes[0].type,
 						tag: "",
 						dob: new Date(),
-						location: defaultLocation,
+						location:
+							livestockTable.modelView.selectedLocation ??
+							repositoryModelView.allLocations[0],
 					},
-				},
-				formTools: {
-					cattleRepository,
-					notifier,
-					successCallback: submitSuccessCallback,
 				},
 			},
 		});
@@ -88,12 +84,14 @@ const Livestock = function () {
 		});
 	};
 	const editCowCallback = (cow: CowModel) => {
-		editCowDialog.interact({
+		if (!(repositoryModelView && livestockTable.modelView))
+			throw new Error("Cannot add cow when repository is uninitialized");
+		editCowDialogInteract({
 			type: "OPEN",
 			input: {
 				cowToBeEdited: cow,
-				cowTypes: repositoryModelView!.cowTypes,
-				locations: repositoryModelView!.allLocations,
+				locations: repositoryModelView.allLocations,
+				cowTypes: repositoryModelView.cowTypes,
 			},
 		});
 	};
@@ -104,26 +102,107 @@ const Livestock = function () {
 			removeCowCallback,
 		),
 		{
-			notification,
-			cattleRepositoryModelView: repositoryModelView,
+			cattle: [],
+			locations: [],
+			notification: null,
 		},
 	);
-	const { selectedCow } = livestockTable.modelView;
 	const addCowDialog = useNewStatefulInteractiveModel(
-		addCowDialogVIInterface(),
-	);
-	const editCowDialog = useNewStatefulInteractiveModel(
-		editCowDialogVIInterface(
+		addCowDialogVIInterface({
 			cattleRepository,
-			notifier,
-			submitSuccessCallback,
-		),
+			pendingCallback() {
+				notifier.interact({
+					type: "NOTIFY",
+					input: { notification: { type: "pending" } },
+				});
+			},
+			successCallback(cow) {
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							text: `${cow.name} successfully added`,
+							type: "success",
+						},
+					},
+				});
+				submitSuccessCallback();
+			},
+			failureCallback() {
+				notifier.interact({
+					type: "CLEAR",
+				});
+			},
+		}),
+	);
+	const {
+		modelView: editCowDialogModelView,
+		interact: editCowDialogInteract,
+	} = useNewStatefulInteractiveModel(
+		editCowDialogVIInterface({
+			cattleRepository,
+			pendingCallback() {
+				notifier.interact({
+					type: "NOTIFY",
+					input: { notification: { type: "pending" } },
+				});
+			},
+			successCallback(cow) {
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							text: `${cow.modelView.name} successfully updated`,
+							type: "success",
+						},
+					},
+				});
+				submitSuccessCallback();
+			},
+			failureCallback() {
+				notifier.interact({
+					type: "CLEAR",
+				});
+			},
+		}),
 	);
 	const removeCowDialog = useNewStatefulInteractiveModel(
 		removeCowDialogVIInterface(
 			cattleRepository,
-			notifier,
-			submitSuccessCallback,
+			() => {
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							type: "pending",
+						},
+					},
+				});
+			},
+			cow => {
+				removeCowDialog.interact({ type: "CLOSE" });
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							text: `${cow.modelView.name} successfully removed`,
+							type: "success",
+						},
+					},
+				});
+				submitSuccessCallback();
+			},
+			error => {
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							type: "failure",
+							text: `Failed to remove cow: ${error}`,
+						},
+					},
+				});
+			},
 		),
 	);
 
@@ -141,79 +220,57 @@ const Livestock = function () {
 							className="size-6!"
 						/>
 					</div>
-					<LivestockTable
-						model={{
-							modelView: {
-								...livestockTable.modelView,
-								cattleRepositoryModelView: repositoryModelView,
-								notification,
-							},
-							interact: livestockTable.interact,
-						}}
-					/>
+					{repositoryModelView ? (
+						<LivestockTable
+							model={{
+								...livestockTable,
+								modelView: {
+									...livestockTable.modelView,
+									cattle: repositoryModelView.cattle,
+									locations:
+										repositoryModelView.activeLocations,
+									notification,
+								},
+							}}
+						/>
+					) : (
+						<Spinner
+							animation="border"
+							color="black"
+							className="size-16! mx-auto my-auto"
+						/>
+					)}
 				</div>
 			</div>
-			<NotificationToast
-				model={{
-					// NOTE: Seems like if there's sub-model state it has to be specified explicitly
-					modelView: { ...notificationToast.modelView, notification },
-					interact: notificationToast.interact,
-				}}
-			/>
 			{addCowDialog.modelView && (
 				<AddCowDialog
 					model={{
 						...addCowDialog,
-						modelView: { ...addCowDialog.modelView },
+						modelView: addCowDialog.modelView,
 					}}
 				/>
 			)}
-			{selectedCow && editCowDialog.modelView && (
+			{editCowDialogModelView && (
 				<EditCowDialog
 					model={{
-						...editCowDialog,
-						modelView: { ...editCowDialog.modelView },
+						modelView: { ...editCowDialogModelView },
+						interact: editCowDialogInteract,
 					}}
 				/>
 			)}
-			{/* <ConditionalComponent
-				model={newReadonlyModel({
-					condition: editCowDialog.modelView,
-					components: new Map([
-						[null, () => <></>],
-						[undefined, () => <></>],
-					]),
-					FallbackComponent: () => (
-						<EditCowDialog
-							model={{
-								...editCowDialog,
-								modelView: editCowDialog.modelView!,
-							}}
-						/>
-					),
-				})}
-			/> */}
-			<ConditionalComponent
-				model={newReadonlyModel({
-					condition: selectedCow,
-					components: new Map([
-						[null, () => <></>],
-						[undefined, () => <></>],
-					]),
-					FallbackComponent: () => (
-						<RemoveCowDialog
-							model={{
-								...removeCowDialog,
-								modelView: removeCowDialog.modelView
-									? removeCowDialog.modelView
-									: {
-											cow: selectedCow!,
-											shown: false,
-										},
-							}}
-						/>
-					),
-				})}
+			{removeCowDialog.modelView && (
+				<RemoveCowDialog
+					model={{
+						...removeCowDialog,
+						modelView: removeCowDialog.modelView,
+					}}
+				/>
+			)}
+			<NotificationToast
+				model={{
+					...notificationToast,
+					modelView: { ...notificationToast.modelView, notification },
+				}}
 			/>
 		</>
 	);

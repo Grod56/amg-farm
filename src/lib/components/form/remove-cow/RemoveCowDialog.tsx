@@ -1,7 +1,6 @@
 import { ModeledVoidComponent } from "@mvc-react/components";
-import { RemoveCowDialogModel } from "./remove-cow-dialog-model";
-import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
+import { RemoveCowDialogModel } from "./remove-cow-dialog-model";
 
 const RemoveCowDialog = function ({ model }) {
 	const { modelView, interact } = model;
@@ -16,34 +15,26 @@ const RemoveCowDialog = function ({ model }) {
 				})
 			}
 		>
-			<Modal.Header className="bg-gray-700 text-white">
+			<Modal.Header
+				className="bg-gray-700 text-white"
+				closeButton
+				closeVariant="white"
+			>
 				<Modal.Title>Remove Cow</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
 				<p>{`Are you sure you want to remove "${cow.modelView.name}"?`}</p>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button
-					variant="secondary"
-					onClick={() =>
-						interact({
-							type: "CLOSE",
-						})
-					}
-				>
-					Close
-				</Button>
-				<Button
-					className="bg-gray-800! hover:bg-gray-900! text-white border-none!"
+				<button
+					className="flex w-1/3 p-2 items-center justify-center gap-2 rounded-lg! text-white bg-gray-700 disabled:bg-gray-400 hover:bg-gray-800"
 					type="submit"
-					onClick={() =>
-						interact({
-							type: "SUBMIT",
-						})
-					}
+					onClick={() => {
+						interact({ type: "SUBMIT" });
+					}}
 				>
 					Remove
-				</Button>
+				</button>
 			</Modal.Footer>
 		</Modal>
 	);

@@ -9,6 +9,10 @@ import { useEffect, useLayoutEffect, useState } from "react";
 const AddCowDialog = function ({ model }) {
 	const { interact, modelView } = model;
 	const { shown, initialFormModelView, formTools } = modelView;
+	const [exited, setExited] = useState(false);
+	const [updateScheduled, setUpdateScheduled] = useState(false);
+	const [updated, setUpdated] = useState(true);
+
 	const { modelView: formModelView, interact: formModelInteract } =
 		useInitializedStatefulInteractiveModel(
 			addCowFormVIInterface({
@@ -20,9 +24,6 @@ const AddCowDialog = function ({ model }) {
 			}),
 			{ ...initialFormModelView },
 		);
-	const [exited, setExited] = useState(false);
-	const [updateScheduled, setUpdateScheduled] = useState(false);
-	const [updated, setUpdated] = useState(true);
 
 	useLayoutEffect(() => {
 		if (
@@ -80,7 +81,6 @@ const AddCowDialog = function ({ model }) {
 			setExited(false);
 		}
 	}, [shown]);
-
 	return (
 		<Modal
 			show={shown}

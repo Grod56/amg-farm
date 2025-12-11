@@ -1,3 +1,4 @@
+import { EditCowFormTools } from "@/lib/implementations/models/edit-cow-form";
 import { Location } from "@/lib/types/miscellaneous";
 import { CowModel, CowType } from "@/lib/types/models/cow";
 import {
@@ -9,9 +10,10 @@ import {
 
 export interface EditCowDialogModelView {
 	shown: boolean;
-	cow: CowModel;
+	cowToBeEdited: CowModel;
 	locations: Location[];
 	cowTypes: { type: CowType }[];
+	formTools: EditCowFormTools;
 }
 
 export type EditCowDialogModelInteraction =
@@ -23,14 +25,7 @@ export type EditCowDialogModelInteraction =
 				locations: Location[];
 				cowTypes: { type: CowType }[];
 			}
-	  >
-	| InputModelInteraction<
-			"SUBMIT",
-			{
-				updatedCow: CowModel;
-			}
 	  >;
-
 export type EditCowDialogModel = InitializedModel<
 	InteractiveModel<EditCowDialogModelView, EditCowDialogModelInteraction>
 >;

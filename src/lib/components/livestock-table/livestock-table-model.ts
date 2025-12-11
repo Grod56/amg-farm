@@ -1,8 +1,7 @@
 import { LivestockNotificationType } from "@/app/livestock/Livestock";
 import { Location } from "@/lib/types/miscellaneous";
-import { Notification } from "@/lib/types/models/notification";
-import { CattleRepositoryModelView } from "@/lib/types/models/cattle-repository";
 import { CowModel } from "@/lib/types/models/cow";
+import { Notification } from "@/lib/types/models/notification";
 import {
 	InitializedModel,
 	InputModelInteraction,
@@ -11,8 +10,9 @@ import {
 } from "@mvc-react/mvc";
 
 export interface LivestockTableModelView {
-	cattleRepositoryModelView: CattleRepositoryModelView | null;
+	cattle: CowModel[];
 	selectedCow?: CowModel;
+	locations: Location[];
 	selectedLocation?: Location;
 	notification: Notification<LivestockNotificationType> | null;
 }
