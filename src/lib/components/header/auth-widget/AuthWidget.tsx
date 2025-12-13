@@ -1,44 +1,36 @@
 "use client";
 
-import { authWidgetVIInterface } from "@/lib/implementations/models/auth-widget";
+import { authWidgetDropdownVIInterface } from "@/lib/implementations/models/auth-widget-dropdown";
 import { notifierVIInterface } from "@/lib/implementations/models/notifier";
-import { useSession } from "@/lib/third-party/clients/better-auth";
 import { useInitializedStatefulInteractiveModel } from "@mvc-react/stateful";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Dropdown from "react-bootstrap/NavDropdown";
-import { AuthWidgetNotificationType } from "./auth-widget-model";
+import {
+	AuthWidgetModel,
+	AuthWidgetNotificationType,
+} from "./auth-widget-model";
+import { ModeledVoidComponent } from "@mvc-react/components";
+import AuthWidgetDropdown from "./auth-widget-dropdown/AuthWidgetDropdown";
 
-const AuthWidget = () => {
-	const { data } = useSession();
+const AuthWidget = function ({ model }) {
+	const { user } = model.modelView;
 	const router = useRouter();
 	const notifier = useInitializedStatefulInteractiveModel(
 		notifierVIInterface<AuthWidgetNotificationType>(),
 		{ notification: null },
 	);
-	const { interact } = useInitializedStatefulInteractiveModel(
-		authWidgetVIInterface(),
-		{ notifier },
+	const authWidgetDropdown = useInitializedStatefulInteractiveModel(
+		authWidgetDropdownVIInterface(notifier, router),
+		{ user },
 	);
 
-	return data ? (
-		<Dropdown
-			className="uppercase text-sm text-white hover:text-orange-300!"
-			title={`Hello, ${data.user.name.split(" ")[0]}`}
-			menuVariant="dark"
-		>
-			<Dropdown.Item
-				className="capitalize text-white text-sm"
-				onClick={() => {
-					interact({
-						type: "SIGN_OUT",
-						input: { router, notifier },
-					});
-				}}
-			>
-				Sign Out
-			</Dropdown.Item>
-		</Dropdown>
+	return user ? (
+		<AuthWidgetDropdown
+			model={{
+				...authWidgetDropdown,
+				modelView: { ...authWidgetDropdown.modelView, user },
+			}}
+		/>
 	) : (
 		<Link
 			className="text-decoration-none uppercase text-sm text-white hover:text-orange-300!"
@@ -47,5 +39,5 @@ const AuthWidget = () => {
 			Sign In
 		</Link>
 	);
-};
+} as ModeledVoidComponent<AuthWidgetModel>;
 export default AuthWidget;

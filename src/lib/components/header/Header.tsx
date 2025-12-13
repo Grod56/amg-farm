@@ -1,11 +1,15 @@
-import { ModeledVoidComponent } from "@mvc-react/components";
+"use server";
+
 import { HeaderModel } from "./header-model";
 import Link from "next/link";
 import Image from "next/image";
 import AuthWidget from "./auth-widget/AuthWidget";
+import { getUser } from "@/lib/utilities/server-actions/auth";
+import { newReadonlyModel } from "@mvc-react/mvc";
 
-const Header = function ({ model }) {
+const Header = async function ({ model }: { model: HeaderModel }) {
 	const { headerTitle } = model.modelView;
+	const user = await getUser();
 
 	return (
 		<div className="sticky shadow top-0 flex px-6 py-4 bg-gray-900 text-white md:px-9">
@@ -40,11 +44,15 @@ const Header = function ({ model }) {
 					>
 						Get Register
 					</Link>
-					<AuthWidget />
+					<AuthWidget
+						model={newReadonlyModel({
+							user,
+						})}
+					/>
 				</div>
 			</div>
 		</div>
 	);
-} as ModeledVoidComponent<HeaderModel>;
+};
 
 export default Header;
