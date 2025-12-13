@@ -1,7 +1,7 @@
 import {
 	AuthWidgetModelView,
 	AuthWidgetModelInteraction,
-} from "@/lib/components/header/auth-widget-model";
+} from "@/lib/components/header/auth-widget/auth-widget-model";
 import { signOut } from "@/lib/third-party/clients/better-auth";
 import { ViewInteractionInterface } from "@mvc-react/stateful";
 

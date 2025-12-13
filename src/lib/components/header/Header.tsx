@@ -2,7 +2,7 @@ import { ModeledVoidComponent } from "@mvc-react/components";
 import { HeaderModel } from "./header-model";
 import Link from "next/link";
 import Image from "next/image";
-import AuthWidget from "./AuthWidget";
+import AuthWidget from "./auth-widget/AuthWidget";
 
 const Header = function ({ model }) {
 	const { headerTitle } = model.modelView;

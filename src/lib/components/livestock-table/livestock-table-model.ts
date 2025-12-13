@@ -13,7 +13,7 @@ export interface LivestockTableModelView {
 	cattle: CowModel[];
 	selectedCow?: CowModel;
 	locations: Location[];
-	selectedLocation?: Location;
+	selectedLocation: Location;
 	notification: Notification<LivestockNotificationType> | null;
 }
 

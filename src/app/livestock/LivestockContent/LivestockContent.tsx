@@ -1,0 +1,238 @@
+import { ModeledVoidComponent } from "@mvc-react/components";
+import { LivestockContentModel } from "./livestock-content-model";
+import AddCowDialog from "@/lib/components/form/add-cow/AddCowDialog";
+import EditCowDialog from "@/lib/components/form/edit-cow/EditCowDialog";
+import RemoveCowDialog from "@/lib/components/form/remove-cow/RemoveCowDialog";
+import LivestockTable from "@/lib/components/livestock-table/LivestockTable";
+import { ToastNotificationType } from "@/lib/components/notification-toast/notification-toast-model";
+import NotificationToast from "@/lib/components/notification-toast/NotificationToast";
+import { addCowDialogVIInterface } from "@/lib/implementations/models/add-cow-dialog";
+import { editCowDialogVIInterface } from "@/lib/implementations/models/edit-cow-dialog";
+import { livestockTableVIInterface } from "@/lib/implementations/models/livestock-table";
+import { notificationToastVIInterface } from "@/lib/implementations/models/notification-toast";
+import { removeCowDialogVIInterface } from "@/lib/implementations/models/remove-cow-dialog";
+import { CowModel } from "@/lib/types/models/cow";
+import {
+	useInitializedStatefulInteractiveModel,
+	useNewStatefulInteractiveModel,
+} from "@mvc-react/stateful";
+import { LivestockNotificationType } from "../Livestock";
+
+const LivestockContent = function ({ model }) {
+	const { cattleRepository, notifier } = model.modelView;
+	const { modelView: repositoryModelView } = cattleRepository;
+	const { notification } = notifier.modelView;
+
+	const notificationToast = useInitializedStatefulInteractiveModel(
+		notificationToastVIInterface(notifier),
+		{
+			notification,
+			typeToToastTypeMap: new Map<
+				LivestockNotificationType,
+				ToastNotificationType
+			>([
+				["success", "success"],
+				["failure", "failure"],
+			]),
+			open: false,
+			wasDisplayed: false,
+		},
+	);
+	const submitSuccessCallback = () => {
+		livestockTable.interact({ type: "RESET_SELECTED_COW" });
+	};
+	const addCowDialog = useNewStatefulInteractiveModel(
+		addCowDialogVIInterface({
+			cattleRepository,
+			pendingCallback() {
+				notifier.interact({
+					type: "NOTIFY",
+					input: { notification: { type: "pending" } },
+				});
+			},
+			successCallback(cow) {
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							text: `${cow.name} successfully added`,
+							type: "success",
+						},
+					},
+				});
+				submitSuccessCallback();
+			},
+			failureCallback() {
+				notifier.interact({
+					type: "CLEAR",
+				});
+			},
+		}),
+	);
+	const editCowDialog = useNewStatefulInteractiveModel(
+		editCowDialogVIInterface({
+			cattleRepository,
+			pendingCallback() {
+				notifier.interact({
+					type: "NOTIFY",
+					input: { notification: { type: "pending" } },
+				});
+			},
+			successCallback(cow) {
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							text: `${cow.modelView.name} successfully updated`,
+							type: "success",
+						},
+					},
+				});
+				submitSuccessCallback();
+			},
+			failureCallback() {
+				notifier.interact({
+					type: "CLEAR",
+				});
+			},
+		}),
+	);
+	const removeCowDialog = useNewStatefulInteractiveModel(
+		removeCowDialogVIInterface(
+			cattleRepository,
+			() => {
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							type: "pending",
+						},
+					},
+				});
+			},
+			cow => {
+				removeCowDialog.interact({ type: "CLOSE" });
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							text: `${cow.modelView.name} successfully removed`,
+							type: "success",
+						},
+					},
+				});
+				submitSuccessCallback();
+			},
+			error => {
+				notifier.interact({
+					type: "NOTIFY",
+					input: {
+						notification: {
+							type: "failure",
+							text: `Failed to remove cow: ${error}`,
+						},
+					},
+				});
+			},
+		),
+	);
+	const addCowCallback = () => {
+		addCowDialog.interact({
+			type: "OPEN",
+			input: {
+				initialFormModelView: {
+					locations: repositoryModelView.allLocations,
+					cowTypes: repositoryModelView.cowTypes,
+					fields: {
+						name: "",
+						type: repositoryModelView.cowTypes[0].type,
+						tag: "",
+						dob: new Date(),
+						location:
+							livestockTable.modelView.selectedLocation ??
+							repositoryModelView.allLocations[0],
+					},
+				},
+			},
+		});
+	};
+	const removeCowCallback = (cow: CowModel) => {
+		removeCowDialog.interact({
+			type: "OPEN",
+			input: {
+				cowToBeRemoved: cow,
+			},
+		});
+	};
+	const editCowCallback = (cow: CowModel) => {
+		editCowDialog.interact({
+			type: "OPEN",
+			input: {
+				cowToBeEdited: cow,
+				locations: repositoryModelView.allLocations,
+				cowTypes: repositoryModelView.cowTypes,
+			},
+		});
+	};
+	const livestockTable = useInitializedStatefulInteractiveModel(
+		livestockTableVIInterface(
+			addCowCallback,
+			editCowCallback,
+			removeCowCallback,
+		),
+		{
+			cattle: repositoryModelView.cattle,
+			locations: repositoryModelView.activeLocations,
+			selectedLocation: repositoryModelView.activeLocations[0],
+			notification,
+		},
+	);
+
+	return (
+		<>
+			<LivestockTable
+				model={{
+					...livestockTable,
+					modelView: {
+						...livestockTable.modelView,
+						cattle: repositoryModelView.cattle,
+						locations: repositoryModelView.activeLocations,
+						notification,
+					},
+				}}
+			/>
+			{addCowDialog.modelView && (
+				<AddCowDialog
+					model={{
+						...addCowDialog,
+						modelView: addCowDialog.modelView,
+					}}
+				/>
+			)}
+			{editCowDialog.modelView && (
+				<EditCowDialog
+					model={{
+						...editCowDialog,
+						modelView: editCowDialog.modelView,
+					}}
+				/>
+			)}
+			{removeCowDialog.modelView && (
+				<RemoveCowDialog
+					model={{
+						...removeCowDialog,
+						modelView: removeCowDialog.modelView,
+					}}
+				/>
+			)}
+			<NotificationToast
+				model={{
+					...notificationToast,
+					modelView: { ...notificationToast.modelView, notification },
+				}}
+			/>
+		</>
+	);
+} as ModeledVoidComponent<LivestockContentModel>;
+
+export default LivestockContent;

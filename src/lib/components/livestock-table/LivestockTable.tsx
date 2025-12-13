@@ -8,9 +8,8 @@ const LivestockTable = function ({ model }) {
 	const { modelView, interact } = model;
 	const { selectedCow, selectedLocation, notification, cattle, locations } =
 		modelView;
-	const computedSelectedLocation = selectedLocation ?? locations[0];
 	const displayedCattle = cattle.filter(
-		cow => cow.modelView.location.id == computedSelectedLocation.id,
+		cow => cow.modelView.location.id == selectedLocation.id,
 	);
 
 	return (
@@ -29,20 +28,18 @@ const LivestockTable = function ({ model }) {
 					modelView: {
 						locations,
 						selectedCow,
-						selectedLocation: computedSelectedLocation!,
+						selectedLocation,
 						isPending: notification?.type == "pending",
 					},
 					interact: (interaction: TableActionsModelInteraction) => {
 						switch (interaction.type) {
 							case "ADD":
-								if (computedSelectedLocation)
-									interact({
-										type: "ADD_COW",
-										input: {
-											defaultLocation:
-												computedSelectedLocation,
-										},
-									});
+								interact({
+									type: "ADD_COW",
+									input: {
+										defaultLocation: selectedLocation,
+									},
+								});
 								break;
 							case "REMOVE":
 								if (selectedCow)
