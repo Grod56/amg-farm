@@ -6,8 +6,9 @@ import Table from "./table/Table";
 
 const LivestockTable = function ({ model }) {
 	const { modelView, interact } = model;
-	const { selectedCow, selectedLocation, notification, cattle, locations } =
+	const { selectedCow, selectedLocation, notification, tableContent } =
 		modelView;
+	const { cattle, locations } = tableContent;
 	const displayedCattle = cattle.filter(
 		cow => cow.modelView.location.id == selectedLocation.id,
 	);

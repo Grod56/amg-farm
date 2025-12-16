@@ -17,6 +17,9 @@ import {
 	useNewStatefulInteractiveModel,
 } from "@mvc-react/stateful";
 import { LivestockNotificationType } from "../Livestock";
+import { useLayoutEffect } from "react";
+import equals from "fast-deep-equal";
+import { Location } from "@/lib/types/miscellaneous";
 
 const LivestockContent = function ({ model }) {
 	const { cattleRepository, notifier } = model.modelView;
@@ -181,26 +184,59 @@ const LivestockContent = function ({ model }) {
 			removeCowCallback,
 		),
 		{
-			cattle: repositoryModelView.cattle,
-			locations: repositoryModelView.activeLocations,
+			tableContent: {
+				cattle: repositoryModelView.cattle,
+				locations: repositoryModelView.activeLocations,
+			},
 			selectedLocation: repositoryModelView.activeLocations[0],
 			notification,
 		},
 	);
 
-	return (
-		<>
-			<LivestockTable
-				model={{
-					...livestockTable,
-					modelView: {
-						...livestockTable.modelView,
+	useLayoutEffect(() => {
+		if (!equals(notification, livestockTable.modelView.notification)) {
+			livestockTable.interact({
+				type: "UPDATE_NOTIFICATION",
+				input: { notification },
+			});
+		}
+		if (!equals(notification, notificationToast.modelView.notification))
+			notificationToast.interact({
+				type: "UPDATE_NOTIFICATION",
+				input: { notification },
+			});
+	}, [notification, livestockTable, notificationToast]);
+
+	useLayoutEffect(() => {
+		const updatedTableContent: {
+			cattle: CowModel[];
+			locations: Location[];
+		} = {
+			cattle: repositoryModelView.cattle,
+			locations: repositoryModelView.activeLocations,
+		};
+		if (
+			!equals(updatedTableContent, livestockTable.modelView.tableContent)
+		) {
+			livestockTable.interact({
+				type: "UPDATE_CONTENT",
+				input: {
+					tableContent: {
 						cattle: repositoryModelView.cattle,
 						locations: repositoryModelView.activeLocations,
-						notification,
 					},
-				}}
-			/>
+				},
+			});
+		}
+	}, [
+		livestockTable,
+		repositoryModelView.activeLocations,
+		repositoryModelView.cattle,
+	]);
+
+	return (
+		<>
+			<LivestockTable model={livestockTable} />
 			{addCowDialog.modelView && (
 				<AddCowDialog
 					model={{
@@ -225,12 +261,7 @@ const LivestockContent = function ({ model }) {
 					}}
 				/>
 			)}
-			<NotificationToast
-				model={{
-					...notificationToast,
-					modelView: { ...notificationToast.modelView, notification },
-				}}
-			/>
+			<NotificationToast model={{ ...notificationToast }} />
 		</>
 	);
 } as ModeledVoidComponent<LivestockContentModel>;

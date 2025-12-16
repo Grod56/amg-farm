@@ -10,9 +10,11 @@ import {
 } from "@mvc-react/mvc";
 
 export interface LivestockTableModelView {
-	cattle: CowModel[];
+	tableContent: {
+		cattle: CowModel[];
+		locations: Location[];
+	};
 	selectedCow?: CowModel;
-	locations: Location[];
 	selectedLocation: Location;
 	notification: Notification<LivestockNotificationType> | null;
 }
@@ -37,6 +39,21 @@ export type LivestockTableModelInteraction =
 			"REMOVE_COW",
 			{
 				cow: CowModel;
+			}
+	  >
+	| InputModelInteraction<
+			"UPDATE_CONTENT",
+			{
+				tableContent: {
+					cattle: CowModel[];
+					locations: Location[];
+				};
+			}
+	  >
+	| InputModelInteraction<
+			"UPDATE_NOTIFICATION",
+			{
+				notification: Notification<LivestockNotificationType> | null;
 			}
 	  >;
 

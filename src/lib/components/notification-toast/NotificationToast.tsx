@@ -31,11 +31,19 @@ const NotificationToast = function ({ model }) {
 			!open &&
 			notification?.text
 		) {
+			console.log(modelView);
 			interact({
 				type: "OPEN",
 			});
 		}
-	}, [notification, interact, wasDisplayed, typeToToastTypeMap, open]);
+	}, [
+		notification,
+		interact,
+		wasDisplayed,
+		typeToToastTypeMap,
+		open,
+		modelView,
+	]);
 
 	return (
 		<ToastContainer

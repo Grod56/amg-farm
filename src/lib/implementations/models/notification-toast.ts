@@ -38,8 +38,17 @@ export function notificationToastVIInterface(
 					notifier.interact({ type: "CLEAR" });
 					return {
 						...currentModelView,
+						notification: null, // HACK
 						open: false,
 						wasDisplayed: false,
+					};
+				}
+				case "UPDATE_NOTIFICATION": {
+					if (!currentModelView)
+						throw new Error("Model view is uninitialized");
+					return {
+						...currentModelView,
+						notification: interaction.input.notification,
 					};
 				}
 			}
