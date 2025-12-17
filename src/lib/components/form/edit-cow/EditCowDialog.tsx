@@ -14,10 +14,9 @@ const EditCowDialog = function ({ model }) {
 		useInitializedStatefulInteractiveModel(
 			editCowFormVIInterface({
 				...formTools,
-				successCallback(cow) {
-					interact({ type: "CLOSE" }).then(() =>
-						formTools.successCallback?.(cow),
-					);
+				async successCallback(cow) {
+					await interact({ type: "CLOSE" });
+					await formTools.successCallback?.(cow);
 				},
 			}),
 			{
