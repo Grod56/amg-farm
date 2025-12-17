@@ -38,14 +38,14 @@ const Table = function ({ model }) {
 											isSelected: selectedCow == cow,
 											rowNumber: index + 1,
 										},
-										interact: function (
+										interact: async function (
 											interaction: TableRowModelInteraction,
 										) {
 											switch (interaction.type) {
 												case "SELECT_COW": {
 													const { cow: cowModel } =
 														interaction.input;
-													interact({
+													await interact({
 														type: "SELECT_COW",
 														input: {
 															cow: cowModel,

@@ -15,8 +15,9 @@ const EditCowDialog = function ({ model }) {
 			editCowFormVIInterface({
 				...formTools,
 				successCallback(cow) {
-					interact({ type: "CLOSE" });
-					formTools.successCallback?.(cow);
+					interact({ type: "CLOSE" }).then(() =>
+						formTools.successCallback?.(cow),
+					);
 				},
 			}),
 			{

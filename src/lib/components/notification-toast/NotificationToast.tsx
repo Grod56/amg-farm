@@ -26,12 +26,9 @@ const NotificationToast = function ({ model }) {
 
 	useEffect(() => {
 		if (
-			!notification?.cleared &&
-			!wasDisplayed &&
-			!open &&
+			!(notification?.cleared || wasDisplayed || open) &&
 			notification?.text
 		) {
-			console.log(modelView);
 			interact({
 				type: "OPEN",
 			});

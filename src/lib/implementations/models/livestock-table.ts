@@ -7,9 +7,9 @@ import { Location } from "@/lib/types/miscellaneous";
 import { CowModel } from "@/lib/types/models/cow";
 
 export function livestockTableVIInterface(
-	addCowCallback: (defaultLocation: Location) => void,
-	editCowCallback: (cow: CowModel) => void,
-	removeCowCallback: (cow: CowModel) => void,
+	addCowCallback: (defaultLocation: Location) => void | Promise<void>,
+	editCowCallback: (cow: CowModel) => void | Promise<void>,
+	removeCowCallback: (cow: CowModel) => void | Promise<void>,
 ): ViewInteractionInterface<
 	LivestockTableModelView,
 	LivestockTableModelInteraction
@@ -51,21 +51,21 @@ export function livestockTableVIInterface(
 					if (!currentModelView)
 						throw new Error("Model view is uninitialized");
 					const { defaultLocation } = interaction.input;
-					addCowCallback(defaultLocation);
+					await addCowCallback(defaultLocation);
 					return currentModelView;
 				}
 				case "EDIT_COW": {
 					if (!currentModelView)
 						throw new Error("Model view is uninitialized");
 					const { cow } = interaction.input;
-					editCowCallback(cow);
+					await editCowCallback(cow);
 					return currentModelView;
 				}
 				case "REMOVE_COW": {
 					if (!currentModelView)
 						throw new Error("Model view is uninitialized");
 					const { cow } = interaction.input;
-					removeCowCallback(cow);
+					await removeCowCallback(cow);
 					return currentModelView;
 				}
 				case "UPDATE_CONTENT": {

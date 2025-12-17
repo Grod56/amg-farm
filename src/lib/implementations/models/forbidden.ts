@@ -16,16 +16,16 @@ export function forbiddenVIInterface(): ViewInteractionInterface<
 					const { notifier, router } = interaction.input;
 					await signOut({
 						fetchOptions: {
-							onRequest: () => {
-								notifier.interact({
+							onRequest: async () => {
+								await notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: { type: "pending" },
 									},
 								});
 							},
-							onSuccess: () => {
-								notifier.interact({
+							onSuccess: async () => {
+								await notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {
@@ -36,8 +36,8 @@ export function forbiddenVIInterface(): ViewInteractionInterface<
 								});
 								router.push("/");
 							},
-							onError: context => {
-								notifier.interact({
+							onError: async context => {
+								await notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {

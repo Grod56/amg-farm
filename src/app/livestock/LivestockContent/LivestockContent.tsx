@@ -41,20 +41,20 @@ const LivestockContent = function ({ model }) {
 			wasDisplayed: false,
 		},
 	);
-	const submitSuccessCallback = () => {
-		livestockTable.interact({ type: "RESET_SELECTED_COW" });
+	const submitSuccessCallback = async () => {
+		await livestockTable.interact({ type: "RESET_SELECTED_COW" });
 	};
 	const addCowDialog = useNewStatefulInteractiveModel(
 		addCowDialogVIInterface({
 			cattleRepository,
-			pendingCallback() {
-				notifier.interact({
+			async pendingCallback() {
+				await notifier.interact({
 					type: "NOTIFY",
 					input: { notification: { type: "pending" } },
 				});
 			},
-			successCallback(cow) {
-				notifier.interact({
+			async successCallback(cow) {
+				await notifier.interact({
 					type: "NOTIFY",
 					input: {
 						notification: {
@@ -63,10 +63,10 @@ const LivestockContent = function ({ model }) {
 						},
 					},
 				});
-				submitSuccessCallback();
+				await submitSuccessCallback();
 			},
-			failureCallback() {
-				notifier.interact({
+			async failureCallback() {
+				await notifier.interact({
 					type: "CLEAR",
 				});
 			},
@@ -75,14 +75,14 @@ const LivestockContent = function ({ model }) {
 	const editCowDialog = useNewStatefulInteractiveModel(
 		editCowDialogVIInterface({
 			cattleRepository,
-			pendingCallback() {
-				notifier.interact({
+			async pendingCallback() {
+				await notifier.interact({
 					type: "NOTIFY",
 					input: { notification: { type: "pending" } },
 				});
 			},
-			successCallback(cow) {
-				notifier.interact({
+			async successCallback(cow) {
+				await notifier.interact({
 					type: "NOTIFY",
 					input: {
 						notification: {
@@ -91,10 +91,10 @@ const LivestockContent = function ({ model }) {
 						},
 					},
 				});
-				submitSuccessCallback();
+				await submitSuccessCallback();
 			},
-			failureCallback() {
-				notifier.interact({
+			async failureCallback() {
+				await notifier.interact({
 					type: "CLEAR",
 				});
 			},
@@ -103,8 +103,8 @@ const LivestockContent = function ({ model }) {
 	const removeCowDialog = useNewStatefulInteractiveModel(
 		removeCowDialogVIInterface(
 			cattleRepository,
-			() => {
-				notifier.interact({
+			async () => {
+				await notifier.interact({
 					type: "NOTIFY",
 					input: {
 						notification: {
@@ -113,9 +113,9 @@ const LivestockContent = function ({ model }) {
 					},
 				});
 			},
-			cow => {
-				removeCowDialog.interact({ type: "CLOSE" });
-				notifier.interact({
+			async cow => {
+				await removeCowDialog.interact({ type: "CLOSE" });
+				await notifier.interact({
 					type: "NOTIFY",
 					input: {
 						notification: {
@@ -124,10 +124,10 @@ const LivestockContent = function ({ model }) {
 						},
 					},
 				});
-				submitSuccessCallback();
+				await submitSuccessCallback();
 			},
-			error => {
-				notifier.interact({
+			async error => {
+				await notifier.interact({
 					type: "NOTIFY",
 					input: {
 						notification: {
@@ -139,8 +139,8 @@ const LivestockContent = function ({ model }) {
 			},
 		),
 	);
-	const addCowCallback = () => {
-		addCowDialog.interact({
+	const addCowCallback = async () => {
+		await addCowDialog.interact({
 			type: "OPEN",
 			input: {
 				initialFormModelView: {
@@ -167,8 +167,8 @@ const LivestockContent = function ({ model }) {
 			},
 		});
 	};
-	const editCowCallback = (cow: CowModel) => {
-		editCowDialog.interact({
+	const editCowCallback = async (cow: CowModel) => {
+		await editCowDialog.interact({
 			type: "OPEN",
 			input: {
 				cowToBeEdited: cow,
@@ -200,11 +200,12 @@ const LivestockContent = function ({ model }) {
 				input: { notification },
 			});
 		}
-		if (!equals(notification, notificationToast.modelView.notification))
+		if (!equals(notification, notificationToast.modelView.notification)) {
 			notificationToast.interact({
 				type: "UPDATE_NOTIFICATION",
 				input: { notification },
 			});
+		}
 	}, [notification, livestockTable, notificationToast]);
 
 	useLayoutEffect(() => {

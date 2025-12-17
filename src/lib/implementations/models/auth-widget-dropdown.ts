@@ -25,8 +25,8 @@ export function authWidgetDropdownVIInterface(
 						);
 					await signOut({
 						fetchOptions: {
-							onRequest: () => {
-								notifier.interact({
+							onRequest: async () => {
+								await notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: { type: "pending" },
@@ -37,8 +37,8 @@ export function authWidgetDropdownVIInterface(
 								router.push("/");
 								router.refresh();
 							},
-							onError: context => {
-								notifier.interact({
+							onError: async context => {
+								await notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {

@@ -31,9 +31,9 @@ export type AddCowFormModelInteraction =
 			"SUBMIT",
 			{
 				cowToBeAdded: Omit<CowModelView, "id">;
-				pendingCallback?: () => void;
-				successCallback?: () => void;
-				failureCallback?: (error: unknown) => void;
+				pendingCallback?: () => void | Promise<void>;
+				successCallback?: () => void | Promise<void>;
+				failureCallback?: (error: unknown) => void | Promise<void>;
 			}
 	  >;
 

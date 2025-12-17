@@ -8,9 +8,9 @@ import { ViewInteractionInterface } from "@mvc-react/stateful";
 
 export function removeCowDialogVIInterface(
 	cattleRepository: CattleRepositoryModel,
-	pendingCallback?: () => void,
-	successCallback?: (removedCow: CowModel) => void,
-	failureCallback?: (error: unknown) => void,
+	pendingCallback?: () => void | Promise<void>,
+	successCallback?: (removedCow: CowModel) => void | Promise<void>,
+	failureCallback?: (error: unknown) => void | Promise<void>,
 ): ViewInteractionInterface<
 	RemoveCowDialogModelView,
 	RemoveCowDialogModelInteraction
@@ -34,16 +34,16 @@ export function removeCowDialogVIInterface(
 					if (!currentDialogModelView)
 						throw new Error("Model view is uninitialized");
 					const { cow } = currentDialogModelView;
-					pendingCallback?.();
-					cattleRepository.interact({
+					await pendingCallback?.();
+					await cattleRepository.interact({
 						type: "REMOVE_COW",
 						input: {
 							cowToBeRemoved: cow,
-							successCallback() {
-								successCallback?.(cow);
+							async successCallback() {
+								await successCallback?.(cow);
 							},
-							failureCallback(error) {
-								failureCallback?.(error);
+							async failureCallback(error) {
+								await failureCallback?.(error);
 							},
 						},
 					});

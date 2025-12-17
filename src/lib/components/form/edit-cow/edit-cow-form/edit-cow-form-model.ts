@@ -30,9 +30,9 @@ export type EditCowFormModelInteraction =
 			"SUBMIT",
 			{
 				updatedCow: CowModel;
-				pendingCallback?: () => void;
-				successCallback?: () => void;
-				failureCallback?: (error: unknown) => void;
+				pendingCallback?: () => void | Promise<void>;
+				successCallback?: () => void | Promise<void>;
+				failureCallback?: (error: unknown) => void | Promise<void>;
 			}
 	  >;
 

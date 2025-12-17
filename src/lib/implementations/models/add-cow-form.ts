@@ -8,9 +8,9 @@ import { ViewInteractionInterface } from "@mvc-react/stateful";
 
 export type AddCowFormTools = {
 	cattleRepository: CattleRepositoryModel;
-	successCallback?: (cow: Omit<CowModelView, "id">) => void;
-	failureCallback?: (error: unknown) => void;
-	pendingCallback?: () => void;
+	successCallback?: (cow: Omit<CowModelView, "id">) => void | Promise<void>;
+	failureCallback?: (error: unknown) => void | Promise<void>;
+	pendingCallback?: () => void | Promise<void>;
 };
 
 export function addCowFormVIInterface({
@@ -43,19 +43,19 @@ export function addCowFormVIInterface({
 						successCallback: formSuccessCallback,
 					} = interaction.input;
 
-					formPendingCallback?.();
-					pendingCallback?.();
-					cattleRepository.interact({
+					await formPendingCallback?.();
+					await pendingCallback?.();
+					await cattleRepository.interact({
 						type: "ADD_COW",
 						input: {
 							cowToBeAdded: cowToBeAdded,
-							successCallback() {
-								formSuccessCallback?.();
-								successCallback?.(cowToBeAdded);
+							async successCallback() {
+								await formSuccessCallback?.();
+								await successCallback?.(cowToBeAdded);
 							},
-							failureCallback(error) {
-								formFailureCallback?.(error);
-								failureCallback?.(error);
+							async failureCallback(error) {
+								await formFailureCallback?.(error);
+								await failureCallback?.(error);
 							},
 						},
 					});

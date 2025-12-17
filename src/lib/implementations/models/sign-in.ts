@@ -19,16 +19,16 @@ export function signInVIInterface(
 							callbackURL: `/${successEndpoint}`,
 						},
 						{
-							onRequest: () => {
-								notifier.interact({
+							onRequest: async () => {
+								await notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: { type: "pending" },
 									},
 								});
 							},
-							onSuccess: () => {
-								notifier.interact({
+							onSuccess: async () => {
+								await notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {
@@ -38,8 +38,8 @@ export function signInVIInterface(
 									},
 								});
 							},
-							onError: context => {
-								notifier.interact({
+							onError: async context => {
+								await notifier.interact({
 									type: "NOTIFY",
 									input: {
 										notification: {

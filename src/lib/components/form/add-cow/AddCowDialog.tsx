@@ -18,8 +18,9 @@ const AddCowDialog = function ({ model }) {
 			addCowFormVIInterface({
 				...formTools,
 				successCallback(cow) {
-					interact({ type: "CLOSE" });
-					formTools.successCallback?.(cow);
+					interact({ type: "CLOSE" }).then(() =>
+						formTools.successCallback?.(cow),
+					);
 				},
 			}),
 			{ ...initialFormModelView },

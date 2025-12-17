@@ -32,10 +32,12 @@ const LivestockTable = function ({ model }) {
 						selectedLocation,
 						isPending: notification?.type == "pending",
 					},
-					interact: (interaction: TableActionsModelInteraction) => {
+					interact: async (
+						interaction: TableActionsModelInteraction,
+					) => {
 						switch (interaction.type) {
 							case "ADD":
-								interact({
+								await interact({
 									type: "ADD_COW",
 									input: {
 										defaultLocation: selectedLocation,
@@ -44,7 +46,7 @@ const LivestockTable = function ({ model }) {
 								break;
 							case "REMOVE":
 								if (selectedCow)
-									interact({
+									await interact({
 										type: "REMOVE_COW",
 										input: {
 											cow: selectedCow,
@@ -53,7 +55,7 @@ const LivestockTable = function ({ model }) {
 								break;
 							case "EDIT":
 								if (selectedCow)
-									interact({
+									await interact({
 										type: "EDIT_COW",
 										input: {
 											cow: selectedCow,
@@ -61,7 +63,7 @@ const LivestockTable = function ({ model }) {
 									});
 								break;
 							case "CHANGE_LOCATION": {
-								interact({
+								await interact({
 									type: "CHANGE_LOCATION",
 									input: {
 										location: interaction.input.location,
@@ -70,7 +72,7 @@ const LivestockTable = function ({ model }) {
 								break;
 							}
 							case "CLEAR_SELECTED": {
-								interact({
+								await interact({
 									type: "RESET_SELECTED_COW",
 								});
 							}
@@ -84,11 +86,11 @@ const LivestockTable = function ({ model }) {
 						cattle: displayedCattle,
 						selectedCow,
 					},
-					interact(interaction) {
+					async interact(interaction) {
 						switch (interaction.type) {
 							case "SELECT_COW": {
 								const { cow } = interaction.input;
-								interact({
+								await interact({
 									type: "SELECT_COW",
 									input: {
 										cow,
@@ -97,7 +99,7 @@ const LivestockTable = function ({ model }) {
 								break;
 							}
 							case "DESELECT": {
-								interact({
+								await interact({
 									type: "RESET_SELECTED_COW",
 								});
 								break;

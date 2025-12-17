@@ -35,7 +35,7 @@ export function notificationToastVIInterface(
 				case "CLEAR_NOTIFICATION": {
 					if (!currentModelView)
 						throw new Error("Model view is uninitialized");
-					notifier.interact({ type: "CLEAR" });
+					await notifier.interact({ type: "CLEAR" });
 					return {
 						...currentModelView,
 						notification: null, // HACK

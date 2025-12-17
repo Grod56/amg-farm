@@ -35,7 +35,7 @@
 		"@eslint/eslintrc": "^3",
 		"@eslint/js": "^9.28.0",
 		"@mvc-react/components": "^1.0.3",
-		"@mvc-react/mvc": "^2.2.2",
+		"@mvc-react/mvc": "^3.0.0",
 		"@mvc-react/stateful": "^3.0.0",
 		"@next/eslint-plugin-next": "^15.3.5",
 		"@tailwindcss/postcss": "^4",
