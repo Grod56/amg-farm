@@ -112,9 +112,9 @@ const LivestockContent = function ({ model }) {
 						},
 					},
 				});
+				await removeCowDialog.interact({ type: "CLOSE" });
 			},
 			async cow => {
-				await removeCowDialog.interact({ type: "CLOSE" });
 				await notifier.interact({
 					type: "NOTIFY",
 					input: {
