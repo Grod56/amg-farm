@@ -38,7 +38,7 @@ export function notificationToastVIInterface(
 					await notifier.interact({ type: "CLEAR" });
 					return {
 						...currentModelView,
-						notification: null, // HACK
+						notification: null, // TODO: Untidy
 						open: false,
 						wasDisplayed: false,
 					};
