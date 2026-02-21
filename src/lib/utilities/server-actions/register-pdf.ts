@@ -90,7 +90,7 @@ function writeTables(doc: PDFKit.PDFDocument, cowRecords: CowRecord[]) {
 		doc.fontSize(9.5);
 		doc.font("Helvetica");
 		doc.moveDown();
-		const defaultStyle = { borderColor: "grey", border: 0.5 };
+		const defaultStyle = { borderColor: "black", border: 0.5 };
 		const columnStyles = ["*", "*", 100, "*", 100, "*"];
 		const rows = cowRecords.map(cowRecord => [
 			{
