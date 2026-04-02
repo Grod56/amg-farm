@@ -21,7 +21,7 @@ export default function RootLayout({
 				{children}
 				<Footer
 					model={newReadonlyModel({
-						copyrightText: `© 2025 Providence Universal Studios. All Rights Reserved.`,
+						copyrightText: `© 2025 Garikai Gumbo. All Rights Reserved.`,
 					})}
 				/>
 			</body>
