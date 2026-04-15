@@ -9,7 +9,7 @@ import {
 	editCow,
 	getCattleRepositorySnapshot,
 	removeCow,
-} from "./server-actions";
+} from "../../server-actions/cattle-repository";
 
 export const cattleRepositoryViewInteractionInterface: ViewInteractionInterface<
 	CattleRepositoryModelView,

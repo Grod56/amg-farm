@@ -4,7 +4,7 @@ import { HeaderModel } from "./header-model";
 import Link from "next/link";
 import Image from "next/image";
 import AuthWidget from "./auth-widget/AuthWidget";
-import { getUser } from "@/lib/utilities/server-actions/auth";
+import { getUser } from "@/lib/server-actions/auth";
 import { newReadonlyModel } from "@mvc-react/mvc";
 
 const Header = async function ({ model }: { model: HeaderModel }) {

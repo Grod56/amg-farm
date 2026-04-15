@@ -1,4 +1,4 @@
-import { getProtectedResource } from "@/lib/utilities/server-actions/auth";
+import { getProtectedResource } from "@/lib/server-actions/auth";
 import { NextRequest } from "next/server";
 import { getRegisterPDF } from "./server-actions";
 

@@ -4,7 +4,7 @@ import neon from "@/lib/third-party/clients/neon";
 import { User } from "better-auth";
 import { headers } from "next/headers";
 import { forbidden, redirect } from "next/navigation";
-import { auth } from "../../../../auth";
+import { auth } from "../../../auth";
 
 export async function isAuthorized(user: User) {
 	const results =

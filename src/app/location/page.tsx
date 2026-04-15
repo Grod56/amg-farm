@@ -1,6 +1,6 @@
 import { getProtectedResource } from "@/lib/server-actions/auth";
-import Livestock from "./Livestock";
+import Location from "./Location";
 
 export default async function Page() {
-	return getProtectedResource(() => <Livestock />, "livestock");
+	return await getProtectedResource(() => <Location />, "location");
 }

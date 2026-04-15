@@ -2,7 +2,7 @@
 
 import PDFDocument from "pdfkit";
 import { CowRecord } from "../../types/cow-record";
-import { retrieveCowRecords } from "../../implementations/repositories/server-actions";
+import { retrieveCowRecords } from "../../server-actions/cattle-repository";
 import { IBlobStream } from "blob-stream";
 import { formatInTimeZone } from "date-fns-tz";
 

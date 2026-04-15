@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body suppressHydrationWarning>
+			<body>
 				<Header model={newReadonlyModel({ headerTitle: "AMG Farm" })} />
 				{children}
 				<Footer
